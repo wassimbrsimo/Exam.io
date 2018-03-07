@@ -154,7 +154,7 @@ public class DB extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(QUESTION_REPONSE,q.getAnswer());
 
-                
+
         return db.update(TABLE_QUESTIONS, values, ID_QUESTION_EXAM +"= ? AND "+ID_QUESTION+" = ?",
                 new String[] { String.valueOf(q.getE_id()),String.valueOf(q.getId()) });
     }
