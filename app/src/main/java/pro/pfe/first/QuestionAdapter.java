@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,14 +21,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public class QuestionViewHolder extends RecyclerView.ViewHolder {
         public TextView question;
-        public RadioButton t,f;
+        public Switch t;
         public Button save,delete;
 
         public QuestionViewHolder(View view) {
             super(view);
             question = (TextView) view.findViewById(R.id.question_text);
-            t=(RadioButton) view.findViewById(R.id.t);
-            f=(RadioButton) view.findViewById(R.id.f);
+            t=(Switch) view.findViewById(R.id.t);
             save=(Button) view.findViewById(R.id.save);
             delete=(Button) view.findViewById(R.id.delete);
 
@@ -49,32 +49,19 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final Question question = Questlist.get(position);
         final QuestionViewHolder hold =(QuestionViewHolder)holder;
         final int pos=position;
-        hold.question.setText(question.getQuestion());
-        hold.delete.setId(question.getId());
+        hold.question.setText(question.getAnswer().toString());
 
-            hold.t.setChecked(!question.getAnswer());
-            hold.f.setChecked(question.getAnswer());
-
-        hold.save.setEnabled(false);
 
         hold.t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(question.getAnswer())
-                    hold.save.setEnabled(false);
-                else
-                    hold.save.setEnabled(true);
+                if(question.getAnswer()==hold.t.isChecked())
+                        hold.save.setEnabled(false);
+                    else
+                        hold.save.setEnabled(true);
             }
         });
-        hold.f.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(question.getAnswer())
-                    hold.save.setEnabled(true);
-                else
-                    hold.save.setEnabled(false);
-            }
-        });
+
         hold.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +74,12 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 DeleteQuestion(question);
             }
         });
+
+        if(!question.getAnswer()) {
+            hold.t.toggle();
+        }
+
+        hold.save.setEnabled(false);
     }
 
 
