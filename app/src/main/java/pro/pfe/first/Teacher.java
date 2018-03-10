@@ -1,11 +1,9 @@
 package pro.pfe.first;
 
-import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class Teacher extends AppCompatActivity {
     public static List<Exam> Examlist=new ArrayList<Exam>();
-    public static ExamAdapter eAdapter;
+    public static ExamListAdapter eAdapter;
     public static int EXAM_ID_MANAGER=0,QUESTION_ID_MANAGER=0;
     RecyclerView rv;
     public static DB db;
@@ -42,10 +40,8 @@ public class Teacher extends AppCompatActivity {
         db = new DB(getApplicationContext());
 
         Examlist= db.getAllExams();
-        //for(int j=0;j<1000;j++)
-        //    Examlist.add(new Exam("KHRA","ZBEL",Examlist.size()));
 
-        eAdapter=new ExamAdapter(Examlist);
+        eAdapter=new ExamListAdapter(Examlist);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv = (RecyclerView) findViewById(R.id.recyclerview_Teacher);
         rv.setLayoutManager(layoutManager);

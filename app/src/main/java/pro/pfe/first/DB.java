@@ -58,19 +58,12 @@ public class DB extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXAMS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
-        // create new tables
-        onCreate(db);
+            onCreate(db);
     }
 
     public List<Exam> getAllExams(){
         List<Exam> exams = new ArrayList<Exam>();
-
-
         String selectExamQuery = "SELECT * FROM "+TABLE_EXAMS;
-
-
-
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectExamQuery, null);
 
