@@ -10,24 +10,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        >
 
-        <Chronometer
-            android:id="@+id/chronometer2"
+        <TextView
+            android:id="@+id/txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center" />
+            android:layout_weight="1"
+            android:text="afaf"
+            android:textSize="30sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/quest_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="60" />
 
         <Button
             android:id="@+id/Done_Exam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="BtnFinishClicked"
             android:text="Terminer" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
