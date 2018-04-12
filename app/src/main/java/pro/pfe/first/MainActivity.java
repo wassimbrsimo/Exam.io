@@ -8,6 +8,11 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
+
+    //TODO : completer les models de questions ( les autres types )
+    //TODO   : DB Students avec les notes (DONE)
+    //TODO   : WIFI tests
+    //TODO :    Landscape mode fix (DONE)
     Intent side;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

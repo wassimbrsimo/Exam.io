@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static pro.pfe.first.Teacher.QUESTION_ID_MANAGER;
 import static pro.pfe.first.Teacher.db;
 import static pro.pfe.first.Teacher.getExamIndexByID;
 
@@ -44,59 +43,99 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    public class HostedExamViewHolder extends RecyclerView.ViewHolder {
+        public TextView Title,nom,matricule,note,answers;
+
+        public HostedExamViewHolder(View view) {
+            super(view);
+            Title =  view.findViewById(R.id.title);
+            matricule = view.findViewById(R.id.matricule);
+            nom=view.findViewById(R.id.name);
+            note= view.findViewById(R.id.note_int);
+            answers= view.findViewById(R.id.answers);
+
+        }
+    }
+
     public ExamListAdapter(List<Exam> List){
         this.Examlist=List;
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(Teacher.VIEWHOSTEDEXAM)
+            return 1;
+        else
+            return 0;
+    }
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.exam_row, parent, false);
-        return new ExamViewHolder(itemView);
+        View itemView ;
+        if(viewType==0) {
+            itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.exam_row, parent, false);
+            return new ExamViewHolder(itemView);
+        }
+        else
+        {
+            itemView= LayoutInflater.from(parent.getContext()).inflate(R.layout.hosted_exam_row, parent, false);
+            return  new HostedExamViewHolder(itemView);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        switch (holder.getItemViewType()) {
+            case 0:
+            final Exam exam = Examlist.get(position);
+            final ExamViewHolder hold = (ExamViewHolder) holder;
+            hold.Title.setText(exam.getTitre());
+            hold.Module.setText(exam.getModule());
+            hold.Delete.setId(exam.getId());
 
-        final Exam  exam =Examlist.get(position);
-        final ExamViewHolder hold=(ExamViewHolder)holder;
-        hold.Title.setText(exam.getTitre());
-        hold.Module.setText(exam.getModule());
-        hold.Delete.setId(exam.getId());
-
-        final QuestionAdapter qAdapter = new QuestionAdapter(exam.questions);
-        hold.r.setAdapter(qAdapter);
-        qAdapter.notifyDataSetChanged();
-
-
-        hold.Questions.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                ShowQuestions(hold,exam);
-            }
-        });
-
-        hold.Delete.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                DeleteExam(exam.getId());
-            }
-        });
-
-        hold.add_question.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                AddQuestion(hold.question.getText().toString(),hold.answer_toggle.isChecked(),exam.getId());
-                qAdapter.notifyItemInserted(Examlist.get(getExamIndexByID(exam.getId())).getQuestions().size());
-            }
-        });
+            final QuestionAdapter qAdapter = new QuestionAdapter(exam.questions);
+            hold.r.setAdapter(qAdapter);
+            qAdapter.notifyDataSetChanged();
 
 
+            hold.Questions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ShowQuestions(hold, exam);
+                }
+            });
 
+            hold.Delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DeleteExam(exam.getId());
+                }
+            });
 
+            hold.add_question.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AddQuestion(hold.question.getText().toString(), hold.answer_toggle.isChecked(), exam.getId());
+                    qAdapter.notifyItemInserted(Examlist.get(getExamIndexByID(exam.getId())).getQuestions().size());
+                }
+            });
+
+            break;
+            case 1:
+                final Exam hostedexam = Examlist.get(position);
+                final HostedExamViewHolder hostedholder = (HostedExamViewHolder) holder;
+                hostedholder.Title.setText(hostedexam.getTitre());
+                hostedholder.matricule.setText(db.getDatabaseName());// get the dude data
+                hostedholder.nom.setText("");
+                hostedholder.note.setText("");
+                hostedholder.answers.setText("");
+                break;
+        }
     }
     public  void AddQuestion(String question,Boolean reponse,int id){
-        Question q= new Question(0,question,reponse,QUESTION_ID_MANAGER++,id);
-        db.create(q);
+        Question q= new Question(0,question,reponse,-1,id);
+        int identity=(int)db.create(q);
+        q.setId(identity);
         Examlist.get(getExamIndexByID(id)).questions.add(q);
 
     }

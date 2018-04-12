@@ -1,33 +1,52 @@
 package pro.pfe.first;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.Result;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Teacher extends AppCompatActivity {
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class Teacher extends AppCompatActivity implements  ZXingScannerView.ResultHandler {
     public static List<Exam> Examlist=new ArrayList<Exam>();
     public static ExamListAdapter eAdapter;
-    public static int EXAM_ID_MANAGER=0,QUESTION_ID_MANAGER=0;
     RecyclerView rv;
     public static DB db;
+    public static Boolean VIEWHOSTEDEXAM=false;
+
+    private ZXingScannerView zxing;
     View addPanel,addqPanel ;
-    Button qvalidate,add,close,validate;
+    Button hosted,add,close,validate;
     TextView titre,module,question;
     RadioButton t,f;
-    //public static int Toggeled_Exam_Id=-1;
+    NumberPicker np;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
+
+        np=findViewById(R.id.numberPicker);
+        final String[] values= {"15 mins","30 mins", "45 mins", "1 heure", "2 heures"};
+        np.setMinValue(0);
+        np.setValue(0);
+        np.setMaxValue(values.length-1);
+        np.setDisplayedValues(values);
+        np.setWrapSelectorWheel(true);
+
+
 
         addPanel= findViewById(R.id.add_epanel);
         close= findViewById(R.id.add_qbtn);
@@ -47,6 +66,20 @@ public class Teacher extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(eAdapter);
         eAdapter.notifyDataSetChanged();
+
+        hosted=findViewById(R.id.Hosted);
+        hosted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (VIEWHOSTEDEXAM){
+                    VIEWHOSTEDEXAM=false;
+
+                }
+                else {
+                    VIEWHOSTEDEXAM=true;
+                }
+            }
+        });
     }
     @Override
     public void onStart(){
@@ -66,14 +99,39 @@ public class Teacher extends AppCompatActivity {
     }
 
     public void AddExam(View view){
-        Exam e = new Exam(titre.getText().toString(),module.getText().toString(),EXAM_ID_MANAGER++);
-        db.create(e);
+        int dur=0;
+        switch (np.getValue()){
+            case 0:
+                dur=1;
+                break;
+            case 1:
+                dur=30;
+                break;
+            case 2:
+                dur=45;
+                break;
+            case 3:
+                dur=60;
+                break;
+            case 4:
+                dur=120;
+                break;
+        }
+
+        Exam e = new Exam(titre.getText().toString(),module.getText().toString(),-1,dur);
+        long id=db.create(e);
+        e.setId((int)id);
         Examlist.add(e);
         eAdapter.notifyItemInserted(Examlist.size());
         AddExamToggler(view);
     }
 
-
+    public void HostExam(View view){
+       zxing = new ZXingScannerView(getApplicationContext());
+       setContentView(zxing);
+       zxing.setResultHandler(this);
+       zxing.startCamera();
+    }
     public void FormatExams(View view){
         db.FormatExams();
         eAdapter.notifyDataSetChanged();
@@ -109,5 +167,13 @@ public class Teacher extends AppCompatActivity {
                 break;
             }}
         return index;
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        zxing.removeAllViews();
+        zxing.stopCamera();
+        Toast.makeText(getApplicationContext(), "Scanned : \" "+result.getText()+" \"", Toast.LENGTH_SHORT).show();
+        setContentView(R.layout.activity_teacher);
     }
 }

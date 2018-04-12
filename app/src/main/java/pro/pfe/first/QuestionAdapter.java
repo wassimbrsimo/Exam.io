@@ -49,7 +49,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final Question question = Questlist.get(position);
         final QuestionViewHolder hold =(QuestionViewHolder)holder;
         final int pos=position;
-        hold.question.setText(question.getAnswer().toString());
+        hold.question.setText(question.getQuestion());
 
 
         hold.t.setOnClickListener(new View.OnClickListener() {

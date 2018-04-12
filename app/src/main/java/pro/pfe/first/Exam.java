@@ -17,6 +17,10 @@ public class Exam {
         this.questions = questions;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public ArrayList<Question> getQuestions() {
         return questions;
     }
@@ -25,16 +29,23 @@ public class Exam {
     private String Module;
     private int id;
 
+    public int getDuration() {
+        return duration;
+    }
+
+    private int duration;
+
     public int getId() {
         return id;
     }
 
     ArrayList<Question> questions;
-    public Exam(String titre,String module,int id){
+    public Exam(String titre,String module,int id,int duration){
         this.id=id;
         this.Titre=titre;
         this.Module=module;
         this.questions= new ArrayList<Question>();
+        this.duration=duration;
     }
 
 }

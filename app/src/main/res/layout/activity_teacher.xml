@@ -7,9 +7,13 @@
     tools:context="pro.pfe.first.Teacher">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,6 +57,12 @@
                         android:onClick="AddExam"
                         android:text="Add" />
 
+                    <NumberPicker
+                        android:id="@+id/numberPicker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="80dp"
+                        android:layout_weight="1" />
+
                     <Button
                         android:id="@+id/add_qbtn"
                         android:layout_width="wrap_content"
@@ -78,11 +88,27 @@
             android:onClick="AddExamToggler"
             android:text="Create" />
 
-        <Button
-            android:id="@+id/FORMAT"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="FormatExams"
-            android:text="FORMAT" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/FORMAT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="HostExam"
+                android:text="HOST" />
+
+            <Button
+                android:id="@+id/Hosted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="FormatExams"
+                android:text="Show passed exams" />
+        </LinearLayout>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

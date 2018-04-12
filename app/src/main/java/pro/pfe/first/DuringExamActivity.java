@@ -1,11 +1,13 @@
 package pro.pfe.first;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -13,12 +15,15 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pro.pfe.first.Teacher.db;
+
 public class DuringExamActivity extends AppCompatActivity {
         RecyclerView rv;
         Button done_exam;
         ExamAdapter examAdapter;
         List<Question> quest_list = new ArrayList<>();
-        TextView txt;
+        TextView txt,time;
+        ProgressBar ptime;
     public static List<String> TypedAnswers = new ArrayList<>();
 
     @Override
@@ -26,9 +31,24 @@ public class DuringExamActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_examination);
         txt=(TextView) findViewById(R.id.txt);
-        for(int i=0 ; i<20;i++)
+        time=(TextView) findViewById(R.id.time);
+        ptime=(ProgressBar) findViewById(R.id.ptime);
+
+        new CountDownTimer(Teacher.Examlist.get(0).getDuration()*60*1000, 1000){ // Temporary
+
+            public void onTick(long millisUntilFinished){
+                ptime.setMax(Teacher.Examlist.get(0).getDuration()*60);
+               time.setText(millisUntilFinished/1000/60+":"+(millisUntilFinished/1000-(millisUntilFinished/1000/60)*60));
+               ptime.setProgress((int) (millisUntilFinished/1000));
+            }
+            public  void onFinish(){
+                BtnFinishClicked(null);
+            }
+        }.start();
+
+        quest_list=Teacher.Examlist.get(0).getQuestions();
+        for(int i=0 ; i<quest_list.size();i++)
         {
-            quest_list.add(new Question(0,"es ce que 1+"+i+" = "+String.valueOf(3),(i+1)==3,i,0));
             TypedAnswers.add("");
         }
         rv= findViewById(R.id.quest_rv);
@@ -56,10 +76,14 @@ public class DuringExamActivity extends AppCompatActivity {
 
     int AnswerPoints(){
         int score=0;
-        for(int i =0;i<TypedAnswers.size();i++)
-            if(TypedAnswers.get(i).equals(quest_list.get(i).getAnswer().toString()))
-            {score++;
+        String answers="";
+        for(int i =0;i<TypedAnswers.size();i++) {
+            answers+=TypedAnswers.get(i)+"/";
+            if (TypedAnswers.get(i).equals(quest_list.get(i).getAnswer().toString())) {
+                score++;
             }
+        }
+        //db.pushAnswerStudent(answers,Teacher.Examlist.get(0).getId(),0);
         return score;
     }
 }
