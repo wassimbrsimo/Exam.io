@@ -34,29 +34,32 @@ public class DuringExamActivity extends AppCompatActivity {
         time=(TextView) findViewById(R.id.time);
         ptime=(ProgressBar) findViewById(R.id.ptime);
 
-        new CountDownTimer(Teacher.Examlist.get(0).getDuration()*60*1000, 1000){ // Temporary
 
-            public void onTick(long millisUntilFinished){
-                ptime.setMax(Teacher.Examlist.get(0).getDuration()*60);
-               time.setText(millisUntilFinished/1000/60+":"+(millisUntilFinished/1000-(millisUntilFinished/1000/60)*60));
-               ptime.setProgress((int) (millisUntilFinished/1000));
-            }
-            public  void onFinish(){
-                BtnFinishClicked(null);
-            }
-        }.start();
-
-        quest_list=Teacher.Examlist.get(0).getQuestions();
-        for(int i=0 ; i<quest_list.size();i++)
-        {
-            TypedAnswers.add("");
-        }
         rv= findViewById(R.id.quest_rv);
         examAdapter = new ExamAdapter(quest_list);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(examAdapter);
         examAdapter.notifyDataSetChanged();
+    }
+    void InitExam(final Exam e){
+        new CountDownTimer(e.getDuration()*60*1000, 1000){ // Temporary
+
+            public void onTick(long millisUntilFinished){
+                ptime.setMax(e.getDuration()*60);
+                time.setText(millisUntilFinished/1000/60+":"+(millisUntilFinished/1000-(millisUntilFinished/1000/60)*60));
+                ptime.setProgress((int) (millisUntilFinished/1000));
+            }
+            public  void onFinish(){
+                BtnFinishClicked(null);
+            }
+        }.start();
+
+        quest_list=Teacher_Tab1.Examlist.get(0).getQuestions();
+        for(int i=0 ; i<quest_list.size();i++)
+        {
+            TypedAnswers.add("");
+        }
     }
     public void BtnFinishClicked(View view){
         if(DoneAllQuestions())

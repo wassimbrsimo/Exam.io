@@ -16,13 +16,13 @@ public class Student extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
-        Bitmap myBitmap = QRCode.from("Wassim").withSize(1000, 1000).bitmap();
-        ImageView myImage = (ImageView) findViewById(R.id.imageView);
-        myImage.setImageBitmap(myBitmap);
+
     }
 
-    public void StartExam(View view){
-        Intent exam_activity = new Intent(this, DuringExamActivity.class);
-        startActivity(exam_activity);
+    public void passExam(View view){
+        Intent Lobby=new Intent(getApplicationContext(),Student_Lobby.class);
+        startActivity(Lobby);
+        //todo: Animation ..
     }
+
 }

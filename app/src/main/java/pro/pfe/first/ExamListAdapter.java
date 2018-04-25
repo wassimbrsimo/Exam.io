@@ -1,6 +1,7 @@
 package pro.pfe.first;
 
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import static pro.pfe.first.Teacher.db;
-import static pro.pfe.first.Teacher.getExamIndexByID;
+import static pro.pfe.first.Teacher_Tab1.getExamIndexByID;
 
 
 public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
@@ -23,7 +24,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextView Title,Module,question;
         public RecyclerView r;
         public View question_panel;
-        public Button Questions,Delete,add_question;
+        public Button Questions,Delete,add_question,host;
         public Switch answer_toggle;
 
         public ExamViewHolder(View view) {
@@ -32,6 +33,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Module = (TextView) view.findViewById(R.id.module);
             add_question=(Button)view.findViewById(R.id.add_question);
             answer_toggle=(Switch) view.findViewById(R.id.toggleButton);
+            host = (Button) view.findViewById(R.id.host);
 
             question=(TextView)view.findViewById(R.id.question_text);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
@@ -63,10 +65,11 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if(Teacher.VIEWHOSTEDEXAM)
+       /* if(Teacher.VIEWHOSTEDEXAM)
             return 1;
         else
-            return 0;
+            return 0;*/
+    return 0;
     }
 
     @Override
@@ -119,7 +122,13 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     qAdapter.notifyItemInserted(Examlist.get(getExamIndexByID(exam.getId())).getQuestions().size());
                 }
             });
+            hold.host.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HostThisExam(view ,exam.getId());
 
+                }
+            });
             break;
             case 1:
                 final Exam hostedexam = Examlist.get(position);
@@ -131,6 +140,12 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 hostedholder.answers.setText("");
                 break;
         }
+    }
+    void HostThisExam(View v,int ID){
+        // launch the Hosting activity after passing data
+        Intent HostingIntent=new Intent(v.getContext(),DuringHostingActivity.class);
+        HostingIntent.putExtra("Exam_ID",ID);
+        v.getContext().startActivity(HostingIntent);
     }
     public  void AddQuestion(String question,Boolean reponse,int id){
         Question q= new Question(0,question,reponse,-1,id);

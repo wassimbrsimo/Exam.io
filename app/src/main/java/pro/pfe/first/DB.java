@@ -91,10 +91,14 @@ public class DB extends SQLiteOpenHelper{
         values.put(ANSWER_STRING,answers);
         db.insert(TABLE_ANSWER,null,values);
     }
-    public void insertStudent(String name,String matricule,int id){
-
+    public long insertStudent(String name,String matricule){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(STUDENT_NAME,name);
+        values.put(STUDENT_MATRICULE,matricule);
+        return db.insert(TABLE_STUDENT,null,values);
     }
-    public void getstudentsanswer(int exam_id){
+    public void getStudentAnswer(int student_Id ,int exam_id){
 
     }
     public List<Exam> getHostedExams(){
@@ -124,6 +128,17 @@ public class DB extends SQLiteOpenHelper{
         return exams;
     }
 
+    public Boolean isExamHosted(int ID){
+
+        SQLiteDatabase db=this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM "+TABLE_ANSWER+" WHERE "+ID_ANSWER_EXAM+" = "+ID;
+        Cursor c =db.rawQuery(selectQuery,null);
+
+        if(c.getCount()>0)
+            return true;
+        else
+             return false;
+    }
     public List<Exam> getAllExams(){
         List<Exam> exams = new ArrayList<Exam>();
         String selectExamQuery = "SELECT * FROM "+TABLE_EXAMS;
@@ -154,6 +169,16 @@ public class DB extends SQLiteOpenHelper{
             }
         return exams;
     }
+    public Exam getExam(int GetThisID){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM "+TABLE_EXAMS+" WHERE "+ID_EXAM+" = "+GetThisID;
+        Cursor c =db.rawQuery(selectQuery,null);
+        if(c!=null)
+            c.moveToFirst();
+        Exam grabbedExam = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)),c.getString(c.getColumnIndex(EXAM_MODULE)),GetThisID,c.getInt(c.getColumnIndex(EXAM_DURATION)));
+        return grabbedExam;
+    }
+
     public void FormatExams(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+TABLE_EXAMS);
@@ -177,15 +202,6 @@ public class DB extends SQLiteOpenHelper{
         return db.insert(TABLE_QUESTIONS,null,values);
     }
 
-    public Exam getExam(int GetThisID){
-        SQLiteDatabase db=this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM "+TABLE_EXAMS+" WHERE id = "+GetThisID;
-        Cursor c =db.rawQuery(selectQuery,null);
-        if(c!=null)
-            c.moveToFirst();
-        Exam grabbedExam = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)),c.getString(c.getColumnIndex(EXAM_MODULE)),GetThisID,c.getInt(c.getColumnIndex(EXAM_DURATION)));
-        return grabbedExam;
-    }
 
     public void DeleteExam(int id ){
         SQLiteDatabase db = this.getWritableDatabase();

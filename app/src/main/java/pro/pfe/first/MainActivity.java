@@ -9,9 +9,9 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
 
-    //TODO : completer les models de questions ( les autres types )
+    //TODO : completer les models de questions
     //TODO   : DB Students avec les notes (DONE)
-    //TODO   : WIFI tests
+    //TODO   : WIFI tests ( PARTIALLY DONE )
     //TODO :    Landscape mode fix (DONE)
     Intent side;
     @Override

@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import java.util.List;
 import static pro.pfe.first.Teacher.db;
-import static pro.pfe.first.Teacher.getExamIndexByID;
-import static pro.pfe.first.Teacher.getQuestionIndexByID;
+import static pro.pfe.first.Teacher_Tab1.getExamIndexByID;
+import static pro.pfe.first.Teacher_Tab1.getQuestionIndexByID;
 
 public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private List<Question> Questlist;
