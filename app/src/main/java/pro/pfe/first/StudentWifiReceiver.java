@@ -12,7 +12,7 @@ public class StudentWifiReceiver extends BroadcastReceiver {
     private WifiP2pManager.Channel mChannel;
     private Student_Lobby mActivity;
 
-    public StudentWifiReceiver(WifiP2pManager mManager, WifiP2pManager.Channel mChannel, Student_Lobby mActivity){
+    public StudentWifiReceiver(WifiP2pManager mManager,WifiP2pManager.Channel mChannel,Student_Lobby mActivity){
         this.mManager=mManager;
         this.mChannel=mChannel;
         this.mActivity=mActivity;
@@ -32,7 +32,11 @@ public class StudentWifiReceiver extends BroadcastReceiver {
                 Toast.makeText(context,"Wifi is OFF",Toast.LENGTH_SHORT).show();
             }
         }
-
+        else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)){
+            if(mManager!=null){
+                //mManager.requestPeers(mChannel,mActivity.peerListListener);
+            }
+        }
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)){
             if(mManager==null){ return;}
 
@@ -41,8 +45,11 @@ public class StudentWifiReceiver extends BroadcastReceiver {
             if(netinfo.isConnected()){
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
             }else{
-                mActivity.conninfo.setText("device disconnected");
+                mActivity.connStatus.setText("device disconnected");
             }
+        }
+        else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)){
+
         }
     }
 }

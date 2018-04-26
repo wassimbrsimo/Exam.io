@@ -144,7 +144,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     void HostThisExam(View v,int ID){
         // launch the Hosting activity after passing data
         Intent HostingIntent=new Intent(v.getContext(),DuringHostingActivity.class);
-        HostingIntent.putExtra("Exam_ID",ID);
+       // HostingIntent.putExtra("Exam_ID",ID);
         v.getContext().startActivity(HostingIntent);
     }
     public  void AddQuestion(String question,Boolean reponse,int id){

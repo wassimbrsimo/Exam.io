@@ -12,7 +12,7 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
     private WifiP2pManager.Channel mChannel;
     private DuringHostingActivity mActivity;
 
-    public TeacherWifiReceiver(WifiP2pManager mManager, WifiP2pManager.Channel mChannel, DuringHostingActivity mActivity){
+    public TeacherWifiReceiver(WifiP2pManager mManager,WifiP2pManager.Channel mChannel,DuringHostingActivity mActivity){
         this.mManager=mManager;
         this.mChannel=mChannel;
         this.mActivity=mActivity;
@@ -44,7 +44,12 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
 
             if(netinfo.isConnected()){
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
+            }else{
+                mActivity.connStatus.setText("device disconnected");
             }
+        }
+        else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)){
+
         }
     }
 }
