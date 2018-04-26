@@ -2,6 +2,7 @@ package pro.pfe.first;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.nsd.NsdManager;
@@ -174,10 +175,30 @@ public class Student_Lobby extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff= (byte[]) msg.obj;
                     String tempMsg = new String(readBuff,0,msg.arg1);
-                    readMsg.setText(tempMsg);
                     conect.setText(conect.getText()+" O ");
 
-                    Toast.makeText(getApplicationContext(),"recieved : "+tempMsg,Toast.LENGTH_SHORT);
+                    if (tempMsg.split("]")[0].equals("0")) {
+                        Log.e("CLIENT RECEPTION","Recieved the First connection info");
+                        Toast.makeText(getApplicationContext(), "Connected succesfully " + tempMsg, Toast.LENGTH_SHORT).show();
+                        try {
+                            sendRecieve.write("1]ExamRequest".getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    else if (tempMsg.split("]")[0].equals("1")) {
+
+                        Log.e("CLIENT RECEPTION","EXAM RECIEVED !");
+                        String[] translated=tempMsg.split("]");
+                        Toast.makeText(getApplicationContext(), "EXAM RECIEVED " + tempMsg, Toast.LENGTH_SHORT).show();
+                        Intent startExam = new Intent(Student_Lobby.this,DuringExamActivity.class);
+                        startExam.putExtra("Exam",tempMsg);
+                        startActivity(startExam);
+
+                        /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
+
+                    }
                     break;
 
             }
@@ -320,7 +341,7 @@ public class Student_Lobby extends AppCompatActivity {
                 socket=serverSocket.accept();
                 sendRecieve=new SendRecieve(socket);
                 sendRecieve.start();
-                sendRecieve.write("Welcome HP SLate 7 .. l'exam is : What is France Doing to america right now ? (true) ( False ) ".getBytes());
+                sendRecieve.write("0]hello back".getBytes());
                 Log.e("GO","Can Now Send To The Dude ");
 
             } catch (IOException e) {
@@ -346,7 +367,7 @@ public class Student_Lobby extends AppCompatActivity {
                 socket.connect(new InetSocketAddress(hostAdd,8888),500);
                 sendRecieve=new SendRecieve(socket);
                 sendRecieve.start();
-                sendRecieve.write("HP SLATE 7 , Please send me The Exam .. ".getBytes());
+                sendRecieve.write("0]hello".getBytes());
                 Log.e("Client","Can Now Send To The Dude ");
             } catch (IOException e) {
                 e.printStackTrace();

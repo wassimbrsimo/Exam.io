@@ -125,7 +125,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             hold.host.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HostThisExam(view ,exam.getId());
+                    HostThisExam(view ,exam);
 
                 }
             });
@@ -141,10 +141,17 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
         }
     }
-    void HostThisExam(View v,int ID){
+    void HostThisExam(View v,Exam ID){
         // launch the Hosting activity after passing data
+        Exam e = ID;
+
+        String questionString="]";
+        for(int i=0;i<e.getQuestions().size();i++){
+            questionString+=e.getQuestions().get(i).question+"]";
+        }
+
         Intent HostingIntent=new Intent(v.getContext(),DuringHostingActivity.class);
-       // HostingIntent.putExtra("Exam_ID",ID);
+        HostingIntent.putExtra("Exam_ID","1]"+e.getTitre().toString()+"]"+e.getModule().toString()+"]"+e.getId()+"]"+e.getDuration()+"]"+e.getQuestions().size()+questionString);
         v.getContext().startActivity(HostingIntent);
     }
     public  void AddQuestion(String question,Boolean reponse,int id){

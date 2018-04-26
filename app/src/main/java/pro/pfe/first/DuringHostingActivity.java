@@ -52,6 +52,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
     TextView readMsg,connStatus,conect;
     EditText writeMsg,ssid;
 
+    String ExamID;
 
     String mac="-1";
     private ZXingScannerView zxing;
@@ -167,6 +168,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
         writeMsg = (EditText) findViewById(R.id.writeMsg0);
         ssid= (EditText) findViewById(R.id.ssid);
 
+        ExamID=getIntent().getStringExtra("Exam_ID");
         wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         wp2pm = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -190,7 +192,20 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
                     readMsg.setText(tempMsg);
                     conect.setText(conect.getText()+" O ");
 
-                    Toast.makeText(getApplicationContext(),"recieved : "+tempMsg,Toast.LENGTH_SHORT);
+                    if (tempMsg.split("]")[0].equals("1")) {
+                        Log.e("Host RECEPTION","Exam Request Recieved");
+                        Toast.makeText(getApplicationContext(), "Asking for Exam .. sending" + tempMsg, Toast.LENGTH_SHORT).show();
+                        try {
+                              sendRecieve.write((ExamID).getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        /////////////   FORMAT :  ONE]NAME]ModulE]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
+                    }
+                    else if (tempMsg.split("]")[0].equals("2")) {
+
+
+                    }
                     break;
 
             }
@@ -313,7 +328,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
     void onStudentIdentified(String result){
         connStatus.setText("Connecting to "+result);
         // String[] data=result.split("/");
-        mac=result.split("]")[2];
+        mac=result.split("]")[3];
         conect.setText("going to connect to : "+mac);
         Log.e("MAC","MAC ADRESS IS "+mac);
         wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
@@ -379,7 +394,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
                 socket=serverSocket.accept();
                 sendRecieve=new SendRecieve(socket);
                 sendRecieve.start();
-                sendRecieve.write("Welcome HP SLate 7 .. l'exam is : What is France Doing to america right now ? (true) ( False ) ".getBytes());
+                sendRecieve.write("0]hoy".getBytes());
                 Log.e("GO","Can Now Send To The Dude ");
 
             } catch (IOException e) {
@@ -405,7 +420,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
                 socket.connect(new InetSocketAddress(hostAdd,8888),500);
                 sendRecieve=new SendRecieve(socket);
                 sendRecieve.start();
-                sendRecieve.write("HP SLATE 7 , Please send me The Exam .. ".getBytes());
+                sendRecieve.write("0]".getBytes());
                 Log.e("Client","Can Now Send To The Dude ");
             } catch (IOException e) {
                 e.printStackTrace();
