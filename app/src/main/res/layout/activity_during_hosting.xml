@@ -6,52 +6,104 @@
     android:layout_height="match_parent"
     tools:context="pro.pfe.first.DuringHostingActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:text="Status : "
-            android:textAlignment="center" />
+        <Button
+            android:id="@+id/discover2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/onOfff"
+            android:layout_alignBottom="@+id/onOfff"
+            android:layout_centerHorizontal="true"
+            android:text="discover" />
+
+        <Button
+            android:id="@+id/sendButton0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/writeMsg0"
+            android:layout_alignEnd="@+id/creategrpt"
+            android:layout_alignRight="@+id/creategrpt"
+            android:text="Send" />
 
         <ListView
-            android:id="@+id/list"
+            android:id="@+id/peerListView0"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2" />
+            android:layout_height="200dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/onOfff"
+            android:layout_marginTop="25dp"
+            android:background="@android:color/holo_orange_light" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/writeMsg0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/sendButton0"
+            android:ems="10"
+            android:hint="Pass"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/onOfff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="55dp"
+            android:text="Wifi On" />
+
+        <TextView
+            android:id="@+id/connectionStatus"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:text="Connection Status"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="18sp"
+            android:textStyle="italic" />
 
-            <Button
-                android:id="@+id/dscover"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:text="DSCVR" />
+        <TextView
+            android:id="@+id/readMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/peerListView0"
+            android:layout_marginTop="31dp"
+            android:text="Message"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="italic" />
 
-            <Button
-                android:id="@+id/addstudent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:onClick="launchQRScanner"
-                android:text="ajouter etudiant" />
+        <TextView
+            android:id="@+id/conct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="msg:"
+            android:textColor="@android:color/holo_green_dark" />
 
-            <Button
-                android:id="@+id/startexam"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Commencer" />
-        </LinearLayout>
-    </LinearLayout>
+        <EditText
+            android:id="@+id/ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/onOfff"
+            android:layout_alignStart="@+id/onOfff"
+            android:layout_below="@+id/peerListView0"
+            android:layout_marginLeft="11dp"
+            android:layout_marginStart="11dp"
+            android:ems="10"
+            android:hint="SSID"
+            android:inputType="textPersonName" />
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
