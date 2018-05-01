@@ -23,10 +23,11 @@
             android:id="@+id/sendButton0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/writeMsg0"
-            android:layout_alignEnd="@+id/creategrpt"
-            android:layout_alignRight="@+id/creategrpt"
-            android:text="Send" />
+            android:layout_alignEnd="@+id/discover2"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/discover2"
+            android:layout_marginBottom="25dp"
+            android:text="SCAN QR" />
 
         <ListView
             android:id="@+id/peerListView0"
@@ -36,17 +37,6 @@
             android:layout_below="@+id/onOfff"
             android:layout_marginTop="25dp"
             android:background="@android:color/holo_orange_light" />
-
-        <EditText
-            android:id="@+id/writeMsg0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/sendButton0"
-            android:ems="10"
-            android:hint="Pass"
-            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/onOfff"
@@ -93,17 +83,5 @@
             android:text="msg:"
             android:textColor="@android:color/holo_green_dark" />
 
-        <EditText
-            android:id="@+id/ssid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/onOfff"
-            android:layout_alignStart="@+id/onOfff"
-            android:layout_below="@+id/peerListView0"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp"
-            android:ems="10"
-            android:hint="SSID"
-            android:inputType="textPersonName" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

@@ -6,108 +6,75 @@
     android:layout_height="match_parent"
     tools:context="pro.pfe.first.Student_Lobby">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/exam"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/ptime"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
 
         <Button
-            android:id="@+id/discover2"
-            android:layout_width="wrap_content"
+            android:id="@+id/Done_Exam"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/onOfff"
-            android:layout_alignBottom="@+id/onOfff"
-            android:layout_centerHorizontal="true"
-            android:text="discover" />
+            android:layout_weight="1"
+            android:onClick="BtnFinishClicked"
+            android:text="Terminer" />
 
-        <Button
-            android:id="@+id/sendButton0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/writeMsg0"
-            android:layout_alignEnd="@+id/creategrpt"
-            android:layout_alignRight="@+id/creategrpt"
-            android:text="Send" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/quest_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="60" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/qr"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <EditText
-            android:id="@+id/writeMsg0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/sendButton0"
-            android:ems="10"
-            android:hint="Pass"
-            android:inputType="textPersonName" />
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/onOfff"
-            android:layout_marginTop="25dp"
-            android:layout_marginLeft="100dp"
-            android:layout_marginRight="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             app:srcCompat="@drawable/ic_launcher_background" />
-
-        <Button
-            android:id="@+id/onOfff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="55dp"
-            android:text="Wifi On" />
 
         <TextView
             android:id="@+id/connectionStatus"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="15dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="Connection Status"
             android:textAlignment="center"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="18sp"
             android:textStyle="italic" />
 
-        <TextView
-            android:id="@+id/readMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/imageView2"
-            android:layout_marginTop="31dp"
-            android:text="Message"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="italic" />
-
-        <TextView
-            android:id="@+id/conct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="msg:"
-            android:textColor="@android:color/holo_green_dark" />
-
-        <EditText
-            android:id="@+id/ssid"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/onOfff"
-            android:layout_alignStart="@+id/onOfff"
-            android:layout_below="@+id/imageView2"
-            android:layout_marginLeft="11dp"
-            android:layout_marginStart="11dp"
-            android:ems="10"
-            android:hint="SSID"
-            android:inputType="textPersonName" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

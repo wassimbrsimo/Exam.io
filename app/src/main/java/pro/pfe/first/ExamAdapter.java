@@ -37,7 +37,7 @@ public class ExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Question quest=liste_des_questions.get(position);
         ExamHolder hold = (ExamHolder) holder;
-        hold.question.setText(quest.getQuestion()+" / "+DuringExamActivity.TypedAnswers.get(position));
+        hold.question.setText(quest.getQuestion()+" / "+Student_Lobby.TypedAnswers.get(position));
 
         AnsweringManager(hold,position);
     }
@@ -49,9 +49,9 @@ public class ExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void AnsweringManager(ExamHolder hold ,int position){
         final Boolean Answer,isAnswerEmpty;
-        if(DuringExamActivity.TypedAnswers.get(position).equals("true"))
+        if(Student_Lobby.TypedAnswers.get(position).equals("true"))
         { Answer=true;isAnswerEmpty=false;}
-        else if(DuringExamActivity.TypedAnswers.get(position).equals("false"))
+        else if(Student_Lobby.TypedAnswers.get(position).equals("false"))
         {Answer=false; isAnswerEmpty=false;}
         else
         {Answer=false; isAnswerEmpty=true;}
@@ -76,10 +76,10 @@ public class ExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             @Override
             public void onClick(View view) {
                 if(isAnswerEmpty || !Answer){
-                    DuringExamActivity.TypedAnswers.set(position,"true");
+                    Student_Lobby.TypedAnswers.set(position,"true");
                 }
                 else{
-                    DuringExamActivity.TypedAnswers.set(position,"false");
+                    Student_Lobby.TypedAnswers.set(position,"false");
                 }
                 notifyItemChanged(position);
             }

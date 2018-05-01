@@ -77,18 +77,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingLeft="100dp"
-            android:paddingRight="100dp"
-            android:visibility="gone">
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <ToggleButton
+                    android:id="@+id/type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:checked="false"
+                    android:text="Type"
+                    android:textOff="boolean"
+                    android:textOn="multi" />
+
                 <EditText
                     android:id="@+id/question_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="50"
                     android:ems="10"

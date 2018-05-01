@@ -101,6 +101,9 @@ public class DB extends SQLiteOpenHelper{
     public void getStudentAnswer(int student_Id ,int exam_id){
 
     }
+    public void getStudent(int Id){
+
+    }
     public List<Exam> getHostedExams(){
         List<Exam> exams = new ArrayList<Exam>();
         String selectExamQuery = "SELECT * FROM "+TABLE_ANSWER;
@@ -155,9 +158,9 @@ public class DB extends SQLiteOpenHelper{
                 ArrayList<Question> questions = new ArrayList<Question>();
                 if (q.moveToFirst()) {
                     do {
-                        Question question = new Question(q.getInt(q.getColumnIndex(QUESTION_TYPE)), q.getString(q.getColumnIndex(QUESTION_TEXT)), q.getString(q.getColumnIndex(QUESTION_REPONSE)).equals("1"), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
+
+                        Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
                         questions.add(question);
-                        Log.e("DB","ADDED QUESTION with an answer :"+q.getString(q.getColumnIndex(QUESTION_REPONSE)));
 
                     } while (q.moveToNext());
                 }
@@ -176,6 +179,19 @@ public class DB extends SQLiteOpenHelper{
         if(c!=null)
             c.moveToFirst();
         Exam grabbedExam = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)),c.getString(c.getColumnIndex(EXAM_MODULE)),GetThisID,c.getInt(c.getColumnIndex(EXAM_DURATION)));
+        String selectQuestionQuery = "SELECT * FROM "+TABLE_QUESTIONS+" WHERE "+ID_QUESTION_EXAM+" = "+grabbedExam.getId();
+        Cursor q = db.rawQuery(selectQuestionQuery, null);
+        ArrayList<Question> questions = new ArrayList<Question>();
+        if (q.moveToFirst()) {
+            do {
+                Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
+                questions.add(question);
+
+            } while (q.moveToNext());
+        }
+
+        grabbedExam.setQuestions(questions);
+
         return grabbedExam;
     }
 
@@ -190,6 +206,7 @@ public class DB extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(EXAM_TITRE,e.getTitre());
         values.put(EXAM_MODULE,e.getModule());
+        values.put(EXAM_DURATION,e.getDuration());
         return db.insert(TABLE_EXAMS,null,values);
     }
     public long create(Question q){
@@ -197,7 +214,7 @@ public class DB extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(ID_QUESTION_EXAM,q.getE_id());
         values.put(QUESTION_TYPE,q.getType());
-        values.put(QUESTION_TEXT,q.getQuestion());
+        values.put(QUESTION_TEXT,Question.toString(q));
         values.put(QUESTION_REPONSE,q.getAnswer());
         return db.insert(TABLE_QUESTIONS,null,values);
     }

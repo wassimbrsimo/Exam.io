@@ -16,7 +16,7 @@
             android:id="@+id/question_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Es ce que le lion est une pute ?" />
+            android:text="" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static pro.pfe.first.Teacher.db;
@@ -118,7 +120,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             hold.add_question.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AddQuestion(hold.question.getText().toString(), hold.answer_toggle.isChecked(), exam.getId());
+                    AddQuestion(hold.question.getText().toString(), String.valueOf(hold.answer_toggle.isChecked()), exam.getId());
                     qAdapter.notifyItemInserted(Examlist.get(getExamIndexByID(exam.getId())).getQuestions().size());
                 }
             });
@@ -141,21 +143,18 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
         }
     }
-    void HostThisExam(View v,Exam ID){
+    void HostThisExam(View v,Exam e){
         // launch the Hosting activity after passing data
-        Exam e = ID;
 
-        String questionString="]";
-        for(int i=0;i<e.getQuestions().size();i++){
-            questionString+=e.getQuestions().get(i).question+"]";
-        }
+
+
 
         Intent HostingIntent=new Intent(v.getContext(),DuringHostingActivity.class);
-        HostingIntent.putExtra("Exam_ID","1]"+e.getTitre().toString()+"]"+e.getModule().toString()+"]"+e.getId()+"]"+e.getDuration()+"]"+e.getQuestions().size()+questionString);
+        HostingIntent.putExtra("Exam",e.getId());
         v.getContext().startActivity(HostingIntent);
     }
-    public  void AddQuestion(String question,Boolean reponse,int id){
-        Question q= new Question(0,question,reponse,-1,id);
+    public  void AddQuestion(String question,String reponse,int id){
+        Question q= new Question(Question.toQuestionArray(question),reponse,-1,id);
         int identity=(int)db.create(q);
         q.setId(identity);
         Examlist.get(getExamIndexByID(id)).questions.add(q);

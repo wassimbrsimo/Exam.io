@@ -49,13 +49,13 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final Question question = Questlist.get(position);
         final QuestionViewHolder hold =(QuestionViewHolder)holder;
         final int pos=position;
-        hold.question.setText(question.getQuestion());
+        hold.question.setText(Question.toString(question));
 
 
         hold.t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(question.getAnswer()==hold.t.isChecked())
+                if(question.getAnswer()==String.valueOf(hold.t.isChecked()))
                         hold.save.setEnabled(false);
                     else
                         hold.save.setEnabled(true);
@@ -65,7 +65,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         hold.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditQuestion(question,hold.t.isChecked());
+                EditQuestion(question,String.valueOf(hold.t.isChecked()));
             }
         });
         hold.delete.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +75,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         });
 
-        if(!question.getAnswer()) {
+        if(!Boolean.valueOf(question.getAnswer())) {
             hold.t.toggle();
         }
 
@@ -84,7 +84,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
 
-    public void EditQuestion(Question q,Boolean answer){
+    public void EditQuestion(Question q,String answer){
         int index=0;
         for(int i=0;i<Questlist.size();i++) {
             Log.e("DEBUG","- "+i+" Queslist dude "+Questlist.get(i).getId());

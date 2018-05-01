@@ -1,5 +1,6 @@
 package pro.pfe.first;
 
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,16 +8,21 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.nsd.NsdManager;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,7 +30,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,18 +45,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class Student_Lobby extends AppCompatActivity {
-    Button ToggleWifi,Discover,SendMsg;
-    ImageView QR;
-    TextView readMsg,connStatus,conect;
-    EditText writeMsg,ssid;
+    static ImageView QR;
+    TextView connStatus;
 
 
     WifiManager wm;
@@ -64,98 +72,116 @@ public class Student_Lobby extends AppCompatActivity {
     WifiP2pDevice[] deviceArray;
 
     static final int MESSAGE_READ=1;
+    public static String MAC_ADDRESS;
 
     Boolean groupeFormed=false;
     String otherguysIp="0";
     ServerClass serverClass;
     ClientClass clientClass;
-    SendRecieve sendRecieve;
+    public static SendRecieve sendRecieve;
+
+    //____________________Examination__________________________
+    RecyclerView rv;
+    Button done_exam;
+    ExamAdapter examAdapter;
+    List<Question> quest_list = new ArrayList<>();
+    TextView txt,time;
+    ProgressBar ptime;
+    public static final String ANSWERS_SEPARATOR = "-";
+    public static List<String> TypedAnswers = new ArrayList<>();
+
+    String answers="";
+
+    View LinearQR,LinearExam;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student__lobby);
-        initWork();
-        Listeners();
-        //SETUP WIFI
-        if(!wm.isWifiEnabled())
-            wm.setWifiEnabled(true);
-        InitQR("moh","lol","8C:54:ed:5a:da");
-
-        wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                connStatus.setText("Discovery Started . . .");
-            }
-
-            @Override
-            public void onFailure(int i) {
-                connStatus.setText("Discovery couldn't establish ! , sorry..");
-            }
-        });
-
-
+        initNetWork();
+        initExamView();
     }
-    private void Listeners() {
-        ToggleWifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(wm.isWifiEnabled()){
-                    wm.setWifiEnabled(false);
-                    ToggleWifi.setText("OFF");
-                }
-                else {
-                    wm.setWifiEnabled(true);
-                    ToggleWifi.setText("ON");
-                }
+    void InitExam(final Exam e){
+        new CountDownTimer(e.getDuration()*60*1000, 1000){ // Temporary
+
+            public void onTick(long millisUntilFinished){
+                ptime.setMax(e.getDuration()*60);
+                time.setText(millisUntilFinished/1000/60+":"+(millisUntilFinished/1000-(millisUntilFinished/1000/60)*60));
+                ptime.setProgress((int) (millisUntilFinished/1000));
             }
-        });
-
-        Discover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        connStatus.setText("Discovery Started . . .");
-                    }
-
-                    @Override
-                    public void onFailure(int i) {
-                        connStatus.setText("Discovery couldn't establish ! , sorry..");
-                    }
-                });
-                //  mNsdManager.discoverServices(
-                //        "_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+            public  void onFinish(){
+                BtnFinishClicked(null);
             }
-        });
+        }.start();
 
-        SendMsg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String msg = writeMsg.getText().toString();
-                try {
-                    if(sendRecieve!=null)
-                        sendRecieve.write(msg.getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        quest_list=e.getQuestions();
+        for(int i=0 ; i<quest_list.size();i++)
+        {
+            TypedAnswers.add("");
+        }
 
+        LinearExam.setVisibility(View.VISIBLE);
+        LinearQR.setVisibility(View.GONE);
     }
-    private void initWork() {
-        ToggleWifi = (Button)findViewById(R.id.onOfff);
-        Discover =(Button)findViewById(R.id.discover2);
-        SendMsg = (Button) findViewById(R.id.sendButton0);
-        QR =(ImageView) findViewById(R.id.imageView2);
+    public void BtnFinishClicked(View view){
+        if(DoneAllQuestions())
+            txt.setText("Your Score is : "+AnswerPoints()+"/"+TypedAnswers.size());
+        else
+            txt.setText("please answer To All the questions");
+    }
+    Boolean DoneAllQuestions(){
+        Boolean statement=true;
+        for(int i =0;i<TypedAnswers.size();i++)
+            if(TypedAnswers.get(i).equals(""))
+            {statement=false;
+                break;
+            }
+        return statement;
+    }
 
-        readMsg =(TextView) findViewById(R.id.readMsg);
-        connStatus = (TextView) findViewById(R.id.connectionStatus);
-        conect = (TextView) findViewById(R.id.conct);
-        writeMsg = (EditText) findViewById(R.id.writeMsg0);
-        ssid= (EditText) findViewById(R.id.ssid);
+    int AnswerPoints(){
+        int score=0;
+        for(int i =0;i<TypedAnswers.size();i++) {
+            answers += TypedAnswers.get(i) + ANSWERS_SEPARATOR;
+
+        }
+        try {
+            sendRecieve.write(("2]"+answers).getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return score;
+    }
+    private void initExamView(){
+        txt=(TextView) findViewById(R.id.txt);
+        time=(TextView) findViewById(R.id.time);
+        ptime=(ProgressBar) findViewById(R.id.ptime);
+
+
+        rv= findViewById(R.id.quest_rv);
+        examAdapter = new ExamAdapter(quest_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(layoutManager);
+        rv.setAdapter(examAdapter);
+        examAdapter.notifyDataSetChanged();
+
+        LinearQR=(LinearLayout) findViewById(R.id.qr);
+        LinearExam=(LinearLayout) findViewById(R.id.exam);
+
+        LinearExam.setVisibility(View.GONE);
+        LinearQR.setVisibility(View.VISIBLE);
+    }
+    // ___________________________________________________________________
+    private void initNetWork() {
 
         wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if(!wm.isWifiEnabled())
+            wm.setWifiEnabled(true);
+
+        QR =(ImageView) findViewById(R.id.imageView2);
+
+        connStatus = (TextView) findViewById(R.id.connectionStatus);
+
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         wp2pm = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = wp2pm.initialize(this,getMainLooper(),null);
@@ -167,6 +193,28 @@ public class Student_Lobby extends AppCompatActivity {
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+
+    }
+    public void startDiscovery(){
+        wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                connStatus.setText("good , Discovery Started");
+            }
+
+            @Override
+            public void onFailure(int i) {
+
+            }
+        });
+    }
+    public void sendAnswer(String Answer){
+        try {
+            sendRecieve.write(Answer.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     Handler handler=new Handler(new Handler.Callback() {
         @Override
@@ -175,7 +223,6 @@ public class Student_Lobby extends AppCompatActivity {
                 case MESSAGE_READ:
                     byte[] readBuff= (byte[]) msg.obj;
                     String tempMsg = new String(readBuff,0,msg.arg1);
-                    conect.setText(conect.getText()+" O ");
 
                     if (tempMsg.split("]")[0].equals("0")) {
                         Log.e("CLIENT RECEPTION","Recieved the First connection info");
@@ -189,16 +236,25 @@ public class Student_Lobby extends AppCompatActivity {
                     }
                     else if (tempMsg.split("]")[0].equals("1")) {
 
-                        Log.e("CLIENT RECEPTION","EXAM RECIEVED !");
-                        String[] translated=tempMsg.split("]");
-                        Toast.makeText(getApplicationContext(), "EXAM RECIEVED " + tempMsg, Toast.LENGTH_SHORT).show();
-                        Intent startExam = new Intent(Student_Lobby.this,DuringExamActivity.class);
-                        startExam.putExtra("Exam",tempMsg);
-                        startActivity(startExam);
+                        Log.e("CLIENT RECEPTION","EXAM RECIEVED ! : "+tempMsg+ " DURATION : "+Exam.toExam(tempMsg).getDuration());
+                        InitExam(Exam.toExam(tempMsg));
 
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
                     }
+                    else if (tempMsg.split("]")[0].equals("2")) {
+
+                        Log.e("CLIENT RECEPTION","NOTE RECIEVED  ! : "+tempMsg);
+
+                            String[] notemsg =tempMsg.split(ANSWERS_SEPARATOR);
+                            //todo save the real exam on BD with the student answers
+                        int score = Integer.valueOf(notemsg[notemsg.length-1]);
+
+                        txt.setText("Note Recu : "+score+" sur "+String.valueOf(notemsg.length-2));
+                        }
+                        /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
+
+
                     break;
 
             }
@@ -255,12 +311,10 @@ public class Student_Lobby extends AppCompatActivity {
 
             if(wifiP2pInfo.isGroupOwner()){
                 connStatus.setText("Groupe Owner"+wifiP2pInfo.getClientList().size()+")" );
-                conect.setText("pass :"+wifiP2pInfo.getPassphrase()+"owner adress:"+wifiP2pInfo.getOwner().deviceAddress+" network name : "+wifiP2pInfo.getNetworkName()+" size :"+wifiP2pInfo.getClientList().size()+" isOwner : "+wifiP2pInfo.isGroupOwner());
 
             }
             else {
                 WifiP2pDevice d =wifiP2pInfo.getOwner();
-                conect.setText("pass :"+wifiP2pInfo.getPassphrase()+"owner adress:"+wifiP2pInfo.getOwner().deviceAddress+" network name : "+wifiP2pInfo.getNetworkName()+" size :"+wifiP2pInfo.getClientList().size()+" isOwner : "+wifiP2pInfo.isGroupOwner());
                 connStatus.setText("Client ("+wifiP2pInfo.getClientList().size()+")" );
 
             }
@@ -374,7 +428,8 @@ public class Student_Lobby extends AppCompatActivity {
             }
         }
     }
-    void InitQR(String name,String matricule,String MAC){
+    public static void InitQR(String name,String matricule,String MAC){
+        Log.e("QR","DONE THE MAC ADRESS IS {"+MAC+"}");
         Bitmap myBitmap = QRCode.from("0]"+name+"]"+matricule+"]"+MAC).withSize(700, 700).bitmap();
         QR.setImageBitmap(myBitmap);
     }

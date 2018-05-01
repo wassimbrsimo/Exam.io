@@ -40,12 +40,24 @@ public class Exam {
     }
 
     ArrayList<Question> questions;
-    public Exam(String titre,String module,int id,int duration){
-        this.id=id;
-        this.Titre=titre;
-        this.Module=module;
-        this.questions= new ArrayList<Question>();
-        this.duration=duration;
+
+    public Exam(String titre, String module, int id, int duration) {
+        this.id = id;
+        this.Titre = titre;
+        this.Module = module;
+        this.questions = new ArrayList<Question>();
+        this.duration = duration;
     }
 
+    public static String toString(Exam e) {
+        return "1]" + e.getTitre() + "]" + e.getModule() + "]" + e.getId() + "]" + e.getDuration() + "]" + e.getQuestions().size() + Question.toStrings(e.getQuestions());
+
+    }
+
+    public static Exam toExam(String s) {
+        String[] split = s.split("]");
+        Exam e = new Exam(split[1], split[2], Integer.valueOf(split[3]), Integer.valueOf(split[4]));
+        e.setQuestions(Question.toQuestions(split));
+        return e;
+    }
 }

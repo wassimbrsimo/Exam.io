@@ -32,9 +32,6 @@
         <activity
             android:name=".Student"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity
-            android:name=".DuringExamActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".DuringHostingActivity" />
         <activity android:name=".Student_Lobby"></activity>
     </application>
