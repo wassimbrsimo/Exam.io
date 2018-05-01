@@ -202,7 +202,6 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        /////////////   FORMAT :  ONE]NAME]ModulE]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
                     }
                     else if (tempMsg.split("]")[0].equals("2")) {
 
@@ -216,20 +215,25 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
         }
     });
 
-    void CalculateScore(String answer){
+    void CalculateScore(String recievedMsg){
         String scoremsg="2]";
         int score = 0;
-        String[] TypedAnswer =answer.split(Student_Lobby.ANSWERS_SEPARATOR);
+        String answers=recievedMsg.split("]")[1];
+        String[] TypedAnswer = answers.split(Student_Lobby.ANSWERS_SEPARATOR);
+        Log.e("Recieved answer ","answer : "+answers);
         String student_answer="";
-        for(int i =1;i<TypedAnswer.length;i++){
+        for(int i =0;i<TypedAnswer.length;i++){
             student_answer+=TypedAnswer[i]+Student_Lobby.ANSWERS_SEPARATOR;
-            scoremsg+=examin.getQuestions().get(i-1)+Student_Lobby.ANSWERS_SEPARATOR;
-            if(TypedAnswer[i].equals(examin.getQuestions().get(i)))
+            scoremsg+=examin.getQuestions().get(i).getAnswer()+Student_Lobby.ANSWERS_SEPARATOR;
+            Log.e("Calculating ","answer : "+TypedAnswer[i]+" / realAnswer :"+examin.getQuestions().get(i).getAnswer());
+            if(TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer()))
                 score++;
         }
         //db.pushAnswer(student_answer,0,0);
         try {
-            sendRecieve.write((scoremsg+Student_Lobby.ANSWERS_SEPARATOR+String.valueOf(score)).getBytes());
+
+            Log.e("Sending note  answer ","temMSg to send  : "+scoremsg+String.valueOf(score));
+            sendRecieve.write((scoremsg+String.valueOf(score)).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

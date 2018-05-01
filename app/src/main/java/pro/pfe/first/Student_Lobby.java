@@ -1,42 +1,30 @@
 package pro.pfe.first;
 
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.nsd.NsdManager;
-import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.zxing.Result;
 
 import net.glxn.qrgen.android.QRCode;
 
@@ -45,14 +33,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class Student_Lobby extends AppCompatActivity {
     static ImageView QR;
@@ -83,8 +67,8 @@ public class Student_Lobby extends AppCompatActivity {
     //____________________Examination__________________________
     RecyclerView rv;
     Button done_exam;
-    ExamAdapter examAdapter;
-    List<Question> quest_list = new ArrayList<>();
+    StudentExamAdapter studentExamAdapter;
+    ArrayList<Question> quest_list = new ArrayList<Question>();
     TextView txt,time;
     ProgressBar ptime;
     public static final String ANSWERS_SEPARATOR = "-";
@@ -101,31 +85,10 @@ public class Student_Lobby extends AppCompatActivity {
         initNetWork();
         initExamView();
     }
-    void InitExam(final Exam e){
-        new CountDownTimer(e.getDuration()*60*1000, 1000){ // Temporary
 
-            public void onTick(long millisUntilFinished){
-                ptime.setMax(e.getDuration()*60);
-                time.setText(millisUntilFinished/1000/60+":"+(millisUntilFinished/1000-(millisUntilFinished/1000/60)*60));
-                ptime.setProgress((int) (millisUntilFinished/1000));
-            }
-            public  void onFinish(){
-                BtnFinishClicked(null);
-            }
-        }.start();
-
-        quest_list=e.getQuestions();
-        for(int i=0 ; i<quest_list.size();i++)
-        {
-            TypedAnswers.add("");
-        }
-
-        LinearExam.setVisibility(View.VISIBLE);
-        LinearQR.setVisibility(View.GONE);
-    }
     public void BtnFinishClicked(View view){
         if(DoneAllQuestions())
-            txt.setText("Your Score is : "+AnswerPoints()+"/"+TypedAnswers.size());
+            txt.setText("Waiting for Answer "+AnswerPoints());
         else
             txt.setText("please answer To All the questions");
     }
@@ -157,13 +120,6 @@ public class Student_Lobby extends AppCompatActivity {
         time=(TextView) findViewById(R.id.time);
         ptime=(ProgressBar) findViewById(R.id.ptime);
 
-
-        rv= findViewById(R.id.quest_rv);
-        examAdapter = new ExamAdapter(quest_list);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        rv.setLayoutManager(layoutManager);
-        rv.setAdapter(examAdapter);
-        examAdapter.notifyDataSetChanged();
 
         LinearQR=(LinearLayout) findViewById(R.id.qr);
         LinearExam=(LinearLayout) findViewById(R.id.exam);
@@ -209,6 +165,34 @@ public class Student_Lobby extends AppCompatActivity {
             }
         });
     }
+    void InitExam(final Exam e){
+        new CountDownTimer(e.getDuration()*60*1000, 1000){ // Temporary
+
+            public void onTick(long millisUntilFinished){
+                ptime.setMax(e.getDuration()*60);
+                time.setText(millisUntilFinished/1000/60+":"+(millisUntilFinished/1000-(millisUntilFinished/1000/60)*60));
+                ptime.setProgress((int) (millisUntilFinished/1000));
+            }
+            public  void onFinish(){
+                BtnFinishClicked(null);
+            }
+        }.start();
+
+        rv= findViewById(R.id.quest_rv);
+        quest_list=e.getQuestions();
+        studentExamAdapter = new StudentExamAdapter(quest_list);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        rv.setLayoutManager(layoutManager);
+        rv.setAdapter(studentExamAdapter);
+        studentExamAdapter.notifyDataSetChanged();
+        for(int i=0 ; i<quest_list.size();i++)
+        {
+            TypedAnswers.add("");
+        }
+
+        LinearExam.setVisibility(View.VISIBLE);
+        LinearQR.setVisibility(View.GONE);
+    }
     public void sendAnswer(String Answer){
         try {
             sendRecieve.write(Answer.getBytes());
@@ -236,7 +220,7 @@ public class Student_Lobby extends AppCompatActivity {
                     }
                     else if (tempMsg.split("]")[0].equals("1")) {
 
-                        Log.e("CLIENT RECEPTION","EXAM RECIEVED ! : "+tempMsg+ " DURATION : "+Exam.toExam(tempMsg).getDuration());
+                        Log.e("CLIENT RECEPTION","EXAM RECIEVED ! : "+tempMsg+ " DURATION : "+Exam.toExam(tempMsg).getQuestions().get(0));
                         InitExam(Exam.toExam(tempMsg));
 
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
@@ -245,12 +229,12 @@ public class Student_Lobby extends AppCompatActivity {
                     else if (tempMsg.split("]")[0].equals("2")) {
 
                         Log.e("CLIENT RECEPTION","NOTE RECIEVED  ! : "+tempMsg);
-
-                            String[] notemsg =tempMsg.split(ANSWERS_SEPARATOR);
+                            String answer=tempMsg.split("]")[1];
+                            String[] notemsg =answer.split(ANSWERS_SEPARATOR);
                             //todo save the real exam on BD with the student answers
                         int score = Integer.valueOf(notemsg[notemsg.length-1]);
 
-                        txt.setText("Note Recu : "+score+" sur "+String.valueOf(notemsg.length-2));
+                        txt.setText("Note Recu : "+score+" sur "+String.valueOf(notemsg.length-1));
                         }
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class ExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<Question> liste_des_questions;
 
     public class ExamHolder extends RecyclerView.ViewHolder{
@@ -23,7 +23,7 @@ public class ExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         }
     }
-    ExamAdapter(List<Question> list){
+    StudentExamAdapter(List<Question> list){
         this.liste_des_questions=list;
     }
 
@@ -37,7 +37,7 @@ public class ExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Question quest=liste_des_questions.get(position);
         ExamHolder hold = (ExamHolder) holder;
-        hold.question.setText(quest.getQuestion()+" / "+Student_Lobby.TypedAnswers.get(position));
+        hold.question.setText(Question.toString(quest)+" / "+Student_Lobby.TypedAnswers.get(position));
 
         AnsweringManager(hold,position);
     }

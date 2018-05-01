@@ -34,6 +34,12 @@
             android:layout_weight="1"
             android:text="TextView" />
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/quest_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="60" />
+
         <Button
             android:id="@+id/Done_Exam"
             android:layout_width="match_parent"
@@ -42,11 +48,6 @@
             android:onClick="BtnFinishClicked"
             android:text="Terminer" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/quest_rv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="60" />
     </LinearLayout>
 
     <LinearLayout
