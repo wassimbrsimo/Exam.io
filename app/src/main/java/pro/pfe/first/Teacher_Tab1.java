@@ -93,7 +93,7 @@ public class Teacher_Tab1 extends Fragment {
         validate= view.findViewById(R.id.add_btn);
         titre= view.findViewById(R.id.add_titre);
         module=view.findViewById(R.id.add_module);
-        question=view.findViewById(R.id.add_question);
+        //question=view.findViewById(R.id.add_question);
         rv = (RecyclerView) view.findViewById(R.id.recyclerview_Teacher);
         np=view.findViewById(R.id.numberPicker);
         np.setMinValue(0);
@@ -166,6 +166,7 @@ public class Teacher_Tab1 extends Fragment {
             add.setVisibility(View.VISIBLE);
         }
     }
+
     void AddExam(){
         int dur=0;
         switch (np.getValue()){

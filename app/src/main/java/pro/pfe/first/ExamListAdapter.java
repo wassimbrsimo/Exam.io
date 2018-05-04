@@ -1,7 +1,11 @@
 package pro.pfe.first;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,27 +32,28 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public View question_panel;
         public Button Questions,Delete,add_question,host;
         public Switch answer_toggle;
-
+        public CardView card;
         public ExamViewHolder(View view) {
             super(view);
             Title = (TextView) view.findViewById(R.id.titre);
             Module = (TextView) view.findViewById(R.id.module);
-            add_question=(Button)view.findViewById(R.id.add_question);
-            answer_toggle=(Switch) view.findViewById(R.id.toggleButton);
+          //  add_question=(Button)view.findViewById(R.id.add_question);
+          //  answer_toggle=(Switch) view.findViewById(R.id.toggleButton);
             host = (Button) view.findViewById(R.id.host);
-
-            question=(TextView)view.findViewById(R.id.question_text);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-            r=(RecyclerView) view.findViewById(R.id.recyclerview_question);
-            r.setLayoutManager(layoutManager);
-            question_panel= view.findViewById(R.id.question_panel);
-            Questions=(Button) view.findViewById(R.id.edit);
-            Delete =(Button) view.findViewById(R.id.delete);
+            card = view.findViewById(R.id.card);
+            //question=(TextView)view.findViewById(R.id.question_text);
+           // RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
+          //  r=(RecyclerView) view.findViewById(R.id.recyclerview_question);
+            //r.setLayoutManager(layoutManager);
+           // question_panel= view.findViewById(R.id.question_panel);
+          //  Questions=(Button) view.findViewById(R.id.edit);
+            //Delete =(Button) view.findViewById(R.id.delete);
         }
     }
 
     public class HostedExamViewHolder extends RecyclerView.ViewHolder {
         public TextView Title,nom,matricule,note,answers;
+
 
         public HostedExamViewHolder(View view) {
             super(view);
@@ -57,6 +62,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             nom=view.findViewById(R.id.name);
             note= view.findViewById(R.id.note_int);
             answers= view.findViewById(R.id.answers);
+
 
         }
     }
@@ -96,14 +102,37 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final ExamViewHolder hold = (ExamViewHolder) holder;
             hold.Title.setText(exam.getTitre());
             hold.Module.setText(exam.getModule());
-            hold.Delete.setId(exam.getId());
+//            hold.Delete.setId(exam.getId());
+            hold.card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // Ordinary Intent for launching a new activity
+                    Intent intent = new Intent(view.getContext(),Edit_Exam.class);
+                    intent.putExtra("id",exam.getId());
 
-            final QuestionAdapter qAdapter = new QuestionAdapter(exam.questions);
-            hold.r.setAdapter(qAdapter);
-            qAdapter.notifyDataSetChanged();
+                    // Get the transition name from the string
+                    String transitionName = "hello";
+
+                    // Define the view that the animation will start from
+                    View viewStart = hold.card;
+
+                    ActivityOptionsCompat options =
+
+                            ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) view.getContext(),
+                                    viewStart,   // Starting view
+                                    transitionName    // The String
+                            );
+                    //Start the Intent
+                    ActivityCompat.startActivity(view.getContext(), intent, options.toBundle());
+
+                }
+            });
+
+           // hold.r.setAdapter(qAdapter);
+           // qAdapter.notifyDataSetChanged();
 
 
-            hold.Questions.setOnClickListener(new View.OnClickListener() {
+  /*          hold.Questions.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ShowQuestions(hold, exam);
@@ -124,7 +153,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     qAdapter.notifyItemInserted(Examlist.get(getExamIndexByID(exam.getId())).getQuestions().size());
                 }
             });
-            hold.host.setOnClickListener(new View.OnClickListener() {
+           */ hold.host.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     HostThisExam(view ,exam);
@@ -143,6 +172,8 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
         }
     }
+
+
     void HostThisExam(View v,Exam e){
         // launch the Hosting activity after passing data
 
@@ -153,13 +184,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         HostingIntent.putExtra("Exam",e.getId());
         v.getContext().startActivity(HostingIntent);
     }
-    public  void AddQuestion(String question,String reponse,int id){
-        Question q= new Question(Question.toQuestionArray(question),reponse,-1,id);
-        int identity=(int)db.create(q);
-        q.setId(identity);
-        Examlist.get(getExamIndexByID(id)).questions.add(q);
 
-    }
 
     public void ShowQuestions(ExamViewHolder hold,Exam exam){
         if (hold.isRecyclable()){

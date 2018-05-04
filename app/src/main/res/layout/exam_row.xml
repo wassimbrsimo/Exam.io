@@ -1,134 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/exam_container"
-
+        <android.support.v7.widget.CardView
+            android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/titre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Examin final QCM" />
-
-                <TextView
-                    android:id="@+id/module"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:text="Crypto" />
-            </LinearLayout>
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:transitionName="hello"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="6dp"
+            app:cardUseCompatPadding="true"
+            tools:layout_editor_absoluteX="25dp"
+            tools:layout_editor_absoluteY="25dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/delete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:contentDescription="0"
-                    android:onClick="DeleteExam"
-                    android:text="Delete Exam"
-                    android:textColor="@color/colorAccent" />
-
-                <Button
-                    android:id="@+id/host"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="HOST"
-                    android:textColor="@android:color/holo_green_dark" />
-
-                <Button
-                    android:id="@+id/edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Show Questions"
-                    android:textColor="@color/colorPrimary" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/question_panel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:visibility="visible">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ToggleButton
-                    android:id="@+id/type"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="50"
-                    android:checked="false"
-                    android:text="Type"
-                    android:textOff="boolean"
-                    android:textOn="multi" />
+                    android:layout_weight="7"
+                    android:background="@color/colorPrimaryDark"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/question_text"
+                    <TextView
+                        android:id="@+id/timeNum"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="30 "
+                        android:textAlignment="center"
+                        android:textColor="@color/cardview_light_background"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/time_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="mins"
+                        android:textAlignment="center"
+                        android:textColor="@color/cardview_light_background"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/exam_container"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="50"
-                    android:ems="10"
-                    android:hint="question"
-                    android:inputType="textPersonName" />
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
 
-                <Button
-                    android:id="@+id/add_question"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0"
-                    android:text="add" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/titre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="casual"
+                            android:text="Examin final QCM"
+                            android:textAlignment="center"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/module"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="casual"
+                            android:text="Crypto"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="Questions : 5"
+                        android:textAlignment="textEnd" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/host"
+                            android:layout_width="wrap_content"
+                            android:layout_height="20dp"
+                            android:layout_weight="1"
+                            android:background="#69a66b"
+                            android:text="HOST"
+                            android:textColor="#000000" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <Switch
-                android:id="@+id/toggleButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textOff="False"
-                android:textOn="True" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview_question"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false">
-
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
-    </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

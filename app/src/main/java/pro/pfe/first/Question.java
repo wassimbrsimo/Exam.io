@@ -33,7 +33,7 @@ public class Question {
     }
 
     public int getType() {
-        return getQuestion().size()>1?1:0;
+        return getQuestion()!=null?getQuestion().size()>1?1:0:0;
     }
 
     public ArrayList<String>  getQuestion() {
@@ -59,11 +59,11 @@ public class Question {
         if(q.getType()==0)
             return q.getQuestion().get(0);
         else {
-            String questions="";
-            for(int i=0;i<q.getQuestion().size();i++)
-                questions+=q.getQuestion().get(i)+Separator;
+            String questions = "";
+            for (int i = 0; i < q.getQuestion().size(); i++)
+                questions += q.getQuestion().get(i) + Separator;
             return questions;
-        }  //todo : Add the Case for Other Question Types  1]X]X]X]3 ] }}..}} }} ] .. ] ..
+        }
     }
     public static String toStrings(ArrayList<Question> qlist){
         String questionString="]";
