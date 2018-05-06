@@ -1,28 +1,42 @@
-
 package pro.pfe.first;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
+/**
+ * Created by wassi on 5/5/2018.
+ */
 
-import net.glxn.qrgen.android.QRCode;
+public class Student {
 
-public class Student extends FragmentActivity {
+    String name,matricule;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student);
-
+    public int getID() {
+        return ID;
     }
 
-    public void passExam(View view){
-        Intent Lobby=new Intent(getApplicationContext(),Student_Lobby.class);
-        startActivity(Lobby);
-        //todo: Animation ..
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    int ID;
+    public Student(String name,String matricule,int ID){
+        this.name=name;
+        this.matricule=matricule;
+        this.ID=ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMatricule() {
+        return matricule;
+    }
+
+    public void setMatricule(String matricule) {
+        this.matricule = matricule;
     }
 
 }

@@ -22,8 +22,8 @@ public class Teacher extends AppCompatActivity implements Teacher_Tab1.OnFragmen
         setContentView(R.layout.activity_teacher);
 
         TabLayout tab=(TabLayout) findViewById(R.id.tabLayout);
-        tab.addTab(tab.newTab().setText("Exams"));
-        tab.addTab(tab.newTab().setText("Generate Exams"));
+        tab.addTab(tab.newTab().setText(R.string.Exams_manager));
+        tab.addTab(tab.newTab().setText(R.string.History));
         tab.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager vp =(ViewPager) findViewById(R.id.pager);
         pagesAdapter pAdapter = new pagesAdapter(getSupportFragmentManager(),tab.getTabCount());

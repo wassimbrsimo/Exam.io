@@ -49,6 +49,7 @@ public class StudentWifiReceiver extends BroadcastReceiver {
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
             }else{
                 mActivity.connStatus.setText("device disconnected");
+
             }
         }
         else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)){

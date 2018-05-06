@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
                 side = new Intent(this,Teacher.class);
             }
             else{  // student
-                side = new Intent(this,Student.class);
+                side = new Intent(this,StudentActivity.class);
             }
             startActivity(side);
         }
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(side);
     }
     public void onStudent(View view){
-        side = new Intent(this,Student.class);
+        side = new Intent(this,StudentActivity.class);
         startActivity(side);
     }
 }

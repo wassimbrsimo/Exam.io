@@ -17,10 +17,14 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:paddingBottom="-5dp"
             android:transitionName="hello"
             app:cardCornerRadius="10dp"
             app:cardElevation="6dp"
             app:cardUseCompatPadding="true"
+            app:contentPadding="10dp"
             tools:layout_editor_absoluteX="25dp"
             tools:layout_editor_absoluteY="25dp">
 
@@ -28,34 +32,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="7"
-                    android:background="@color/colorPrimaryDark"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/timeNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-condensed"
-                        android:text="30 "
-                        android:textAlignment="center"
-                        android:textColor="@color/cardview_light_background"
-                        android:textSize="24sp" />
-
-                    <TextView
-                        android:id="@+id/time_txt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-condensed"
-                        android:text="mins"
-                        android:textAlignment="center"
-                        android:textColor="@color/cardview_light_background"
-                        android:textSize="14sp" />
-                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/exam_container"
@@ -81,26 +57,33 @@
                             android:fontFamily="casual"
                             android:text="Examin final QCM"
                             android:textAlignment="center"
-                            android:textSize="18sp"
+                            android:textSize="30sp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/module"
-                            android:layout_width="match_parent"
+                            android:id="@+id/duration"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="casual"
-                            android:text="Crypto"
-                            android:textAlignment="center" />
+                            android:text="TextView" />
 
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/module"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
                         android:layout_weight="1"
+                        android:fontFamily="casual"
+                        android:text="Crypto"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/nquest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
                         android:text="Questions : 5"
                         android:textAlignment="textEnd" />
 
@@ -113,11 +96,13 @@
                         <Button
                             android:id="@+id/host"
                             android:layout_width="wrap_content"
-                            android:layout_height="20dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="10dp"
                             android:layout_weight="1"
-                            android:background="#69a66b"
+                            android:background="@drawable/blue_button_shape"
+                            android:elevation="0dp"
                             android:text="HOST"
-                            android:textColor="#000000" />
+                            android:textColor="#fff" />
 
                     </LinearLayout>
 

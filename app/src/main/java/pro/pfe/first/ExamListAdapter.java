@@ -25,59 +25,56 @@ import static pro.pfe.first.Teacher_Tab1.getExamIndexByID;
 
 public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private List<Exam> Examlist;
-
+    Boolean HOSTED;
     public class ExamViewHolder extends RecyclerView.ViewHolder {
-        public TextView Title,Module,question;
+        public TextView Title,Module,question,duration;
         public RecyclerView r;
         public View question_panel;
-        public Button Questions,Delete,add_question,host;
+        public Button Delete,host;
         public Switch answer_toggle;
         public CardView card;
         public ExamViewHolder(View view) {
             super(view);
             Title = (TextView) view.findViewById(R.id.titre);
             Module = (TextView) view.findViewById(R.id.module);
-          //  add_question=(Button)view.findViewById(R.id.add_question);
-          //  answer_toggle=(Switch) view.findViewById(R.id.toggleButton);
             host = (Button) view.findViewById(R.id.host);
             card = view.findViewById(R.id.card);
-            //question=(TextView)view.findViewById(R.id.question_text);
-           // RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
-          //  r=(RecyclerView) view.findViewById(R.id.recyclerview_question);
-            //r.setLayoutManager(layoutManager);
-           // question_panel= view.findViewById(R.id.question_panel);
-          //  Questions=(Button) view.findViewById(R.id.edit);
+            question=(TextView)view.findViewById(R.id.nquest);
+            duration=view.findViewById(R.id.duration);
             //Delete =(Button) view.findViewById(R.id.delete);
         }
     }
 
     public class HostedExamViewHolder extends RecyclerView.ViewHolder {
-        public TextView Title,nom,matricule,note,answers;
+        public TextView Title,nom,matricule,note;
+        View layout;
+        RecyclerView rv;
 
 
         public HostedExamViewHolder(View view) {
             super(view);
+            layout=view.findViewById(R.id.layout);
             Title =  view.findViewById(R.id.title);
             matricule = view.findViewById(R.id.matricule);
             nom=view.findViewById(R.id.name);
             note= view.findViewById(R.id.note_int);
-            answers= view.findViewById(R.id.answers);
+            rv = view.findViewById(R.id.students_list);
 
 
         }
     }
 
-    public ExamListAdapter(List<Exam> List){
-        this.Examlist=List;
+    public ExamListAdapter(List<Exam> List,Boolean hosted) {
+        this.Examlist = List;
+        this.HOSTED = hosted;
     }
 
     @Override
     public int getItemViewType(int position) {
-       /* if(Teacher.VIEWHOSTEDEXAM)
+       if(HOSTED)
             return 1;
         else
-            return 0;*/
-    return 0;
+            return 0;
     }
 
     @Override
@@ -102,57 +99,38 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final ExamViewHolder hold = (ExamViewHolder) holder;
             hold.Title.setText(exam.getTitre());
             hold.Module.setText(exam.getModule());
+            hold.duration.setText(exam.getDuration()+" Mins");
+            hold.question.setText(exam.getQuestions().size()+" Questions");
 //            hold.Delete.setId(exam.getId());
             hold.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Ordinary Intent for launching a new activity
                     Intent intent = new Intent(view.getContext(),Edit_Exam.class);
                     intent.putExtra("id",exam.getId());
 
-                    // Get the transition name from the string
                     String transitionName = "hello";
 
-                    // Define the view that the animation will start from
                     View viewStart = hold.card;
 
                     ActivityOptionsCompat options =
 
                             ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) view.getContext(),
-                                    viewStart,   // Starting view
-                                    transitionName    // The String
+                                    viewStart,
+                                    transitionName
                             );
-                    //Start the Intent
                     ActivityCompat.startActivity(view.getContext(), intent, options.toBundle());
 
                 }
             });
 
-           // hold.r.setAdapter(qAdapter);
-           // qAdapter.notifyDataSetChanged();
-
-
-  /*          hold.Questions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ShowQuestions(hold, exam);
-                }
-            });
-
-            hold.Delete.setOnClickListener(new View.OnClickListener() {
+       /*  hold.Delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     DeleteExam(exam.getId());
                 }
             });
 
-            hold.add_question.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AddQuestion(hold.question.getText().toString(), String.valueOf(hold.answer_toggle.isChecked()), exam.getId());
-                    qAdapter.notifyItemInserted(Examlist.get(getExamIndexByID(exam.getId())).getQuestions().size());
-                }
-            });
+
            */ hold.host.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -165,10 +143,26 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 final Exam hostedexam = Examlist.get(position);
                 final HostedExamViewHolder hostedholder = (HostedExamViewHolder) holder;
                 hostedholder.Title.setText(hostedexam.getTitre());
-                hostedholder.matricule.setText(db.getDatabaseName());// get the dude data
-                hostedholder.nom.setText("");
-                hostedholder.note.setText("");
-                hostedholder.answers.setText("");
+                hostedholder.matricule.setText(hostedexam.getModule() );// get the dude data
+                hostedholder.nom.setText(hostedexam.getTitre());
+                hostedholder.note.setText("note moyenne : ..");
+                StudentAdapter sAdapter=new StudentAdapter(db.getStudentWithExam(hostedexam.getId()),hostedexam.getId());
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(hostedholder.Title.getContext());
+                hostedholder.rv.setLayoutManager(layoutManager);
+                hostedholder.rv.setAdapter(sAdapter);
+                sAdapter.notifyDataSetChanged();
+                hostedholder.layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(hostedholder.rv.getVisibility()==View.VISIBLE)
+                        hostedholder.rv.setVisibility(View.GONE);
+                        else
+                            hostedholder.rv.setVisibility(View.VISIBLE);
+                        /*  Intent Teacher_Done_Exam = new Intent(view.getContext(),Teacher_Done_Exam.class);
+                        Teacher_Done_Exam.putExtra("id",hostedexam.getId());
+                        view.getContext().startActivity(Teacher_Done_Exam);
+                    */}
+                });
                 break;
         }
     }

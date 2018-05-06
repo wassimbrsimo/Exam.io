@@ -17,7 +17,7 @@ public class Edit_Exam extends AppCompatActivity {
     private Exam examin;
     Button toggle_vf,toggle_multi;
     TextView titre,module;
-    RecyclerView rv;
+    public static RecyclerView rv;
     QuestionAdapter qAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class Edit_Exam extends AppCompatActivity {
         q.setId(identity);
         examin.getQuestions().add(q);
         qAdapter.notifyDataSetChanged();
-        rv.smoothScrollToPosition(examin.getQuestions().size());
+        rv.scrollBy(0,9999);
     }
 
 }

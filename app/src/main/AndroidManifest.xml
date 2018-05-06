@@ -30,11 +30,18 @@
             android:name=".Teacher"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".Student"
+            android:name=".StudentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".DuringHostingActivity" />
-        <activity android:name=".Student_Lobby" />
-        <activity android:name=".Edit_Exam"></activity>
+        <activity
+            android:name=".DuringHostingActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".Student_Lobby"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".Edit_Exam"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity android:name=".Teacher_Done_Exam"></activity>
     </application>
 
 </manifest>

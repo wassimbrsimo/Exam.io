@@ -20,6 +20,7 @@ import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static pro.pfe.first.Teacher.db;
 
 
 /**
@@ -58,8 +59,6 @@ public class Teacher_Tab1 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
     }
     void Listeners(){
         add.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +103,7 @@ public class Teacher_Tab1 extends Fragment {
 
         Examlist= Teacher.db.getAllExams();
         Log.e("EXAMILIST","DONE WE HAVE "+Examlist.size());
-        eAdapter=new ExamListAdapter(Examlist);
+        eAdapter=new ExamListAdapter(Examlist,false);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(eAdapter);

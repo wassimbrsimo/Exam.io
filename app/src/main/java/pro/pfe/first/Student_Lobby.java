@@ -110,6 +110,7 @@ public class Student_Lobby extends AppCompatActivity {
         }
         try {
             sendRecieve.write(("2]"+answers).getBytes());
+            Log.e("CLIENT ","NOTE envoyer : "+answers);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,6 +128,12 @@ public class Student_Lobby extends AppCompatActivity {
         LinearExam.setVisibility(View.GONE);
         LinearQR.setVisibility(View.VISIBLE);
     }
+    public static void InitQR(String name,String matricule,String MAC){
+        Log.e("QR","DONE THE MAC ADRESS IS {"+MAC+"}");
+        Bitmap myBitmap = QRCode.from("0]"+name+"]"+matricule+"]"+MAC).withSize(700, 700).bitmap();
+        QR.setImageBitmap(myBitmap);
+    }
+
     // ___________________________________________________________________
     private void initNetWork() {
 
@@ -231,7 +238,7 @@ public class Student_Lobby extends AppCompatActivity {
                         Log.e("CLIENT RECEPTION","NOTE RECIEVED  ! : "+tempMsg);
                             String answer=tempMsg.split("]")[1];
                             String[] notemsg =answer.split(ANSWERS_SEPARATOR);
-                            //todo save the real exam on BD with the student answers
+
                         int score = Integer.valueOf(notemsg[notemsg.length-1]);
 
                         txt.setText("Note Recu : "+score+" sur "+String.valueOf(notemsg.length-1));
@@ -411,11 +418,6 @@ public class Student_Lobby extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
-    public static void InitQR(String name,String matricule,String MAC){
-        Log.e("QR","DONE THE MAC ADRESS IS {"+MAC+"}");
-        Bitmap myBitmap = QRCode.from("0]"+name+"]"+matricule+"]"+MAC).withSize(700, 700).bitmap();
-        QR.setImageBitmap(myBitmap);
     }
 
 

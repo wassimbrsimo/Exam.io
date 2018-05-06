@@ -83,51 +83,58 @@ public class DB extends SQLiteOpenHelper{
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_STUDENT);
             onCreate(db);
     }
-    public void pushAnswer(String answers,int exam_id,int student_id ){
-        SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ID_ANSWER_EXAM,exam_id);
-        values.put(ID_ANSWER_STUDENT,student_id);
-        values.put(ANSWER_STRING,answers);
-        db.insert(TABLE_ANSWER,null,values);
-    }
-    public long insertStudent(String name,String matricule){
-        SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(STUDENT_NAME,name);
-        values.put(STUDENT_MATRICULE,matricule);
-        return db.insert(TABLE_STUDENT,null,values);
-    }
-    public void getStudentAnswer(int student_Id ,int exam_id){
+    public String getStudentAnswer(int student_Id ,int exam_id){
+        String answer="";
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor c= db.rawQuery("SELECT * FROM "+TABLE_ANSWER+" WHERE "+ID_ANSWER_STUDENT+" = "+student_Id + " AND "+ID_ANSWER_EXAM+" = "+exam_id,null);
+        if(c.moveToFirst()) {
+            do {
+               answer = c.getString(c.getColumnIndex(ANSWER_STRING));
 
+            }while(c.moveToNext());
+        }
+        return answer;
     }
-    public void getStudent(int Id){
+    public Student getStudent(int id){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor c= db.rawQuery("SELECT * FROM "+TABLE_STUDENT+" WHERE "+ID_STUDENT+" = "+id,null);
+        Student grabbedStudent=null;
+        if(c.moveToFirst()) {
+            do {
+                grabbedStudent = new Student(c.getString(c.getColumnIndex(STUDENT_NAME)), c.getString(c.getColumnIndex(STUDENT_MATRICULE)), c.getInt(c.getColumnIndex(ID_STUDENT)));
 
+        }while(c.moveToNext());
     }
-    public List<Exam> getHostedExams(){
-        List<Exam> exams = new ArrayList<Exam>();
-        String selectExamQuery = "SELECT * FROM "+TABLE_ANSWER;
+    return grabbedStudent;
+    }
+    public ArrayList<Student> getStudentWithExam(int id){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM "+TABLE_ANSWER+" WHERE "+ID_ANSWER_EXAM+" = "+id;
+        Cursor c =db.rawQuery(selectQuery,null);
+        ArrayList<Student> students=new ArrayList<>();
+        if(c.moveToFirst())
+            do {
+                students.add(getStudent(c.getInt(c.getColumnIndex(ID_ANSWER_STUDENT))));
+            }while(c.moveToNext());
+
+
+        return students;
+    }
+    public ArrayList<Exam> getHostedExams(){
+        ArrayList<Exam> exams = new ArrayList<Exam>();
+        String selectExamQuery = "SELECT * FROM "+TABLE_ANSWER+ " GROUP BY "+ID_ANSWER_EXAM;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectExamQuery, null);
 
 
         if(c.moveToFirst()){
             do {
-                String selectQuestionQuery = "SELECT * FROM "+TABLE_EXAMS+" WHERE "+ID_EXAM+" = "+c.getInt(c.getColumnIndex(ID_ANSWER_EXAM));
-                Cursor q = db.rawQuery(selectQuestionQuery, null);
-
-                if (q.moveToFirst()) {
-                    do {
-                        Exam e = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)), c.getString(c.getColumnIndex(EXAM_MODULE)), c.getInt(c.getColumnIndex(ID_EXAM)),c.getInt(c.getColumnIndex(EXAM_DURATION)));
-                        exams.add(e);
-
-                       ////////////////////////
-
-                    } while (q.moveToNext());
-                }
+                exams.add(getExam(c.getInt(c.getColumnIndex(ID_ANSWER_EXAM))));
             }
             while (c.moveToNext()) ;
         }
+        if(exams.size()!=0)
+        Log.e("get HOSTED ","got a hosted : "+exams.get(0).getTitre());
         return exams;
     }
 
@@ -219,6 +226,22 @@ public class DB extends SQLiteOpenHelper{
         return db.insert(TABLE_QUESTIONS,null,values);
     }
 
+
+    public void pushAnswer(String answers,int exam_id,int student_id ){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID_ANSWER_EXAM,exam_id);
+        values.put(ID_ANSWER_STUDENT,student_id);
+        values.put(ANSWER_STRING,answers);
+        db.insert(TABLE_ANSWER,null,values);
+    }
+    public long insertStudent(String name,String matricule){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(STUDENT_NAME,name);
+        values.put(STUDENT_MATRICULE,matricule);
+        return db.insert(TABLE_STUDENT,null,values);
+    }
 
     public void DeleteExam(int id ){
         SQLiteDatabase db = this.getWritableDatabase();

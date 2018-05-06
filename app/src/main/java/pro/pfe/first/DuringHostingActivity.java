@@ -14,6 +14,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -53,7 +54,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
 
     TextView readMsg,connStatus,conect;
     EditText writeMsg,ssid;
-
+    Student currentStudent;
     int EXAM_ID;
 
     String mac="-1";
@@ -127,27 +128,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final WifiP2pDevice device=deviceArray[i];
-                WifiP2pConfig config =new WifiP2pConfig();
-                config.deviceAddress=device.deviceAddress;
-                config.groupOwnerIntent=15;
-                config.wps.setup = WpsInfo.PBC;
-               wp2pm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(getApplicationContext(),"Connected to +"+device.deviceName+" successfully",Toast.LENGTH_SHORT).show();
-                    }
 
-                    @Override
-                    public void onFailure(int i) {
-                        Toast.makeText(getApplicationContext(),"Cannot connect with "+device.deviceName,Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
         SendMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,36 +165,41 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
     }
-    Handler handler=new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what){
-                case MESSAGE_READ:
-                    byte[] readBuff= (byte[]) msg.obj;
-                    String tempMsg = new String(readBuff,0,msg.arg1);
-                    readMsg.setText(tempMsg);
-                    conect.setText(conect.getText()+" O ");
 
-                    if (tempMsg.split("]")[0].equals("1")) {
-                        Log.e("Host RECEPTION","Exam Request Recieved");
-                        Toast.makeText(getApplicationContext(), "Asking for Exam .. sending"  + tempMsg, Toast.LENGTH_SHORT).show();
-                        try {
-                              sendRecieve.write(Exam.toString(examin).getBytes());
-                        } catch (IOException e) {
-                            e.printStackTrace();
+
+
+
+                Handler handler=new Handler(new Handler.Callback() {
+                    @Override
+                    public boolean handleMessage(Message msg) {
+                        switch (msg.what){
+                            case MESSAGE_READ:
+                                byte[] readBuff= (byte[]) msg.obj;
+                                String tempMsg = new String(readBuff,0,msg.arg1);
+                                readMsg.setText(tempMsg);
+                                conect.setText(conect.getText()+" O ");
+
+                                if (tempMsg.split("]")[0].equals("1")) {
+
+                                    Log.e("Host RECEPTION","Exam Request Recieved");
+                                    try {
+                                          sendRecieve.write(Exam.toString(examin).getBytes());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                else if (tempMsg.split("]")[0].equals("2")) {
+
+                                        CalculateScore(tempMsg);
+
+                                }
+                                break;
+
                         }
+                        return true;
                     }
-                    else if (tempMsg.split("]")[0].equals("2")) {
-
-                            CalculateScore(tempMsg);
-
-                    }
-                    break;
-
-            }
-            return true;
-        }
-    });
+                });
 
     void CalculateScore(String recievedMsg){
         String scoremsg="2]";
@@ -229,16 +215,15 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
             if(TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer()))
                 score++;
         }
-        //db.pushAnswer(student_answer,0,0);
         try {
-
+            db.pushAnswer(answers,examin.getId(),currentStudent.getID());
             Log.e("Sending note  answer ","temMSg to send  : "+scoremsg+String.valueOf(score));
             sendRecieve.write((scoremsg+String.valueOf(score)).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    //TODO : - multiple choice questions , A Z examination tests , security system ,history and marks for each student
+    //TODO : -  A Z examination tests , security system ,history and marks for each student
     WifiP2pManager.PeerListListener peerListListener=new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
@@ -257,23 +242,22 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
                     index++;
                     if( device.deviceAddress.equals(mac))
                     {
-                        WifiP2pConfig config =new WifiP2pConfig();
+                        final WifiP2pConfig config =new WifiP2pConfig();
                         config.deviceAddress=mac;
                         config.groupOwnerIntent=15;
                         config.wps.setup = WpsInfo.PBC;
                         mac="-1";
+                                wp2pm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(getApplicationContext(),"Connecting to "+device.deviceName,Toast.LENGTH_SHORT).show();
+                                    }
 
-                        wp2pm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-                            @Override
-                            public void onSuccess() {
-                                Toast.makeText(getApplicationContext(),"Connecting to "+device.deviceName,Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onFailure(int i) {
-                                Toast.makeText(getApplicationContext(),"Cannot connect with "+device.deviceName,Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                    @Override
+                                    public void onFailure(int i) {
+                                        Toast.makeText(getApplicationContext(),"Cannot connect with "+device.deviceName,Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 }
 
@@ -361,6 +345,7 @@ public class DuringHostingActivity extends AppCompatActivity  implements ZXingSc
         mac=result.split("]")[3];
         conect.setText("going to connect to : "+mac);
         Log.e("MAC","MAC ADRESS IS "+mac);
+        currentStudent = new Student(result.split("]")[0],"",(int)db.insertStudent(result.split("]")[0],result.split("]")[1]));
         wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {

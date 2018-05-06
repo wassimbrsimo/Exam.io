@@ -1,6 +1,7 @@
 package pro.pfe.first;
 
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
+
+import static pro.pfe.first.Student_Lobby.TypedAnswers;
 
 
 public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -19,7 +22,7 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class TFHolder extends RecyclerView.ViewHolder{
         TextView question;
-        View question_row;
+        CardView question_row;
         public TFHolder(View view) {
             super(view);
             this.question=view.findViewById(R.id.question_text);
@@ -30,21 +33,25 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class MultiHolder extends RecyclerView.ViewHolder{
         TextView question;
-        TextView[] choices;
-        CheckBox[] checks;
-        View[] lays;
+        TextView[] choices=new TextView[5];
+        CheckBox[] checks=new CheckBox[5];
+        View[] lays=new View[5];
+        CardView card;
+        View holderLayout;
         public MultiHolder(View view) {
             super(view);
             this.question=view.findViewById(R.id.question_text);
-            for(int i=0;i<5;i++){
+            for(int i=1;i<6;i++){
                 int ID_text =itemView.getResources().getIdentifier("c"+i, "id",itemView.getContext().getPackageName());
                 int ID_check =itemView.getResources().getIdentifier("ch"+i, "id",itemView.getContext().getPackageName());
                 int ID_lay =itemView.getResources().getIdentifier("cl"+i, "id",itemView.getContext().getPackageName());
 
-                choices[i]=itemView.findViewById(ID_text);
-                checks[i]=itemView.findViewById(ID_check);
-                lays[i]=itemView.findViewById(ID_lay);
+                choices[i-1]=itemView.findViewById(ID_text);
+                checks[i-1]=itemView.findViewById(ID_check);
+                lays[i-1]=itemView.findViewById(ID_lay);
             }
+            holderLayout=itemView.findViewById(R.id.holder);
+            card=itemView.findViewById(R.id.card);
         }
     }
 
@@ -62,22 +69,50 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Question quest = liste_des_questions.get(position);
         if(holder.getItemViewType()==0) {
             TFHolder hold = (TFHolder) holder;
-            hold.question.setText(Question.toString(quest) + " / " + Student_Lobby.TypedAnswers.get(position));
+            hold.question.setText(Question.toString(quest) + " / " + TypedAnswers.get(position));
             AnsweringManager(hold, position);
         }
         else {
-            MultiHolder hold=(MultiHolder) holder;
+            final MultiHolder hold=(MultiHolder) holder;
             hold.question.setText(quest.getQuestion().get(0));
-            for(int i=0;i<quest.getQuestion().size();i++){
+            for(int i=0;i<quest.getQuestion().size()-1;i++){
                 hold.lays[i].setVisibility(View.VISIBLE);
                 if(i!=0)// skip the element 0 of ques
                 hold.choices[i-1].setText(quest.getQuestion().get(i));
             }
+
+            for(int i =0;i<5;i++){
+                hold.checks[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String temp="";
+                        for(int j=0;j<5;j++){
+                            temp+=hold.checks[j].isChecked()?"1":0;
+                        }
+                        TypedAnswers.remove(position);
+                        TypedAnswers.add(position,temp);
+                    }
+                });
+            }
+            hold.card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(hold.holderLayout.getVisibility()==View.VISIBLE)
+                    hold.holderLayout.setVisibility(View.GONE);
+                    else
+                        hold.holderLayout.setVisibility(View.VISIBLE);
+                }
+            });
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return liste_des_questions.get(position).getType();
     }
 
     @Override
@@ -87,9 +122,9 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void AnsweringManager(TFHolder hold , int position){
         final Boolean Answer,isAnswerEmpty;
-        if(Student_Lobby.TypedAnswers.get(position).equals("true"))
+        if(TypedAnswers.get(position).equals("true"))
         { Answer=true;isAnswerEmpty=false;}
-        else if(Student_Lobby.TypedAnswers.get(position).equals("false"))
+        else if(TypedAnswers.get(position).equals("false"))
         {Answer=false; isAnswerEmpty=false;}
         else
         {Answer=false; isAnswerEmpty=true;}
@@ -102,11 +137,11 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
     private void InitColors(final TFHolder hold, final Boolean answer, final Boolean isAnswerEmpty){
         if(isAnswerEmpty)
-            hold.question_row.setBackgroundColor(Color.WHITE);
+            hold.question_row.setCardBackgroundColor(Color.WHITE);
         else if(answer)
-            hold.question_row.setBackgroundColor(Color.GREEN);
+            hold.question_row.setCardBackgroundColor(Color.GREEN);
         else
-            hold.question_row.setBackgroundColor(Color.RED);
+            hold.question_row.setCardBackgroundColor(Color.RED);
     }
 
     private void ListenersManager(final TFHolder hold , final int position, final Boolean isAnswerEmpty, final Boolean Answer){
@@ -114,10 +149,10 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             @Override
             public void onClick(View view) {
                 if(isAnswerEmpty || !Answer){
-                    Student_Lobby.TypedAnswers.set(position,"true");
+                    TypedAnswers.set(position,"true");
                 }
                 else{
-                    Student_Lobby.TypedAnswers.set(position,"false");
+                    TypedAnswers.set(position,"false");
                 }
                 notifyItemChanged(position);
             }

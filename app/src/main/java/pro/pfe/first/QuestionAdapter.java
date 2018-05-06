@@ -2,6 +2,8 @@ package pro.pfe.first;
 
 
 import android.app.Application;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,14 +34,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextView question;
         public EditText question_edit;
         public Switch t;
-        public Button save,delete;
+        public ImageView save,delete;
 
         public TFQuestionViewHolder(View view) {
             super(view);
             question = (TextView) view.findViewById(R.id.question_text);
             t=(Switch) view.findViewById(R.id.t);
-            save=(Button) view.findViewById(R.id.save);
-            delete=(Button) view.findViewById(R.id.delete);
+            save=(ImageView) view.findViewById(R.id.save);
+            delete= (ImageView) view.findViewById(R.id.delete);
             question_edit=(EditText) view.findViewById(R.id.question_edit);
 
         }
@@ -51,14 +54,14 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         EditText[] choices_Edit=new EditText[5];
         CheckBox[] choices_Check=new CheckBox[5];
         View[] layouts = new View[5];
-        Button edit,delete;
+        ImageView edit,delete;
 
         public MultiQuestionViewHolder(View itemView) {
             super(itemView);
             spinner = (Spinner) itemView.findViewById(R.id.spinner);
             question=itemView.findViewById(R.id.question_text);
             question_edit=itemView.findViewById(R.id.question_edit);
-            edit=itemView.findViewById(R.id.toggleedit);
+            edit=(ImageView)itemView.findViewById(R.id.toggleedit);
             delete=itemView.findViewById(R.id.delete);
             for(int i=1;i<6;i++){
                 int ID_edit =itemView.getResources().getIdentifier("ce"+i, "id",itemView.getContext().getPackageName());
@@ -100,7 +103,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         final Question question = Questlist.get(position);
 
@@ -108,20 +111,20 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder.getItemViewType() == 0) {
             final TFQuestionViewHolder hold = (TFQuestionViewHolder) holder;
             if (question.getQuestion() != null) {
-                if (!Boolean.valueOf(question.getAnswer())) {
-                    hold.t.toggle();
-                }
+                if (Boolean.valueOf(question.getAnswer()))
+                    hold.t.setChecked(true);
+                else
+                    hold.t.setChecked(false);
                 hold.question.setText(Question.toString(question));
                 hold.question_edit.setText(Question.toString(question));
                 hold.question_edit.setVisibility(View.GONE);
                 hold.question.setVisibility(View.VISIBLE);
-                hold.save.setEnabled(false);
             }
             if(question.getQuestion().get(0).equals(""))
             {
+                hold.question_edit.setHint("remplire question");
                 hold.question_edit.setVisibility(View.VISIBLE);
                 hold.question.setVisibility(View.GONE);
-                hold.save.setEnabled(true);
             }
             hold.t.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -129,9 +132,9 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     if (question.getAnswer() == String.valueOf(hold.t.isChecked()))
                     {}
                     else{
+                        hold.save.setBackground(hold.question.getContext().getResources().getDrawable(R.drawable.save_button_shape));
                         hold.question_edit.setVisibility(View.VISIBLE);
                         hold.question.setVisibility(View.GONE);
-                        hold.save.setEnabled(true);
                     }
                 }
             });
@@ -139,11 +142,20 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             hold.save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(hold.question.getVisibility()==View.GONE){
                     hold.question.setVisibility(View.VISIBLE);
                     hold.question_edit.setVisibility(View.GONE);
                     ArrayList<String> temp= new ArrayList<String>();
                     temp.add(hold.question_edit.getText().toString());
+                    hold.save.setBackground(hold.question.getContext().getResources().getDrawable(R.drawable.blue_button_shape));
                     EditQuestion(new Question(temp,String.valueOf(hold.t.isChecked()),question.getId(),question.getE_id()) );
+                }
+                else {
+                        Edit_Exam.rv.scrollToPosition(position);
+                        hold.save.setBackground(hold.question.getContext().getResources().getDrawable(R.drawable.save_button_shape));
+                        hold.question.setVisibility(View.GONE);
+                        hold.question_edit.setVisibility(View.VISIBLE);
+                    }
                 }
             });
             hold.delete.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +180,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             multiholder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    MultiToggleEditMode(multiholder.edit.getText().equals("save"),multiholder.choices_Check,multiholder.choices_Edit,multiholder.choices_Text,multiholder.spinner,multiholder.edit,multiholder.question_edit.getText().toString(),multiholder.question_edit,multiholder.question,question);
+                    MultiToggleEditMode(multiholder.choices_Edit[0].getVisibility()==View.VISIBLE,multiholder.choices_Check,multiholder.choices_Edit,multiholder.choices_Text,multiholder.spinner,multiholder.edit,multiholder.question_edit.getText().toString(),multiholder.question_edit,multiholder.question,question);
                 }
             });
             List<String> list = new ArrayList<String>();
@@ -190,6 +202,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             for(int i=1;i<question.getQuestion().size();i++){
                    multiholder.choices_Text[i-1].setText(question.getQuestion().get(i));
                     multiholder.choices_Edit[i-1].setText(question.getQuestion().get(i));
+                    multiholder.layouts[i-1].setVisibility(View.VISIBLE);
 
             }
             for(int i=0;i<5;i++){
@@ -197,9 +210,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 multiholder.choices_Check[i].setChecked(question.getAnswer().charAt(i) == '1');
                 multiholder.question.setVisibility(View.VISIBLE);
                 multiholder.choices_Text[i].setVisibility(View.VISIBLE);
-                multiholder.edit.setText("edit");
+                multiholder.edit.setBackground(multiholder.edit.getContext().getResources().getDrawable(R.drawable.blue_button_shape));
             }
-            //MultiToggleEditMode(false,multiholder.choices_Check,multiholder.choices_Edit,multiholder.choices_Text,multiholder.spinner,multiholder.edit,question.getQuestion().get(0),question);
+            if(question.getQuestion().get(0).equals(""))
+                MultiToggleEditMode(false,multiholder.choices_Check,multiholder.choices_Edit,multiholder.choices_Text,multiholder.spinner,multiholder.edit,multiholder.question_edit.getText().toString(),multiholder.question_edit,multiholder.question,question);
 
 
             multiholder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -224,7 +238,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
         }
     }
-    public void MultiToggleEditMode(Boolean edit,CheckBox[] choices_Check,EditText[] choices_Edit,TextView[] choices_Text,Spinner sp,Button Toggeler,String q,EditText editQ,TextView questio,Question ques){
+    public void MultiToggleEditMode(Boolean edit,CheckBox[] choices_Check,EditText[] choices_Edit,TextView[] choices_Text,Spinner sp,ImageView Toggeler,String q,EditText editQ,TextView questio,Question ques){
         if(!edit){//si pour edité
         for(int i=0;i<5;i++){
 
@@ -235,7 +249,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             questio.setVisibility(View.GONE);
             choices_Text[i].setVisibility(View.GONE);
             editQ.setVisibility(View.VISIBLE);
-            Toggeler.setText("save");
+
+            Toggeler.setBackground(sp.getContext().getResources().getDrawable(R.drawable.save_button_shape));
             }
         }
         else {
@@ -247,7 +262,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 choices_Text[i].setVisibility(View.VISIBLE);
                 editQ.setVisibility(View.GONE);
                 questio.setVisibility(View.VISIBLE);
-                Toggeler.setText("edit");
+                Toggeler.setBackground(sp.getContext().getResources().getDrawable(R.drawable.blue_button_shape));
                 if(i<sp.getSelectedItemPosition()+2)
                 collected_Answer+=choices_Check[i].isChecked()?"1":"0";
                 else
