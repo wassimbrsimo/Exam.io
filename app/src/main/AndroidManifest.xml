@@ -41,7 +41,8 @@
         <activity
             android:name=".Edit_Exam"
             android:configChanges="keyboardHidden|orientation|screenSize" />
-        <activity android:name=".Teacher_Done_Exam"></activity>
+        <activity android:name=".Teacher_Done_Exam" />
+        <activity android:name=".QRScanner"></activity>
     </application>
 
 </manifest>

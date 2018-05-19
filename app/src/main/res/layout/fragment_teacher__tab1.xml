@@ -4,145 +4,164 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="pro.pfe.first.Teacher_Tab1">
-                    <android.support.design.widget.CoordinatorLayout
 
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.design.widget.CoordinatorLayout
+
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentScrim="@color/colorPrimary"
+                app:layout_scrollFlags="scroll|snap">
+
+                <RelativeLayout
+                    android:id="@+id/expandedImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_shape"
+                    android:fitsSystemWindows="true"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7">
+
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        >
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <android.support.design.widget.AppBarLayout
-                            android:id="@+id/app_bar_layout"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="0dp"
+                            android:layout_weight="90"
+                            android:orientation="vertical">
 
-                            <android.support.design.widget.CollapsingToolbarLayout
-                                android:id="@+id/collapsing_toolbar"
+                            <LinearLayout
+                                android:id="@+id/add_epanel"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                app:contentScrim="@color/colorPrimary"
-                                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
-                                <RelativeLayout
-                                    android:id="@+id/expandedImage"
+                                <EditText
+                                    android:id="@+id/add_titre"
                                     android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:background="@drawable/gradient_shape"
-                                    android:transitionName="hello"
-                                    app:layout_collapseMode="pin"
-                                    app:layout_collapseParallaxMultiplier="0.7">
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Titre"
+                                    android:inputType="textPersonName" />
 
-
-
-
-                                </RelativeLayout>
-
-                                <android.support.v7.widget.Toolbar
-                                    android:id="@+id/toolbar"
+                                <EditText
+                                    android:id="@+id/add_module"
                                     android:layout_width="match_parent"
-                                    android:layout_height="?attr/actionBarSize"
-                                    app:layout_collapseMode="pin">
+                                    android:layout_height="wrap_content"
+                                    android:ems="10"
+                                    android:hint="Module"
+                                    android:inputType="textPersonName" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <ImageButton
+                                        android:id="@+id/add_btn"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:src="@drawable/common_google_signin_btn_text_light"
+                                        android:text="Add" />
+
+                                    <NumberPicker
+                                        android:id="@+id/numberPicker"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="80dp"
+                                        android:layout_weight="1" />
+
+                                    <ImageButton
+                                        android:id="@+id/add_qbtn"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:src="@drawable/common_google_signin_btn_text_light"
+                                        android:text="Cancel" />
+                                </LinearLayout>
+                            </LinearLayout>
 
 
-                                </android.support.v7.widget.Toolbar>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/create"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/linearLayout"
+                        android:layout_marginTop="100dp"
+                        android:background="@drawable/blue_button_shape"
+                        android:backgroundTint="@android:color/white"
+                        android:elevation="6dp"
+                        android:padding="10dp"
+                        android:src="@android:drawable/ic_menu_add"
+                        android:text="Create"
+                        android:textColor="@drawable/blue_button_shape"
+                        android:tint="@color/colorPrimaryDark" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:fadeScrollbars="true"
+                    android:theme="@style/AlertDialog.AppCompat.Light"
+                    app:layout_collapseMode="pin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="Departure" />
+
+                </android.support.v7.widget.Toolbar>
 
 
-                            </android.support.design.widget.CollapsingToolbarLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
 
-                        </android.support.design.widget.AppBarLayout>
-                        <android.support.v4.widget.NestedScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/white"
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/recyclerview_Teacher"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scrollbars="vertical" />
+        </android.support.design.widget.AppBarLayout>
 
-                        </android.support.v4.widget.NestedScrollView>
-
-                    </android.support.design.widget.CoordinatorLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="90"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:id="@+id/add_epanel"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview_Teacher"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
 
-                <EditText
-                    android:id="@+id/add_titre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Titre"
-                    android:inputType="textPersonName" />
+        </android.support.v4.widget.NestedScrollView>
 
-                <EditText
-                    android:id="@+id/add_module"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="Module"
-                    android:inputType="textPersonName" />
+    </android.support.design.widget.CoordinatorLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/add_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Add" />
-
-                    <NumberPicker
-                        android:id="@+id/numberPicker"
-                        android:layout_width="wrap_content"
-                        android:layout_height="80dp"
-                        android:layout_weight="1" />
-
-                    <Button
-                        android:id="@+id/add_qbtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Cancel" />
-                </LinearLayout>
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/create"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@drawable/save_button_shape"
-            android:text="Create"
-            android:textColor="@color/cardview_light_background" />
-
-    </LinearLayout>
 </FrameLayout>

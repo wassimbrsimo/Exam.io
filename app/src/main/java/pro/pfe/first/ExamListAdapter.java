@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,18 +31,19 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public TextView Title,Module,question,duration;
         public RecyclerView r;
         public View question_panel;
-        public Button Delete,host;
+        public Button host;
+        ImageButton Delete;
         public Switch answer_toggle;
         public CardView card;
         public ExamViewHolder(View view) {
             super(view);
             Title = (TextView) view.findViewById(R.id.titre);
             Module = (TextView) view.findViewById(R.id.module);
-            host = (Button) view.findViewById(R.id.host);
+            host =  view.findViewById(R.id.host);
             card = view.findViewById(R.id.card);
             question=(TextView)view.findViewById(R.id.nquest);
             duration=view.findViewById(R.id.duration);
-            //Delete =(Button) view.findViewById(R.id.delete);
+            Delete =(ImageButton) view.findViewById(R.id.delete);
         }
     }
 
@@ -123,15 +125,13 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
 
-       /*  hold.Delete.setOnClickListener(new View.OnClickListener() {
+         hold.Delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     DeleteExam(exam.getId());
                 }
             });
-
-
-           */ hold.host.setOnClickListener(new View.OnClickListener() {
+         hold.host.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     HostThisExam(view ,exam);

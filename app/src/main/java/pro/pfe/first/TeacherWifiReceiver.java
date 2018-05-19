@@ -27,6 +27,7 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE,-1);
             if(state==WifiP2pManager.WIFI_P2P_STATE_ENABLED){
                 Toast.makeText(context,"Wifi is On",Toast.LENGTH_SHORT).show();
+                mActivity.startDiscovery();
             }
             else {
                 Toast.makeText(context,"Wifi is OFF",Toast.LENGTH_SHORT).show();
@@ -43,10 +44,13 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
             NetworkInfo netinfo= intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
             if(netinfo.isConnected()){
+
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
             }else{
                 mActivity.connStatus.setText("device disconnected");
             }
+            mManager.requestGroupInfo(mChannel, mActivity.groupeInfoListener);
+
         }
         else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)){
 

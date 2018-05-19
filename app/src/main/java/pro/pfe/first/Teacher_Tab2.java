@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,13 @@ public class Teacher_Tab2 extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         rv = (RecyclerView) view.findViewById(R.id.hosted_list);
-
+        TextView titre = view.findViewById(R.id.titre);
         eAdapter=new ExamListAdapter(Examlist,true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(eAdapter);
         eAdapter.notifyDataSetChanged();
+        titre.setText("You Have "+Examlist.size()+" Hosted Exams");
     }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

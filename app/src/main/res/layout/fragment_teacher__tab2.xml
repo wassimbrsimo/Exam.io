@@ -40,7 +40,7 @@
                         android:layout_alignLeft="@+id/titre"
                         android:layout_alignStart="@+id/titre"
                         android:layout_below="@+id/titre"
-                        android:text="04/05/2018"
+                        android:text="date "
                         android:textColor="@color/colorAccent" />
 
                     <TextView

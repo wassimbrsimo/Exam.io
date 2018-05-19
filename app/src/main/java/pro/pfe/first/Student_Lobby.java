@@ -51,16 +51,11 @@ public class Student_Lobby extends AppCompatActivity {
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
 
-    List<WifiP2pDevice> peers= new ArrayList<WifiP2pDevice>();
-    String[] deviceNameArray;
-    WifiP2pDevice[] deviceArray;
 
     static final int MESSAGE_READ=1;
-    public static String MAC_ADDRESS;
+    static String MAC_ADDRESS;
 
-    Boolean groupeFormed=false;
     String otherguysIp="0";
-    ServerClass serverClass;
     ClientClass clientClass;
     public static SendRecieve sendRecieve;
 
@@ -74,7 +69,6 @@ public class Student_Lobby extends AppCompatActivity {
     public static final String ANSWERS_SEPARATOR = "-";
     public static List<String> TypedAnswers = new ArrayList<>();
 
-    String answers="";
 
     View LinearQR,LinearExam;
 
@@ -104,6 +98,8 @@ public class Student_Lobby extends AppCompatActivity {
 
     int AnswerPoints(){
         int score=0;
+
+        String answers="";
         for(int i =0;i<TypedAnswers.size();i++) {
             answers += TypedAnswers.get(i) + ANSWERS_SEPARATOR;
 
@@ -130,6 +126,7 @@ public class Student_Lobby extends AppCompatActivity {
     }
     public static void InitQR(String name,String matricule,String MAC){
         Log.e("QR","DONE THE MAC ADRESS IS {"+MAC+"}");
+        MAC_ADDRESS=MAC;
         Bitmap myBitmap = QRCode.from("0]"+name+"]"+matricule+"]"+MAC).withSize(700, 700).bitmap();
         QR.setImageBitmap(myBitmap);
     }
@@ -215,8 +212,17 @@ public class Student_Lobby extends AppCompatActivity {
                     byte[] readBuff= (byte[]) msg.obj;
                     String tempMsg = new String(readBuff,0,msg.arg1);
 
+                    Log.e("CLIENT RECEPTION","msg : "+tempMsg);
                     if (tempMsg.split("]")[0].equals("0")) {
-                        Log.e("CLIENT RECEPTION","Recieved the First connection info");
+                        try {
+                            sendRecieve.write(("0]"+MAC_ADDRESS).getBytes());
+                            Log.e("MAC","Sending mac adress to host");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (tempMsg.split("]")[0].equals("00")) {
+                        Log.e("CLIENT RECEPTION","MAC authentified");
                         Toast.makeText(getApplicationContext(), "Connected succesfully " + tempMsg, Toast.LENGTH_SHORT).show();
                         try {
                             sendRecieve.write("1]ExamRequest".getBytes());
@@ -252,42 +258,12 @@ public class Student_Lobby extends AppCompatActivity {
             return true;
         }
     });
-   // WifiP2pManager.PeerListListener peerListListener=new WifiP2pManager.PeerListListener() {
-     //   @Override
-       // public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
-         //   if(!wifiP2pDeviceList.getDeviceList().equals(peers)){
-           //     peers.clear();
-             //   peers.addAll(wifiP2pDeviceList.getDeviceList());
-               // deviceNameArray=new String[wifiP2pDeviceList.getDeviceList().size()];
-               // deviceArray=new WifiP2pDevice[wifiP2pDeviceList.getDeviceList().size()];
-                //int index = 0;
-                //for (WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()){
-                 //   deviceNameArray[index]=device.deviceName;
-                 //   deviceArray[index]=device;
-                 //   index++;
-                //}
-                //ArrayAdapter<String> adapter =new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,deviceNameArray);
-                //listView.setAdapter(adapter);
-            //}
-            //if(peers.size()==0){
-            //    Toast.makeText(getApplicationContext(),"No peers Found ! ",Toast.LENGTH_SHORT).show();
-            //}
-        //}
-    //};
 
     WifiP2pManager.ConnectionInfoListener connectionInfoListener=new WifiP2pManager.ConnectionInfoListener() {
         @Override
         public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
             final InetAddress groupOwnerAddress = wifiP2pInfo.groupOwnerAddress;
-            if(wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
-                groupeFormed=true;
-                connStatus.setText("Groupe Owner");
-                wp2pm.requestGroupInfo(mChannel,groupeInfoListener);
-                serverClass=new ServerClass();
-                otherguysIp="";
-                serverClass.start();
-            }
-            else if(wifiP2pInfo.groupFormed){
+            if(wifiP2pInfo.groupFormed){
                 connStatus.setText("Client ");
                 clientClass = new ClientClass(groupOwnerAddress.getHostAddress());
                 otherguysIp=groupOwnerAddress.getHostAddress();
@@ -375,26 +351,6 @@ public class Student_Lobby extends AppCompatActivity {
         }
     }
 
-    public class ServerClass extends Thread {
-        Socket socket;
-        ServerSocket serverSocket;
-
-        @Override
-        public void run() {
-            try {
-                serverSocket= new ServerSocket(8888);
-                socket=serverSocket.accept();
-                sendRecieve=new SendRecieve(socket);
-                sendRecieve.start();
-                sendRecieve.write("0]hello back".getBytes());
-                Log.e("GO","Can Now Send To The Dude ");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
     public class ClientClass extends Thread{
         Socket socket;
         String hostAdd;
@@ -412,7 +368,7 @@ public class Student_Lobby extends AppCompatActivity {
                 socket.connect(new InetSocketAddress(hostAdd,8888),500);
                 sendRecieve=new SendRecieve(socket);
                 sendRecieve.start();
-                sendRecieve.write("0]hello".getBytes());
+                sendRecieve.write(("").getBytes());
                 Log.e("Client","Can Now Send To The Dude ");
             } catch (IOException e) {
                 e.printStackTrace();

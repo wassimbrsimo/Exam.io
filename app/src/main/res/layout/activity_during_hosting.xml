@@ -17,7 +17,6 @@
             android:layout_alignBaseline="@+id/onOfff"
             android:layout_alignBottom="@+id/onOfff"
             android:layout_centerHorizontal="true"
-            android:enabled="false"
             android:text="discover" />
 
         <Button

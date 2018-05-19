@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -34,10 +36,12 @@ import static pro.pfe.first.Teacher.db;
 public class Teacher_Tab1 extends Fragment {
 
     View addPanel,addqPanel ;
-    Button hosted,add,close,validate;
+    ImageButton add,close,validate,delete;
     TextView titre,module,question;
     RadioButton t,f;
     NumberPicker np;
+
+
 
     public static List<Exam> Examlist=new ArrayList<Exam>();
     public static ExamListAdapter eAdapter;
@@ -85,13 +89,14 @@ public class Teacher_Tab1 extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final String[] values= {"15 mins","30 mins", "45 mins", "1 heure", "2 heures"};
 
-
         addPanel=view.findViewById(R.id.add_epanel);
-        close= view.findViewById(R.id.add_qbtn);
-        add= view.findViewById(R.id.create);
-        validate= view.findViewById(R.id.add_btn);
+        close= (ImageButton) view.findViewById(R.id.add_qbtn);
+        add= (ImageButton) view.findViewById(R.id.create);
+        validate= (ImageButton) view.findViewById(R.id.add_btn);
         titre= view.findViewById(R.id.add_titre);
         module=view.findViewById(R.id.add_module);
+
+
         //question=view.findViewById(R.id.add_question);
         rv = (RecyclerView) view.findViewById(R.id.recyclerview_Teacher);
         np=view.findViewById(R.id.numberPicker);
@@ -109,6 +114,7 @@ public class Teacher_Tab1 extends Fragment {
         rv.setAdapter(eAdapter);
         eAdapter.notifyDataSetChanged();
         Listeners();
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -191,6 +197,7 @@ public class Teacher_Tab1 extends Fragment {
         e.setId((int)id);
         Examlist.add(e);
         eAdapter.notifyItemInserted(Examlist.size());
+        rv.scrollToPosition(0);
         AddExamToggler();
     }
 

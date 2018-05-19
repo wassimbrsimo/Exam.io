@@ -9,6 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/card"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/card"
+            android:background="@drawable/delete_button_shape"
+            android:elevation="8dp"
+            app:srcCompat="@drawable/ic_clear_black_24dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
         <android.support.v7.widget.CardView
             android:id="@+id/card"
             android:layout_width="match_parent"
@@ -29,86 +42,80 @@
             tools:layout_editor_absoluteY="25dp">
 
             <LinearLayout
+                android:id="@+id/exam_container"
+
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
-                    android:id="@+id/exam_container"
-
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/titre"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="casual"
-                            android:text="Examin final QCM"
-                            android:textAlignment="center"
-                            android:textSize="30sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/duration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="TextView" />
-
-                    </LinearLayout>
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/module"
+                        android:id="@+id/titre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="casual"
-                        android:text="Crypto"
-                        android:textAlignment="center" />
+                        android:text="Examin final QCM"
+                        android:textAlignment="center"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/nquest"
-                        android:layout_width="match_parent"
+                        android:id="@+id/duration"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="end"
-                        android:text="Questions : 5"
-                        android:textAlignment="textEnd" />
+                        android:text="TextView" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/module"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="casual"
+                    android:text="Crypto"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:id="@+id/nquest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="Questions : 5"
+                    android:textAlignment="textEnd" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/host"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/host"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:layout_margin="10dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/blue_button_shape"
-                            android:elevation="0dp"
-                            android:text="HOST"
-                            android:textColor="#fff" />
-
-                    </LinearLayout>
+                        android:background="@drawable/blue_button_shape"
+                        android:elevation="0dp"
+                        android:text="HOST"
+                        android:textColor="#fff" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
     </RelativeLayout>
 
