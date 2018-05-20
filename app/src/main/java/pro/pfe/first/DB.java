@@ -37,7 +37,7 @@ public class DB extends SQLiteOpenHelper{
                             +ID_ANSWER_STUDENT+" INTEGER,"
                             +ANSWER_STRING+" TEXT)",
 
-            TABLE_STUDENT="students",
+            TABLE_STUDENT="Etudiants",
                     CREATE_TABLE_STUDENT=
                         "CREATE TABLE "+TABLE_STUDENT+"("
                                 +ID_STUDENT+" Integer PRIMARY KEY AUTOINCREMENT,"
@@ -235,6 +235,33 @@ public class DB extends SQLiteOpenHelper{
         values.put(ANSWER_STRING,answers);
         db.insert(TABLE_ANSWER,null,values);
     }
+    public List<Student> getAllStudents(){
+        SQLiteDatabase db=this.getReadableDatabase();
+        List<Student> students=new ArrayList<Student>();
+            Cursor c = db.rawQuery("SELECT * FROM " + TABLE_STUDENT , null);
+            if (c.moveToFirst())
+                do {
+                students.add(new Student(c.getString(c.getColumnIndex(STUDENT_NAME)),c.getString(c.getColumnIndex(STUDENT_MATRICULE)),c.getInt(c.getColumnIndex(ID_STUDENT))));
+                } while (c.moveToNext());
+            return  students;
+    }
+    public boolean isStudentExists(Boolean parMatricule,String matricule){
+        SQLiteDatabase db=this.getReadableDatabase();
+        if(parMatricule) {
+            Cursor c = db.rawQuery("SELECT * FROM " + TABLE_STUDENT + " WHERE " + STUDENT_MATRICULE + " = " + matricule, null);
+            if (c.moveToFirst())
+                do {
+                    return true;
+                } while (c.moveToNext());
+        }else {
+            Cursor c = db.rawQuery("SELECT * FROM " + TABLE_STUDENT , null);
+            if (c.moveToFirst())
+                do {
+                    return true;
+                } while (c.moveToNext());
+        }
+        return false;
+    }
     public long insertStudent(String name,String matricule){
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -254,7 +281,6 @@ public class DB extends SQLiteOpenHelper{
     }
     public int updateQuestion(Question q) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(QUESTION_REPONSE,q.getAnswer());
         values.put(QUESTION_TEXT,Question.toString(q));

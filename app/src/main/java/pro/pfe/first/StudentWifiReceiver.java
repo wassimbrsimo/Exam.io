@@ -8,10 +8,13 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.widget.Toast;
 
+import static pro.pfe.first.StudentActivity.Etudiant;
+
 public class StudentWifiReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private Student_Lobby mActivity;
+    boolean t=false;
 
     public StudentWifiReceiver(WifiP2pManager mManager,WifiP2pManager.Channel mChannel,Student_Lobby mActivity){
         this.mManager=mManager;
@@ -45,9 +48,12 @@ public class StudentWifiReceiver extends BroadcastReceiver {
 
             NetworkInfo netinfo= intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
-            if(netinfo.isConnected()){
+            if(netinfo.isConnectedOrConnecting()){
+                t=true;
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
-            }else{
+            }else if(t){
+                mActivity.wm.setWifiEnabled(false);
+                t=false;
                 mActivity.connStatus.setText("device disconnected");
 
             }
@@ -56,7 +62,7 @@ public class StudentWifiReceiver extends BroadcastReceiver {
             WifiP2pDevice device = (WifiP2pDevice) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
 
-            mActivity.InitQR("name","0251",device.deviceAddress);
+            mActivity.InitQR(Etudiant.getName(),Etudiant.getMatricule(),device.deviceAddress);
         }
     }
 }

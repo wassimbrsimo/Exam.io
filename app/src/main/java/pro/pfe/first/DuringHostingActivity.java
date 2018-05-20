@@ -18,12 +18,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,14 +41,12 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import static pro.pfe.first.Teacher.db;
 
 public class DuringHostingActivity extends AppCompatActivity  {
-    ListView listView;
-    Button ToggleWifi,Discover,SendMsg;
+    RecyclerView recyclerView;
+    Button  addStudent;
 
     TextView readMsg,connStatus,conect;
     EditText writeMsg,ssid;
     int EXAM_ID;
-
-    int mac=0;
     private ZXingScannerView zxing;
 
     WifiManager wm;
@@ -65,13 +63,13 @@ public class DuringHostingActivity extends AppCompatActivity  {
     Exam examin;
 
     public static Activity activity;
-    public static ArrayAdapter<String> adapter;
-    List <String> values;
+    public static StudentSocketAdapter adapter;
 
     static final int MESSAGE_READ=1;
 
-    ArrayList<SendRecieve> sendRecieve= new ArrayList<>();
-    ArrayList<StudentSocket> students = new ArrayList<>();
+    ArrayList<Attente_Connexion> attente_Connexion = new ArrayList<>();
+    ArrayList<StudentSocket> Etudiants = new ArrayList<>();
+    ArrayList<String> AttenteMac=new ArrayList<>();
 
 
     @Override
@@ -88,41 +86,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
     }
     private void Listeners() {
-        ToggleWifi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(wm.isWifiEnabled()){
-                    wm.setWifiEnabled(false);
-                    ToggleWifi.setText("OFF");
-                }
-                else {
-                    wm.setWifiEnabled(true);
-                    ToggleWifi.setText("ON");
-                }
-            }
-        });
-
-        Discover.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
-                    @Override
-                    public void onSuccess() {
-                        connStatus.setText("Discovery Started . . .");
-                    }
-
-                    @Override
-                    public void onFailure(int i) {
-                        connStatus.setText("Discovery couldn't establish ! , sorry..");
-                    }
-                });
-                //  mNsdManager.discoverServices(
-                //        "_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
-            }
-        });
-
-
-        SendMsg.setOnClickListener(new View.OnClickListener() {
+        addStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -131,23 +95,19 @@ public class DuringHostingActivity extends AppCompatActivity  {
         });
     }
     private void initWork() {
-        ToggleWifi = (Button)findViewById(R.id.onOfff);
-        Discover =(Button)findViewById(R.id.discover2);
-        SendMsg = (Button) findViewById(R.id.sendButton0);
+        addStudent = (Button) findViewById(R.id.sendButton0);
 
 
-        listView = (ListView) findViewById(R.id.peerListView0);
-
-        values = new ArrayList<String>();
-
-
-
-        adapter= new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        recyclerView = (RecyclerView) findViewById(R.id.rvstudents);
+        adapter= new StudentSocketAdapter(Etudiants,this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
-        // Assign adapter to ListView
-        listView.setAdapter(adapter);
+
+        recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         readMsg =(TextView) findViewById(R.id.readMsg);
@@ -156,7 +116,6 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
         EXAM_ID=getIntent().getIntExtra("Exam",0);
         examin= db.getExam(EXAM_ID);
-        Log.e("DB"," exam : "+examin.getTitre()+" questions : "+examin.getQuestions().size());
 
         Toast.makeText(getApplicationContext(),Exam.toString(examin),Toast.LENGTH_LONG).show();
         wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -171,9 +130,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-    }
-    void updateList(){
 
+        registerReceiver(mReceiver, mIntentFilter);
     }
     public void startDiscovery(){
         wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
@@ -188,12 +146,25 @@ public class DuringHostingActivity extends AppCompatActivity  {
             }
         });
     }
+    public void stopDiscovery(){
+        wp2pm.stopPeerDiscovery(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                connStatus.setText("good , Discovery Started");
+            }
 
+            @Override
+            public void onFailure(int i) {
 
+            }
+        });
+    }
+
+/*
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mReceiver, mIntentFilter);
+
         //  if (otherguysIp.equals(""))
         //    {       serverClass = new ServerClass();
         //      serverClass.start();
@@ -201,6 +172,12 @@ public class DuringHostingActivity extends AppCompatActivity  {
         //     clientClass = new ClientClass(otherguysIp);
         //     clientClass.start();
         //  ://  }
+
+    }
+*/    public void onDestroy() {
+
+        unregisterReceiver(mReceiver);
+        super.onDestroy();
 
     }
 /*
@@ -211,9 +188,187 @@ public class DuringHostingActivity extends AppCompatActivity  {
         // clientClass.stop();
         // serverClass.stop();
     }
+
 */
 
 
+    void ConnectToMAC(String mac, final WifiP2pDevice device){
+        final WifiP2pConfig config =new WifiP2pConfig();
+        config.deviceAddress=mac;
+        config.groupOwnerIntent=15;
+        config.wps.setup = WpsInfo.PBC;
+        wp2pm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getApplicationContext(),"Connecting to "+device.deviceName,Toast.LENGTH_SHORT).show();
+                Log.e("CONNECT", "CONNECTING TO "+device.deviceName);
+
+                AttenteMac.remove(0);
+            }
+
+            @Override
+            public void onFailure(int i) {
+                Toast.makeText(getApplicationContext(),"Cannot connect with "+device.deviceName,Toast.LENGTH_SHORT).show();
+                Log.e("CONNECT", "CANNOT CONNECT TO   XXXXXXXXXXXXXXX" +device.deviceName);
+            }
+        });
+    }
+
+    public void onStudentIdentified(String result){
+        connStatus.setText("Connecting to "+result);
+        // String[] data=result.split("/");
+        String MAC=result.split("]")[3];
+        conect.setText("going to connect to : "+result.split("]")[3]);
+        //todo : check if student already exists DB
+        Log.e("QR","Result : "+result);
+        Etudiants.add(new StudentSocket(new Student(result.split("]")[0],result.split("]")[1],(int)db.insertStudent(result.split("]")[0],result.split("]")[1])),result.split("]")[3],null));
+        AttenteMac.add(MAC);
+
+        startDiscovery();
+        adapter.notifyDataSetChanged();
+    }
+
+    //TODO : -  A Z examination tests , security system ,history and marks for each student
+    WifiP2pManager.PeerListListener peerListListener=new WifiP2pManager.PeerListListener() {
+        @Override
+        public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
+
+            if(AttenteMac.size()>0){
+                for (final WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()) {
+
+                        if (device.deviceAddress.equals(AttenteMac.get(0))) {
+                            ConnectToMAC(AttenteMac.get(0), device);
+                        }}
+           }
+            if(peers.size()==0){
+                Toast.makeText(getApplicationContext(),"No peers Found ! ",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    WifiP2pManager.ConnectionInfoListener connectionInfoListener=new WifiP2pManager.ConnectionInfoListener() {
+        @Override
+        public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
+            if(wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
+                connStatus.setText("Groupe Owner");
+                wp2pm.requestGroupInfo(mChannel,groupeInfoListener);
+
+                ServerClass serverClass=new ServerClass();
+
+                serverClass.start();
+
+            }
+            else{
+                Log.e("Error","the TEACHER IS NOT OWNER");
+                wm.setWifiEnabled(false);
+            }
+        }
+    };
+
+    WifiP2pManager.GroupInfoListener groupeInfoListener=new WifiP2pManager.GroupInfoListener() {
+        @Override
+        public void onGroupInfoAvailable(WifiP2pGroup wifiP2pInfo) {
+
+            if(wifiP2pInfo!=null) {
+                Log.e("GROUPEINFO","We got : "+wifiP2pInfo.getClientList().size());
+
+            if(wifiP2pInfo.isGroupOwner()){
+                connStatus.setText("Groupe Owner"+wifiP2pInfo.getClientList().size()+")" );
+                conect.setText("pass :"+wifiP2pInfo.getPassphrase()+"owner adress:"+wifiP2pInfo.getOwner().deviceAddress+" network name : "+wifiP2pInfo.getNetworkName()+" size :"+wifiP2pInfo.getClientList().size()+" isOwner : "+wifiP2pInfo.isGroupOwner());
+            }
+            }
+        }
+    };
+
+    int getStudentIndexByIP(String IP){
+        for(int i = 0; i< Etudiants.size(); i++){
+            if(Etudiants.get(i).isConnected() && Etudiants.get(i).getSr().socket.getInetAddress().toString().equals(IP))
+                return i;
+        }return -1;}
+    int getSendRecieveIndexByIP(String IP){
+        for(int i = 0; i< attente_Connexion.size(); i++){
+            if(attente_Connexion.get(i).socket.getInetAddress().toString().equals(IP))
+                return i;
+        }return -1;}
+
+    int matchSrStudent(String MAC,int indexSR){
+        for(int i = 0; i< Etudiants.size(); i++)
+            if(Etudiants.get(i).getMAC().equals(MAC)){
+                Etudiants.get(i).setSr(attente_Connexion.get(indexSR));
+                attente_Connexion.remove(indexSR);
+                Log.e("RESEAU","SR MOVED FROM QUEU _____________________________________________________________");
+                return i;
+            }
+        Log.e("RESEAU","didnt find SR MAC ");
+        return -1;
+    }
+
+    Handler handler=new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+
+            byte[] readBuff= (byte[]) msg.obj;
+            String tempMsg = new String(readBuff,0,msg.arg1);
+            readMsg.setText(tempMsg);
+            conect.setText(conect.getText()+" O ");
+
+
+            if (tempMsg.equals("OUT_OF_APP")) {
+                Etudiants.get(msg.what).setState(4);
+                adapter.notifyDataSetChanged();
+
+            }
+
+
+            else if (tempMsg.equals("BACK_TO_APP")) {
+
+                Etudiants.get(msg.what).setState(5);
+                adapter.notifyDataSetChanged();
+            }
+
+
+            else if (tempMsg.split("]")[0].equals("0")) {
+                try {
+                    Log.e("Host RECEPTION","msg : "+tempMsg );
+                    int index =matchSrStudent(tempMsg.split("]")[1],msg.what);
+                    Etudiants.get(index).getSr().write(("00]authentification done").getBytes());
+                    Etudiants.get(index).setState(1);
+
+                    adapter.notifyDataSetChanged();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+            else if (tempMsg.split("]")[0].equals("1")) {
+
+                Log.e("Host RECEPTION","Exam Request Recieved FROM :" + Etudiants.get(msg.what).getName());
+                try {
+                    Etudiants.get(msg.what).setState(2);
+                    Etudiants.get(msg.what).getSr().write(Exam.toString(examin).getBytes());
+                    adapter.notifyDataSetChanged();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+
+            else if (tempMsg.split("]")[0].equals("2")) {
+
+                CalculateScore(tempMsg, Etudiants.get(msg.what));
+                Etudiants.get(msg.what).setState(3);
+                adapter.notifyDataSetChanged();
+
+            }
+
+
+
+            return true;
+        }
+    });
     void CalculateScore(String recievedMsg,StudentSocket ss){
         String scoremsg="2]";
         int score = 0;
@@ -237,160 +392,12 @@ public class DuringHostingActivity extends AppCompatActivity  {
         }
     }
 
-    void ConnectToMAC(String mac, final WifiP2pDevice device){
-        final WifiP2pConfig config =new WifiP2pConfig();
-        config.deviceAddress=mac;
-        config.groupOwnerIntent=15;
-        config.wps.setup = WpsInfo.PBC;
-        wp2pm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-                Toast.makeText(getApplicationContext(),"Connecting to "+device.deviceName,Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onFailure(int i) {
-                Toast.makeText(getApplicationContext(),"Cannot connect with "+device.deviceName,Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void onStudentIdentified(String result){
-        connStatus.setText("Connecting to "+result);
-        // String[] data=result.split("/");
-        String MAC=result.split("]")[3];
-        conect.setText("going to connect to : "+result.split("]")[3]);
-        Log.e("MAC","MAC ADRESS IS "+MAC);
-        //todo : check if student already exists DB
-        students.add(new StudentSocket(new Student(result.split("]")[0],result.split("]")[1],(int)db.insertStudent(result.split("]")[0],result.split("]")[1])),result.split("]")[3],null));
-        mac++;
-        adapter.add(students.get(students.size()-1).getName() +"          connecting ..");
-    }
-
-    //TODO : -  A Z examination tests , security system ,history and marks for each student
-    WifiP2pManager.PeerListListener peerListListener=new WifiP2pManager.PeerListListener() {
-        @Override
-        public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
-            if(mac>0){
-                for (final WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()) {
-                    if (device.deviceAddress.equals(students.get(students.size() - (students.get(students.size() - 1).isConnected() ? 2 : 1)).getMAC())) {
-                        Log.e("PEERS", "FOUND " + device.deviceName);
-
-                        ConnectToMAC(students.get(students.size() - (students.get(students.size() - 1).isConnected() ? 2 : 1)).getMAC(), device);
-                        mac--;
-                    }
-                }
-            }
-            if(peers.size()==0){
-                Toast.makeText(getApplicationContext(),"No peers Found ! ",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    WifiP2pManager.ConnectionInfoListener connectionInfoListener=new WifiP2pManager.ConnectionInfoListener() {
-        @Override
-        public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
-            if(wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner){
-
-                connStatus.setText("Groupe Owner");
-                wp2pm.requestGroupInfo(mChannel,groupeInfoListener);
-
-                ServerClass serverClass=new ServerClass();
-
-                serverClass.start();
-
-            }
-            else
-                Log.e("Error","the TEACHER IS NOT OWNER");
-        }
-    };
-
-    WifiP2pManager.GroupInfoListener groupeInfoListener=new WifiP2pManager.GroupInfoListener() {
-        @Override
-        public void onGroupInfoAvailable(WifiP2pGroup wifiP2pInfo) {
-            if(wifiP2pInfo!=null) {
-                Log.e("GROUPEINFO","We got : "+wifiP2pInfo.getClientList().size());
-
-            if(wifiP2pInfo.isGroupOwner()){
-                connStatus.setText("Groupe Owner"+wifiP2pInfo.getClientList().size()+")" );
-                conect.setText("pass :"+wifiP2pInfo.getPassphrase()+"owner adress:"+wifiP2pInfo.getOwner().deviceAddress+" network name : "+wifiP2pInfo.getNetworkName()+" size :"+wifiP2pInfo.getClientList().size()+" isOwner : "+wifiP2pInfo.isGroupOwner());
-
-            }
-            else {
-                WifiP2pDevice d =wifiP2pInfo.getOwner();
-                conect.setText("pass :"+wifiP2pInfo.getPassphrase()+"owner adress:"+wifiP2pInfo.getOwner().deviceAddress+" network name : "+wifiP2pInfo.getNetworkName()+" size :"+wifiP2pInfo.getClientList().size()+" isOwner : "+wifiP2pInfo.isGroupOwner());
-                connStatus.setText("Client ("+wifiP2pInfo.getClientList().size()+")" );
-
-            } }
-        }
-    };
-
-    int getStudentIndexByIP(String IP){
-        for(int i=0;i<students.size();i++){
-            if(students.get(i).isConnected() && students.get(i).getSr().socket.getInetAddress().toString().equals(IP))
-                return i;
-        }return -1;}
-    int getSendRecieveIndexByIP(String IP){
-        for(int i=0;i<sendRecieve.size();i++){
-            if(sendRecieve.get(i).socket.getInetAddress().toString().equals(IP))
-                return i;
-        }return -1;}
-
-    int matchSrStudent(String MAC,int indexSR){
-        for(int i=0;i<students.size();i++)
-            if(students.get(i).getMAC().equals(MAC)){
-                students.get(i).setSr(sendRecieve.get(indexSR));
-                sendRecieve.remove(indexSR);
-                Log.e("RESEAU","Added SR to main and removed from Queu");
-                return i;
-            }
-        Log.e("RESEAU","didnt find SR MAC ");
-        return -1;
-    }
-
-    Handler handler=new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-
-            byte[] readBuff= (byte[]) msg.obj;
-            String tempMsg = new String(readBuff,0,msg.arg1);
-            readMsg.setText(tempMsg);
-            conect.setText(conect.getText()+" O ");
-            if (tempMsg.split("]")[0].equals("0")) {
-                try {
-
-                    Log.e("Host RECEPTION","msg : "+tempMsg + " //// msg.what="+msg.what);
-                    students.get(matchSrStudent(tempMsg.split("]")[1],msg.what)).getSr().write(("00]authentification done").getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else if (tempMsg.split("]")[0].equals("1")) {
-
-                Log.e("Host RECEPTION","Exam Request Recieved FROM :         " +students.get(msg.what).getName());
-                try {
-                    // here give the sendRecieve ta3 le recieved item
-                    students.get(msg.what).getSr().write(Exam.toString(examin).getBytes());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            else if (tempMsg.split("]")[0].equals("2")) {
-
-                CalculateScore(tempMsg,students.get(msg.what));
-
-            }
-            return true;
-        }
-    });
-
-    public class SendRecieve extends Thread{
+    public class Attente_Connexion extends Thread{
         public Socket socket;
         private InputStream inputStream;
         private OutputStream outputStream;
 
-        public SendRecieve(Socket skt){
+        public Attente_Connexion(Socket skt){
             socket=skt;
             try {
                 inputStream=socket.getInputStream();
@@ -410,8 +417,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
                     bytes=inputStream.read(buffer);
                     if(bytes>0){
                         int index;
-                        for(int i=0;i<students.size();i++)
-                            Log.e("SR ","student "+students.get(i).getName()+"connected ? "+students.get(i).isConnected());
+                        for(int i = 0; i< Etudiants.size(); i++)
+                            Log.e("SR ","student "+ Etudiants.get(i).getName()+"connected ? "+ Etudiants.get(i).isConnected());
                         if(srExists(socket.getInetAddress()))
                             index=getSendRecieveIndexByIP(socket.getInetAddress().toString());
                         else
@@ -431,8 +438,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
         }
     }
     boolean srExists(InetAddress ip){
-        for(int i=0;i<sendRecieve.size();i++)
-            if(sendRecieve.get(i).socket.getInetAddress().equals(ip))
+        for(int i = 0; i< attente_Connexion.size(); i++)
+            if(attente_Connexion.get(i).socket.getInetAddress().equals(ip))
                 return true;
         return false;
     }
@@ -446,10 +453,10 @@ public class DuringHostingActivity extends AppCompatActivity  {
                 serverSocket= new ServerSocket(8888);
                 socket=serverSocket.accept();// connecté avec le seyed
 
-                sendRecieve.add(new SendRecieve(socket));
-                sendRecieve.get(sendRecieve.size()-1).start();
-                sendRecieve.get(sendRecieve.size()-1).write("0]sendMac".getBytes());
-                Log.e("GO","Can Now Send To The Dude  sendRecieve size: "+sendRecieve.size());
+                attente_Connexion.add(new Attente_Connexion(socket));
+                attente_Connexion.get(attente_Connexion.size()-1).start();
+                attente_Connexion.get(attente_Connexion.size()-1).write("0]sendMac".getBytes());
+                Log.e("GO","Can Now Send To The Dude  attente_Connexion size: "+ attente_Connexion.size());
 
             } catch (IOException e) {
                 e.printStackTrace();

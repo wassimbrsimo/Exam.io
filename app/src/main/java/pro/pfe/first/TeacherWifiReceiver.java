@@ -27,7 +27,7 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE,-1);
             if(state==WifiP2pManager.WIFI_P2P_STATE_ENABLED){
                 Toast.makeText(context,"Wifi is On",Toast.LENGTH_SHORT).show();
-                mActivity.startDiscovery();
+
             }
             else {
                 Toast.makeText(context,"Wifi is OFF",Toast.LENGTH_SHORT).show();

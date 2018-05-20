@@ -50,7 +50,6 @@ public class Teacher_Tab1 extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     public Teacher_Tab1() {
-        // Required empty public constructor
     }
 
     public static Teacher_Tab1 newInstance(String param1, String param2) {
@@ -98,7 +97,7 @@ public class Teacher_Tab1 extends Fragment {
 
 
         //question=view.findViewById(R.id.add_question);
-        rv = (RecyclerView) view.findViewById(R.id.recyclerview_Teacher);
+
         np=view.findViewById(R.id.numberPicker);
         np.setMinValue(0);
         np.setValue(0);
@@ -108,6 +107,8 @@ public class Teacher_Tab1 extends Fragment {
 
         Examlist= Teacher.db.getAllExams();
         Log.e("EXAMILIST","DONE WE HAVE "+Examlist.size());
+
+        rv = (RecyclerView) view.findViewById(R.id.recyclerview_Teacher);
         eAdapter=new ExamListAdapter(Examlist,false);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(layoutManager);

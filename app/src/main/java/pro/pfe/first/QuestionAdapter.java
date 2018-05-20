@@ -97,7 +97,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         else
         {
-            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.question_row_multi, parent, false);
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.question_row_multi, null, false);
             return new MultiQuestionViewHolder(itemView);
         }
 }

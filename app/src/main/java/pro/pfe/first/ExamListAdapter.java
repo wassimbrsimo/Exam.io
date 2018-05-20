@@ -139,6 +139,8 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             });
             break;
+
+
             case 1:
                 final Exam hostedexam = Examlist.get(position);
                 final HostedExamViewHolder hostedholder = (HostedExamViewHolder) holder;
@@ -146,23 +148,12 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 hostedholder.matricule.setText(hostedexam.getModule() );// get the dude data
                 hostedholder.nom.setText(hostedexam.getTitre());
                 hostedholder.note.setText("note moyenne : ..");
-                StudentAdapter sAdapter=new StudentAdapter(db.getStudentWithExam(hostedexam.getId()),hostedexam.getId());
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(hostedholder.Title.getContext());
-                hostedholder.rv.setLayoutManager(layoutManager);
-                hostedholder.rv.setAdapter(sAdapter);
-                sAdapter.notifyDataSetChanged();
-                hostedholder.layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(hostedholder.rv.getVisibility()==View.VISIBLE)
-                        hostedholder.rv.setVisibility(View.GONE);
-                        else
-                            hostedholder.rv.setVisibility(View.VISIBLE);
-                        /*  Intent Teacher_Done_Exam = new Intent(view.getContext(),Teacher_Done_Exam.class);
-                        Teacher_Done_Exam.putExtra("id",hostedexam.getId());
-                        view.getContext().startActivity(Teacher_Done_Exam);
-                    */}
-                });
+                //StudentAdapter sAdapter=new StudentAdapter(db.getStudentWithExam(hostedexam.getId()),hostedexam.getId());
+                //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(hostedholder.Title.getContext());
+                //hostedholder.rv.setLayoutManager(layoutManager);
+               // hostedholder.rv.setAdapter(sAdapter);
+               // sAdapter.notifyDataSetChanged();
+
                 break;
         }
     }
