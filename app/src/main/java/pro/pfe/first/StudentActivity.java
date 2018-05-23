@@ -83,6 +83,8 @@ public class StudentActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        super.onDestroy();
 
     }
 

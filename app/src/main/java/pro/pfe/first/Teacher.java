@@ -68,6 +68,8 @@ public class Teacher extends AppCompatActivity implements Teacher_Tab1.OnFragmen
     @Override
     public void onBackPressed() {
         finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        super.onDestroy();
     }
     @Override
     public void onFragmentInteraction(Uri uri) {

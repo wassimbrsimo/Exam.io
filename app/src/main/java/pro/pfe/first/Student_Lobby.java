@@ -64,7 +64,7 @@ public class Student_Lobby extends AppCompatActivity {
 
     String otherguysIp = "0";
     ClientClass clientClass;
-    public static SendRecieve sendRecieve=null;
+    SendRecieve sendRecieve=null;
     boolean CONNECTED=false;
     //____________________Examination__________________________
     RecyclerView rv;
@@ -191,7 +191,8 @@ public class Student_Lobby extends AppCompatActivity {
         mChannel = wp2pm.initialize(this, getMainLooper(), null);
 
         mReceiver = new StudentWifiReceiver(wp2pm, mChannel, this);
-
+        sendRecieve=null;
+        clientClass=null;
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -199,6 +200,7 @@ public class Student_Lobby extends AppCompatActivity {
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         registerReceiver(mReceiver, mIntentFilter);
+       // startTimedOutTimer();
     }
 
     public void startDiscovery() {
@@ -268,7 +270,7 @@ public class Student_Lobby extends AppCompatActivity {
         }
     }
     public void startTimedOutTimer(){
-        new CountDownTimer(15000, 1000) {
+        new CountDownTimer(40000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 Log.e("Timer "," millis remainins : "+millisUntilFinished);
@@ -276,9 +278,8 @@ public class Student_Lobby extends AppCompatActivity {
 
             public void onFinish() {
                 if(!CONNECTED){
-                    stopDiscovery();
-                    connStatus.setText("trying again");
-                    startDiscovery();
+                    wm.setWifiEnabled(false);
+                    //startTimedOutTimer();
                 }
             }
         }.start();
@@ -293,24 +294,26 @@ public class Student_Lobby extends AppCompatActivity {
                     String tempMsg = new String(readBuff, 0, msg.arg1);
 
                     Log.e("CLIENT RECEPTION", "msg : " + tempMsg);
-                    if (tempMsg.split("]")[0].equals("0")) {
+                                                                                                        // CODES DE RECEPTION ETUDIANT
+                    if (tempMsg.equals("MAC_REQUEST")) {                                    // CODE 0
                         try {
                             sendRecieve.write(("0]" + MAC_ADDRESS).getBytes());
                             Log.e("MAC", "Sending mac adress to host");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    } else if (tempMsg.split("]")[0].equals("00")) {
+                    }
+
+                    else if (tempMsg.equals("AUTHENTIFICATION_CONFIRMED")) {                              // CODE 00
                         Log.e("CLIENT RECEPTION", "MAC authentified");
                         CONNECTED=true;
                         Toast.makeText(getApplicationContext(), "Connected succesfully " + tempMsg, Toast.LENGTH_SHORT).show();
                         try {
-                            sendRecieve.write("1]ExamRequest".getBytes());
+                            sendRecieve.write("EXAM_REQUEST".getBytes());
                         } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    } else if (tempMsg.split("]")[0].equals("1")) {
+                            e.printStackTrace();}
+                    }
+                    else if (tempMsg.split("]")[0].equals("1")) {                                  /// CODE 1
 
                         Log.e("CLIENT RECEPTION", "EXAM RECIEVED ! : " + tempMsg );
                         actualExam = Exam.toExam(tempMsg);
@@ -320,7 +323,7 @@ public class Student_Lobby extends AppCompatActivity {
 
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
-                    } else if (tempMsg.split("]")[0].equals("2")) {
+                    } else if (tempMsg.split("]")[0].equals("2")) {                                 // CODE 2
 
                         String answer = tempMsg.split("]")[1];
                         String[] notemsg = answer.split(ANSWERS_SEPARATOR);
@@ -332,7 +335,6 @@ public class Student_Lobby extends AppCompatActivity {
                             db.create(new Question(actualExam.getQuestions().get(i).getQuestion(),notemsg[i],0,id));
                             Log.e("CREATEDD QUESTION DB "," ID QUESTION EXAM  id = "+id);
                         }
-                        Log.e("IIIIIIIIIIIIIIIIII","  exam questions : "+actualExam.getQuestions().size()+"            ya rien         ");
                         Intent resultActivity = new Intent(getApplicationContext(),Student_Result.class);
                         resultActivity.putExtra("id",id);
                         try {
@@ -342,7 +344,6 @@ public class Student_Lobby extends AppCompatActivity {
                         }
                         wm.setWifiEnabled(false);
                         startActivity(resultActivity);
-
                         finish();
                     }
                     /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
@@ -359,6 +360,7 @@ public class Student_Lobby extends AppCompatActivity {
         @Override
         public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
             final InetAddress groupOwnerAddress = wifiP2pInfo.groupOwnerAddress;
+            Log.e("CONNECTION INFO done ","");
             if (wifiP2pInfo.groupFormed) {
 
 
@@ -419,17 +421,6 @@ public class Student_Lobby extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiver);
-        wp2pm.stopPeerDiscovery(mChannel, new WifiP2pManager.ActionListener() {
-            @Override
-            public void onSuccess() {
-
-            }
-
-            @Override
-            public void onFailure(int i) {
-
-            }
-        });
     }
 
     private class SendRecieve extends Thread{

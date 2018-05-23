@@ -15,7 +15,6 @@ public class StudentWifiReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;
     private WifiP2pManager.Channel mChannel;
     private Student_Lobby mActivity;
-    boolean t=false;
 
     public StudentWifiReceiver(WifiP2pManager mManager,WifiP2pManager.Channel mChannel,Student_Lobby mActivity){
         this.mManager=mManager;
@@ -53,8 +52,7 @@ public class StudentWifiReceiver extends BroadcastReceiver {
             if(netinfo.isConnectedOrConnecting()){
 
                 //mActivity.startTimedOutTimer();
-                Log.e("NETWORK","Connecting");
-                t=true;
+                Log.e("NETWORK","Connection info request");
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
             }
         }

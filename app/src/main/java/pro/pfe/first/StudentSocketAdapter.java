@@ -42,22 +42,26 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final StudentSocket student = Studentlist.get(position);
         final StudentSocketHolder hold = (StudentSocketHolder) holder;
+        if(!student.isConnected())
+//        new CountDownTimer(45000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+//                Log.e("Timer "," millis remainins  socket: "+millisUntilFinished);
+//            }
+//
+//            public void onFinish() {
+//
+//               if(!student.isConnected()&& dha.CONNECTING==0)
+//                   dha.onRetryStudent(position);
+//            }
+//        }.start();
 
         hold.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dha.stopDiscovery();
-                new CountDownTimer(1000, 1000){
+            dha.onRetryStudent(position);
 
-                    @Override
-                    public void onTick(long l) {
 
-                    }
-
-                    public  void onFinish(){
-                        dha.startDiscovery();
-                    }
-                }.start();
 
 
             }
