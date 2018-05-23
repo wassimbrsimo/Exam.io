@@ -133,8 +133,6 @@ public class DB extends SQLiteOpenHelper{
             }
             while (c.moveToNext()) ;
         }
-        if(exams.size()!=0)
-        Log.e("get HOSTED ","got a hosted : "+exams.get(0).getTitre());
         return exams;
     }
 
@@ -158,47 +156,58 @@ public class DB extends SQLiteOpenHelper{
 
         if(c.moveToFirst()){
             do {
-                Exam e = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)), c.getString(c.getColumnIndex(EXAM_MODULE)), c.getInt(c.getColumnIndex(ID_EXAM)),c.getInt(c.getColumnIndex(EXAM_DURATION)));
 
-                String selectQuestionQuery = "SELECT * FROM "+TABLE_QUESTIONS+" WHERE "+ID_QUESTION_EXAM+" = "+c.getInt(c.getColumnIndex(ID_EXAM));
-                Cursor q = db.rawQuery(selectQuestionQuery, null);
-                ArrayList<Question> questions = new ArrayList<Question>();
-                if (q.moveToFirst()) {
-                    do {
 
-                        Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
-                        questions.add(question);
+                /*Exam e = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)), c.getString(c.getColumnIndex(EXAM_MODULE)), c.getInt(c.getColumnIndex(ID_EXAM)),c.getInt(c.getColumnIndex(EXAM_DURATION)));
 
-                    } while (q.moveToNext());
-                }
 
-                    e.setQuestions(questions);
-                    exams.add(e);
+
+                    e.setQuestions(questions);*/
+                    exams.add(getExam(c.getInt(c.getColumnIndex(ID_EXAM))));
                 }
                 while (c.moveToNext()) ;
             }
         return exams;
     }
-    public Exam getExam(int GetThisID){
-        SQLiteDatabase db=this.getReadableDatabase();
-        String selectQuery = "SELECT * FROM "+TABLE_EXAMS+" WHERE "+ID_EXAM+" = "+GetThisID;
-        Cursor c =db.rawQuery(selectQuery,null);
-        if(c!=null)
-            c.moveToFirst();
-        Exam grabbedExam = new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)),c.getString(c.getColumnIndex(EXAM_MODULE)),GetThisID,c.getInt(c.getColumnIndex(EXAM_DURATION)));
-        String selectQuestionQuery = "SELECT * FROM "+TABLE_QUESTIONS+" WHERE "+ID_QUESTION_EXAM+" = "+grabbedExam.getId();
+    public List<Question> getAllQuestion(){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuestionQuery = "SELECT * FROM "+TABLE_QUESTIONS;
         Cursor q = db.rawQuery(selectQuestionQuery, null);
         ArrayList<Question> questions = new ArrayList<Question>();
         if (q.moveToFirst()) {
             do {
+
                 Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
                 questions.add(question);
 
             } while (q.moveToNext());
         }
+        return questions;
+    }
 
-        grabbedExam.setQuestions(questions);
+    public Exam getExam(int GetThisID){
+        SQLiteDatabase db=this.getReadableDatabase();
+        String selectQuery = "SELECT * FROM "+TABLE_EXAMS+" WHERE "+ID_EXAM+" = "+GetThisID;
+        Cursor c =db.rawQuery(selectQuery,null);
+        Exam grabbedExam = null;
+        if (c.moveToFirst()) {
+            do {
+               grabbedExam= new Exam(c.getString(c.getColumnIndex(EXAM_TITRE)),c.getString(c.getColumnIndex(EXAM_MODULE)),GetThisID,c.getInt(c.getColumnIndex(EXAM_DURATION)));
+                String selectQuestionQuery = "SELECT * FROM "+TABLE_QUESTIONS+" WHERE "+ID_QUESTION_EXAM+" = "+grabbedExam.getId();
+                Cursor q = db.rawQuery(selectQuestionQuery, null);
+                ArrayList<Question> questions = new ArrayList<Question>();
+                if (q.moveToFirst()) {
+                    do {
+                        Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
+                        questions.add(question);
 
+                    } while (q.moveToNext());
+                }
+                grabbedExam.setQuestions(questions);
+                
+            } while (c.moveToNext());
+        }
         return grabbedExam;
     }
 

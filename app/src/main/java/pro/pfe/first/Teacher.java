@@ -1,7 +1,9 @@
 package pro.pfe.first;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -56,9 +58,17 @@ public class Teacher extends AppCompatActivity implements Teacher_Tab1.OnFragmen
         super.onStart();
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        wm.setWifiEnabled(false);
+    }
 
-
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
     @Override
     public void onFragmentInteraction(Uri uri) {
 

@@ -33,14 +33,15 @@
                     android:id="@+id/module"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/titre"
-                    android:layout_alignStart="@+id/titre"
-                    android:layout_below="@+id/titre"
+                    android:layout_alignLeft="@+id/rtitre"
+                    android:layout_alignStart="@+id/rtitre"
+                    android:layout_below="@+id/rtitre"
+                    android:fontFamily="@font/acme"
                     android:text="TextView"
                     android:textColor="@color/colorAccent" />
 
                 <TextView
-                    android:id="@+id/titre"
+                    android:id="@+id/rtitre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -48,7 +49,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="35dp"
                     android:layout_marginStart="35dp"
-                    android:fontFamily="casual"
+                    android:fontFamily="@font/acme"
                     android:text="EXAM FINAL"
                     android:textColor="@color/colorAccent"
                     android:textSize="30sp" />
@@ -61,6 +62,7 @@
                     android:layout_toLeftOf="@+id/multi_btn"
                     android:layout_toStartOf="@+id/multi_btn"
                     android:background="@drawable/delete_button_shape"
+                    android:fontFamily="@font/acme"
                     android:text="vrai ou Fau" />
 
                 <Button
@@ -71,6 +73,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/save_button_shape"
+                    android:fontFamily="@font/acme"
                     android:text="Choi multiple" />
             </RelativeLayout>
 
@@ -87,9 +90,10 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

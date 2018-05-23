@@ -44,11 +44,12 @@ public class Teacher_Tab2 extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         rv = (RecyclerView) view.findViewById(R.id.hosted_list);
-        TextView titre = view.findViewById(R.id.titre);
-        eAdapter=new ExamListAdapter(Examlist,true);
+        TextView titre = view.findViewById(R.id.rtitre);
+        eAdapter=new ExamListAdapter(Examlist,2);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(eAdapter);
+        rv.setNestedScrollingEnabled(false);
         eAdapter.notifyDataSetChanged();
         titre.setText("You Have "+Examlist.size()+" Hosted Exams");
     }

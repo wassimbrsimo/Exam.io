@@ -67,10 +67,7 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (student.getState()) {
 
             case 0:
-
                 hold.status.setText("connecting");
-
-
                 break;
 
 
@@ -83,7 +80,7 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case 3:
 
-                hold.status.setText("Terminé  !");
+                hold.status.setText("exam terminé");
                 break;
             case 4:
 
@@ -92,6 +89,10 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
             case 5:
 
                 hold.status.setText("L'etudiant est revenu !");
+                break;
+            case 6:
+
+                hold.status.setText("Deconnecté");
                 break;
         }
     }

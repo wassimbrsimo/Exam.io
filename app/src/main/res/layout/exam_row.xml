@@ -32,7 +32,6 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
-            android:paddingBottom="-5dp"
             android:transitionName="hello"
             app:cardCornerRadius="10dp"
             app:cardElevation="6dp"
@@ -58,13 +57,14 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/titre"
+                        android:id="@+id/rtitre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:fontFamily="casual"
                         android:text="Examin final QCM"
                         android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="30sp"
                         android:textStyle="bold" />
 

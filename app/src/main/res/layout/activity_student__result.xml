@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-20dp"
+        android:layout_marginTop="-30dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,26 +18,26 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
             android:background="@drawable/blue_button_shape"
             android:elevation="5dp">
 
             <TextView
-                android:id="@+id/titre_exam"
+                android:id="@+id/rtitre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
+                android:layout_alignBaseline="@+id/button4"
+                android:layout_alignBottom="@+id/button4"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="11dp"
                 android:text="Titre"
                 android:textColor="@color/colorAccent"
-                android:textSize="30sp" />
+                android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/rmatricule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/textView4"
+                android:layout_alignBottom="@+id/rnote"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginBottom="26dp"
@@ -45,21 +45,21 @@
                 android:layout_marginStart="16dp"
                 android:text="matricule"
                 android:textColor="@color/colorAccent"
-                android:textSize="30sp" />
+                android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/rname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/textView6"
-                android:layout_alignLeft="@+id/textView6"
-                android:layout_alignStart="@+id/textView6"
+                android:layout_above="@+id/rmatricule"
+                android:layout_alignLeft="@+id/rmatricule"
+                android:layout_alignStart="@+id/rmatricule"
                 android:text="NAME:"
                 android:textColor="@color/colorAccent"
-                android:textSize="30sp" />
+                android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/rnote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -70,11 +70,26 @@
                 android:layout_marginRight="15dp"
                 android:text="NOTE :  20/20"
                 android:textColor="@color/colorAccent"
-                android:textSize="30sp" />
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/rmatricule"
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@+id/rmatricule"
+                android:layout_marginTop="34dp"
+                android:onClick="goBackPressed"
+                android:text="Accueil" />
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -23,7 +23,7 @@ public class StudentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public NoteStudentViewHolder(View itemView) {
             super(itemView);
             nom=itemView.findViewById(R.id.nom);
-            note=itemView.findViewById(R.id.note);
+            note=itemView.findViewById(R.id.rnote);
         }
     }
     @Override

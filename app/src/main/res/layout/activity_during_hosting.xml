@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/peerListView0"
             android:layout_marginTop="31dp"
+            android:fontFamily="@font/acme"
             android:text="Message"
             android:textAlignment="center"
             android:textSize="20sp"
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/acme"
             android:text="msg:"
             android:textColor="@android:color/holo_green_dark" />
 
@@ -37,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dp"
+            android:fontFamily="@font/acme"
             android:text="Connection Status"
             android:textAlignment="center"
             android:textColor="@android:color/holo_blue_dark"
@@ -51,6 +54,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/discover2"
             android:layout_marginBottom="25dp"
+            android:fontFamily="@font/acme"
             android:text="SCAN QR" />
 
         <android.support.v7.widget.RecyclerView

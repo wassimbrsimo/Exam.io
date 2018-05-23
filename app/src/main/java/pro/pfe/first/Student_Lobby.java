@@ -1,9 +1,13 @@
 package pro.pfe.first;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.nsd.NsdManager;
 import android.net.wifi.WifiManager;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -18,6 +22,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -60,15 +65,16 @@ public class Student_Lobby extends AppCompatActivity {
     String otherguysIp = "0";
     ClientClass clientClass;
     public static SendRecieve sendRecieve=null;
-
+    boolean CONNECTED=false;
     //____________________Examination__________________________
     RecyclerView rv;
-    Button done_exam;
+    Button retry;
     StudentExamAdapter studentExamAdapter;
     ArrayList<Question> quest_list = new ArrayList<Question>();
     TextView txt, time;
     ProgressBar ptime;
     Exam actualExam = null;
+    int id=0;
     public static final String ANSWERS_SEPARATOR = "-";
     public static List<String> TypedAnswers = new ArrayList<>();
 
@@ -81,13 +87,43 @@ public class Student_Lobby extends AppCompatActivity {
         setContentView(R.layout.activity_student__lobby);
         initNetWork();
         initExamView();
+        TypedAnswers.clear();
     }
 
     public void BtnFinishClicked(View view) {
         if (DoneAllQuestions())
-            txt.setText("Waiting for Answer " + AnswerPoints());
-        else
-            txt.setText("please answer To All the questions");
+            AnswerPoints();
+        else{
+
+            LayoutInflater factory = LayoutInflater.from(view.getContext());
+            final View dialogView = factory.inflate(R.layout.dialog_unfinished, null);
+            final AlertDialog confirmDialog = new AlertDialog.Builder(view.getContext()).create();
+            confirmDialog.setView(dialogView);
+            confirmDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+
+            dialogView.findViewById(R.id.validate).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmDialog.dismiss();
+                    AnswerPoints();
+                }
+            });
+            dialogView.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmDialog.dismiss();
+                }
+            });
+            confirmDialog.show();
+
+        }
+
+    }
+
+    public void retryNetwork(View view) {
+        wm.setWifiEnabled(false);
     }
 
     Boolean DoneAllQuestions() {
@@ -110,8 +146,8 @@ public class Student_Lobby extends AppCompatActivity {
         }
         try {
             sendRecieve.write(("2]" + answers).getBytes());
-            db.pushAnswer(answers, actualExam.getId(), 0);
-            Log.e("CLIENT ", "NOTE envoyer : " + answers);
+            db.pushAnswer(answers, id, 0);
+            txt.setText("Waiting for Answer ");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,6 +158,7 @@ public class Student_Lobby extends AppCompatActivity {
         txt = (TextView) findViewById(R.id.txt);
         time = (TextView) findViewById(R.id.time);
         ptime = (ProgressBar) findViewById(R.id.ptime);
+        retry = findViewById(R.id.retry);
 
 
         LinearQR = (LinearLayout) findViewById(R.id.qr);
@@ -134,7 +171,7 @@ public class Student_Lobby extends AppCompatActivity {
     public static void InitQR(String name, String matricule, String MAC) {
         Log.e("QR", "DONE THE MAC ADRESS IS {" + MAC + "}");
         MAC_ADDRESS = MAC;
-        Bitmap myBitmap = QRCode.from("0]" + name + "]" + matricule + "]" + MAC).withSize(700, 700).bitmap();
+        Bitmap myBitmap = QRCode.from( name + "]" + matricule + "]" + MAC).withSize(700, 700).bitmap();
         QR.setImageBitmap(myBitmap);
     }
 
@@ -169,6 +206,20 @@ public class Student_Lobby extends AppCompatActivity {
             @Override
             public void onSuccess() {
                 connStatus.setText("good , Discovery Started");
+               // startTimedOutTimer();
+            }
+
+            @Override
+            public void onFailure(int i) {
+
+            }
+        });
+    }
+    public void stopDiscovery() {
+        wp2pm.stopPeerDiscovery(mChannel, new WifiP2pManager.ActionListener() {
+            @Override
+            public void onSuccess() {
+                connStatus.setText("stoped discovery");
             }
 
             @Override
@@ -188,7 +239,7 @@ public class Student_Lobby extends AppCompatActivity {
             }
 
             public void onFinish() {
-                BtnFinishClicked(null);
+                BtnFinishClicked(ptime.getRootView());
             }
         }.start();
 
@@ -198,6 +249,7 @@ public class Student_Lobby extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(studentExamAdapter);
+        rv.setNestedScrollingEnabled(false);
         studentExamAdapter.notifyDataSetChanged();
         studentExamAdapter.notifyDataSetChanged();
         for (int i = 0; i < quest_list.size(); i++) {
@@ -215,7 +267,23 @@ public class Student_Lobby extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+    public void startTimedOutTimer(){
+        new CountDownTimer(15000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                Log.e("Timer "," millis remainins : "+millisUntilFinished);
+            }
+
+            public void onFinish() {
+                if(!CONNECTED){
+                    stopDiscovery();
+                    connStatus.setText("trying again");
+                    startDiscovery();
+                }
+            }
+        }.start();
+
+    }
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -234,6 +302,7 @@ public class Student_Lobby extends AppCompatActivity {
                         }
                     } else if (tempMsg.split("]")[0].equals("00")) {
                         Log.e("CLIENT RECEPTION", "MAC authentified");
+                        CONNECTED=true;
                         Toast.makeText(getApplicationContext(), "Connected succesfully " + tempMsg, Toast.LENGTH_SHORT).show();
                         try {
                             sendRecieve.write("1]ExamRequest".getBytes());
@@ -245,7 +314,9 @@ public class Student_Lobby extends AppCompatActivity {
 
                         Log.e("CLIENT RECEPTION", "EXAM RECIEVED ! : " + tempMsg );
                         actualExam = Exam.toExam(tempMsg);
+                        Log.e("EXAM ", " WE REVIECED EXAM WITH "+actualExam.getQuestions().size()+" QUESTIONS");
                         InitExam(actualExam);
+                        id =(int)db.create(actualExam);
 
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
@@ -253,19 +324,26 @@ public class Student_Lobby extends AppCompatActivity {
 
                         String answer = tempMsg.split("]")[1];
                         String[] notemsg = answer.split(ANSWERS_SEPARATOR);
-                        //todo :  construire lexam complet
 
                         Log.e("CLIENT RECEPTION", "NOTE RECIEVED  ! : " + tempMsg
                                 + "\n" + " notemsg[]=" + notemsg.length + "  /  exam.questions = " + actualExam.getQuestions().size());
 
                         for (int i = 0; i < actualExam.getQuestions().size(); i++) {
-                            actualExam.getQuestions().get(i).setAnswer(notemsg[i]);
-
+                            db.create(new Question(actualExam.getQuestions().get(i).getQuestion(),notemsg[i],0,id));
+                            Log.e("CREATEDD QUESTION DB "," ID QUESTION EXAM  id = "+id);
                         }
-                        db.create(actualExam);
-                        int score = Integer.valueOf(notemsg[notemsg.length - 1]);
+                        Log.e("IIIIIIIIIIIIIIIIII","  exam questions : "+actualExam.getQuestions().size()+"            ya rien         ");
+                        Intent resultActivity = new Intent(getApplicationContext(),Student_Result.class);
+                        resultActivity.putExtra("id",id);
+                        try {
+                            sendRecieve.write(("FINISH").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        wm.setWifiEnabled(false);
+                        startActivity(resultActivity);
 
-                        txt.setText("Note Recu : " + score + " sur " + String.valueOf(notemsg.length - 1));
+                        finish();
                     }
                     /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
@@ -282,10 +360,14 @@ public class Student_Lobby extends AppCompatActivity {
         public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
             final InetAddress groupOwnerAddress = wifiP2pInfo.groupOwnerAddress;
             if (wifiP2pInfo.groupFormed) {
-                connStatus.setText("Client ");
-                clientClass = new ClientClass(groupOwnerAddress.getHostAddress());
-                otherguysIp = groupOwnerAddress.getHostAddress();
-                clientClass.start();
+
+
+                            connStatus.setText("Client ");
+                            clientClass = new ClientClass(groupOwnerAddress.getHostAddress());
+                            otherguysIp = groupOwnerAddress.getHostAddress();
+                            clientClass.start();
+
+
             }
         }
     };
@@ -307,7 +389,8 @@ public class Student_Lobby extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        if(sendRecieve==null)
+            startActivity(new Intent(this,StudentActivity.class));
     }
     @Override
     public void onPause() {
@@ -368,6 +451,11 @@ public class Student_Lobby extends AppCompatActivity {
         public void run() {
             byte[] buffer=new byte[1024];
             int bytes;
+            try {
+                write(("").getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             while(socket!=null){
 
                 try {
@@ -404,10 +492,16 @@ public class Student_Lobby extends AppCompatActivity {
         public void run() {
             try {
                 socket.connect(new InetSocketAddress(hostAdd,8888),500);
+
                 sendRecieve=new SendRecieve(socket);
                 sendRecieve.start();
-                sendRecieve.write(("").getBytes());
-                Log.e("Client","Can Now Send To The Dude ");
+//                    Log.e("Client","Can Now Send To The Dude ");
+//                while(networkState==0)
+//                {
+//
+//
+//                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -35,12 +35,12 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".DuringHostingActivity"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask" />
         <activity
             android:name=".Student_Lobby"
-            android:launchMode="singleTask"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTask" />
         <activity
             android:name=".Edit_Exam"
             android:configChanges="keyboardHidden|orientation|screenSize" />
@@ -52,7 +52,11 @@
         <service
             android:name=".AntiCheatService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

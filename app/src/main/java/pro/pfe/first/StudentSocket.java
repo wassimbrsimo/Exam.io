@@ -5,7 +5,7 @@ package pro.pfe.first;
  */
 
 public class StudentSocket extends Student {
-    DuringHostingActivity.Attente_Connexion sr;
+    DuringHostingActivity.SocketConnexion sr;
     String MAC;
 
     public int getState() {
@@ -23,16 +23,16 @@ public class StudentSocket extends Student {
     public void setMAC(String MAC) {this.MAC = MAC;}
 
 
-    public DuringHostingActivity.Attente_Connexion getSr() {return sr;}
-    public void setSr(DuringHostingActivity.Attente_Connexion sr) {this.sr = sr;}
+    public DuringHostingActivity.SocketConnexion getSr() {return sr;}
+    public void setSr(DuringHostingActivity.SocketConnexion sr) {this.sr = sr;}
 
-    public StudentSocket(String name, String matricule, int ID,String MAC, DuringHostingActivity.Attente_Connexion sr) {
+    public StudentSocket(String name, String matricule, int ID,String MAC, DuringHostingActivity.SocketConnexion sr) {
         super(name, matricule, ID);
         this.sr=sr;
         this.MAC=MAC;
         this.state=0;
     }
-    public StudentSocket(Student st,String MAC, DuringHostingActivity.Attente_Connexion sr) {
+    public StudentSocket(Student st,String MAC, DuringHostingActivity.SocketConnexion sr) {
         super(st.getName(), st.getMatricule(), st.getID());
         this.sr=sr;
         this.MAC=MAC;

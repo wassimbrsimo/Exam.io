@@ -35,6 +35,7 @@
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/acme"
                     android:text="This is a question"
                     android:textAlignment="center" />
             </LinearLayout>

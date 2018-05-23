@@ -1,5 +1,6 @@
 package pro.pfe.first;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static pro.pfe.first.Teacher.db;
@@ -24,13 +24,14 @@ public class Edit_Exam extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit__exam);
         examin= db.getExam(getIntent().getIntExtra("id",0));
-        titre = findViewById(R.id.titre);
+        titre = findViewById(R.id.rtitre);
         module= findViewById(R.id.module);
         rv = (RecyclerView) findViewById(R.id.quest_list);
         titre.setText(examin.getTitre());
         module.setText(examin.getModule());
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
+        rv.setNestedScrollingEnabled(false);
         qAdapter = new QuestionAdapter(examin.getQuestions());
         rv.setAdapter(qAdapter);
         qAdapter.notifyDataSetChanged();
@@ -62,6 +63,12 @@ public class Edit_Exam extends AppCompatActivity {
         examin.getQuestions().add(q);
         qAdapter.notifyDataSetChanged();
         rv.scrollBy(0,9999);
+    }
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent Teach=new Intent(this,Teacher.class);
+        startActivity(Teach);
     }
 
 }

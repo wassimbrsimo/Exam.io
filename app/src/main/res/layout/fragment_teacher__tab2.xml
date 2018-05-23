@@ -37,14 +37,15 @@
                         android:id="@+id/module"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/titre"
-                        android:layout_alignStart="@+id/titre"
-                        android:layout_below="@+id/titre"
+                        android:layout_alignLeft="@+id/rtitre"
+                        android:layout_alignStart="@+id/rtitre"
+                        android:layout_below="@+id/rtitre"
+                        android:fontFamily="@font/acme"
                         android:text="date "
                         android:textColor="@color/colorAccent" />
 
                     <TextView
-                        android:id="@+id/titre"
+                        android:id="@+id/rtitre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -52,7 +53,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="35dp"
                         android:layout_marginStart="35dp"
-                        android:fontFamily="casual"
+                        android:fontFamily="@font/acme"
                         android:text="You Have 0 Hosted Exams"
                         android:textColor="@color/colorAccent"
                         android:textSize="30sp" />
@@ -64,6 +65,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:fadeScrollbars="true"
                     app:layout_collapseMode="pin">
 
 

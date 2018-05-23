@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/blue_button_shape"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/nom"
@@ -11,14 +14,10 @@
         android:text="nom etudiant" />
 
     <TextView
-        android:id="@+id/note"
+        android:id="@+id/rnote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/nom"
-        android:layout_alignBottom="@+id/nom"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="50dp"
-        android:layout_marginRight="50dp"
+        android:layout_below="@+id/nom"
+        android:layout_centerHorizontal="true"
         android:text="13/20" />
 </RelativeLayout>

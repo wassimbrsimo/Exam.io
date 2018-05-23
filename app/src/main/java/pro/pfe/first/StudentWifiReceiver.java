@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import static pro.pfe.first.StudentActivity.Etudiant;
@@ -32,6 +33,7 @@ public class StudentWifiReceiver extends BroadcastReceiver {
             if(state==WifiP2pManager.WIFI_P2P_STATE_ENABLED){
                 Toast.makeText(context,"Wifi is On",Toast.LENGTH_SHORT).show();
                 mActivity.startDiscovery();
+
             }
             else {
                 Toast.makeText(context,"Wifi is OFF",Toast.LENGTH_SHORT).show();
@@ -44,18 +46,16 @@ public class StudentWifiReceiver extends BroadcastReceiver {
             }
         }
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)){
-            if(mManager==null){ return;}
 
+            if(mManager==null){ return;}
             NetworkInfo netinfo= intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 
             if(netinfo.isConnectedOrConnecting()){
+
+                //mActivity.startTimedOutTimer();
+                Log.e("NETWORK","Connecting");
                 t=true;
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
-            }else if(t){
-                mActivity.wm.setWifiEnabled(false);
-                t=false;
-                mActivity.connStatus.setText("device disconnected");
-
             }
         }
         else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)){

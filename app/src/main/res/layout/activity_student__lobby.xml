@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,6 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/acme"
             android:textAlignment="center"
             android:textSize="30sp" />
 
@@ -36,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/acme"
             android:text="TextView" />
 
         <android.support.v7.widget.RecyclerView
@@ -49,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/acme"
             android:onClick="BtnFinishClicked"
             android:text="Terminer" />
 
@@ -59,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
         <ImageView
@@ -74,11 +78,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/acme"
             android:text="Connection Status"
             android:textAlignment="center"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="18sp"
             android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/retry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="@font/acme"
+            android:onClick="retryNetwork"
+            android:text="Reesayé" />
 
     </LinearLayout>
 

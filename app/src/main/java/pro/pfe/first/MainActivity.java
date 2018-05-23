@@ -1,6 +1,7 @@
 package pro.pfe.first;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,16 +9,15 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    //TODO : completer les models de questions
-    //TODO   : DB Students avec les notes (DONE)
-    //TODO   : WIFI tests ( PARTIALLY DONE )
-    //TODO :    Landscape mode fix (DONE)
+    public static String PREF_NAME="preferences",VALUE_NAME="valeur";
     Intent side;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(false){ // entered the app before
-            if(true)        // teacher
+
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        int value=prefs.getInt(VALUE_NAME,-1) ;
+        if(value!=-1){ // entered the app before
+            if(value==0)
             {
                 side = new Intent(this,Teacher.class);
             }
@@ -31,16 +31,23 @@ public class MainActivity extends AppCompatActivity {
         Button Teacher=(Button)findViewById(R.id.Teacher);
         Button Student=(Button)findViewById(R.id.Student);
 
+
         Teacher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             onTeacher(v);
+                SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
+                editor.putInt(VALUE_NAME, 0);
+                editor.apply();
             }
         });
         Student.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onStudent(v);
+                SharedPreferences.Editor editor = getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
+                editor.putInt(VALUE_NAME, 1);
+                editor.apply();
             }
         });
     }

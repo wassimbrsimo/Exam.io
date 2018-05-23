@@ -43,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:fontFamily="@font/acme"
                     android:hint="question"
                     android:inputType="textPersonName"
                     android:text="Name"
@@ -58,6 +59,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/acme"
                     android:text="test quest"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
@@ -96,6 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
+                        android:fontFamily="@font/acme"
                         android:visibility="gone" />
 
                     <EditText
@@ -104,6 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:fontFamily="@font/acme"
                         android:hint="choix 1"
                         android:inputType="textPersonName"
                         android:visibility="gone" />
@@ -113,6 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/acme"
                         android:text="choix 1"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -129,6 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
+                        android:fontFamily="@font/acme"
                         android:visibility="gone" />
 
                     <EditText
@@ -137,6 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:fontFamily="@font/acme"
                         android:hint="choix 2"
                         android:inputType="textPersonName"
                         android:visibility="gone" />
@@ -146,6 +153,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/acme"
                         android:text="choix 2"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -162,6 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
+                        android:fontFamily="@font/acme"
                         android:visibility="gone" />
 
                     <EditText
@@ -170,6 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:fontFamily="@font/acme"
                         android:hint="choix 3"
                         android:inputType="textPersonName"
                         android:visibility="gone" />
@@ -179,6 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/acme"
                         android:text="choix 3"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -195,6 +206,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
+                        android:fontFamily="@font/acme"
                         android:visibility="gone" />
 
                     <EditText
@@ -203,6 +215,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:fontFamily="@font/acme"
                         android:hint="choix 4"
                         android:inputType="textPersonName"
                         android:visibility="gone" />
@@ -212,6 +225,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/acme"
                         android:text="choix 4"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -228,6 +242,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/colorPrimary"
+                        android:fontFamily="@font/acme"
                         android:visibility="gone" />
 
                     <EditText
@@ -236,6 +251,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:fontFamily="@font/acme"
                         android:hint="choix 5"
                         android:inputType="textPersonName"
                         android:visibility="gone" />
@@ -245,6 +261,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/acme"
                         android:text="choix 5"
                         android:visibility="gone" />
                 </LinearLayout>

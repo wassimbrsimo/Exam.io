@@ -48,6 +48,13 @@ public class Exam {
         this.questions = new ArrayList<Question>();
         this.duration = duration;
     }
+    public String getAnswers(){
+        String answers = "";
+        for(Question q : getQuestions()) {
+            answers += q.getAnswer() + Student_Lobby.ANSWERS_SEPARATOR;
+        }
+        return answers;
+    }
 
     public static String toString(Exam e) {
         return "1]" + e.getTitre() + "]" + e.getModule() + "]" + e.getId() + "]" + e.getDuration() + "]" + e.getQuestions().size() + Question.toStrings(e.getQuestions());

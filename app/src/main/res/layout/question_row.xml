@@ -75,6 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="@font/acme"
                     android:text="test quest" />
 
                 <EditText
@@ -83,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
+                    android:fontFamily="@font/acme"
                     android:inputType="textPersonName"
                     android:visibility="gone" />
 
@@ -92,6 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
+                    android:fontFamily="@font/acme"
                     android:showText="true"
                     android:splitTrack="false"
                     android:switchMinWidth="100dp"

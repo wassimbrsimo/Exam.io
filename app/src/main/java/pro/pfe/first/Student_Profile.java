@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import static pro.pfe.first.StudentActivity.db;
 
 
 public class Student_Profile extends AppCompatActivity {
     EditText matricule,name;
     Button save;
+    DB db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +20,7 @@ public class Student_Profile extends AppCompatActivity {
         save = findViewById(R.id.save);
         name=findViewById(R.id.edit_name);
         matricule=findViewById(R.id.edit_matricule);
+        db =new DB(getApplicationContext());
         if(!db.isStudentExists(false,"")){
             save.setText("Sauvegarder");
         }else {
