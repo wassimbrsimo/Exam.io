@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import static pro.pfe.first.Teacher.db;
 public class Teacher_Done_Exam extends AppCompatActivity {
     ArrayList<Student> students=new ArrayList<>();
     Exam examin;
+    public MyQuestionAnswerRecyclerViewAdapter qAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +30,16 @@ public class Teacher_Done_Exam extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         RecyclerView rv = findViewById(R.id.correction);
-        MyQuestionAnswerRecyclerViewAdapter qAdapter= new MyQuestionAnswerRecyclerViewAdapter(examin.getQuestions(),db.getStudentAnswer(students.get(0).getID(),examin.getId()));
+       qAdapter= new MyQuestionAnswerRecyclerViewAdapter(examin.getQuestions(),db.getStudentAnswer(students.get(0).getID(),examin.getId()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(qAdapter);
         qAdapter.notifyDataSetChanged();
+
+
+    }
+    public void onBack(View v){
+        finish();
     }
 
 }

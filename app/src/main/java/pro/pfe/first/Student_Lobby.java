@@ -3,6 +3,7 @@ package pro.pfe.first;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -66,6 +67,8 @@ public class Student_Lobby extends AppCompatActivity {
     ClientClass clientClass;
     SendRecieve sendRecieve=null;
     boolean CONNECTED=false;
+    boolean FINISHED=false;
+    AlertDialog QrDialog=null;
     //____________________Examination__________________________
     RecyclerView rv;
     Button retry;
@@ -129,7 +132,7 @@ public class Student_Lobby extends AppCompatActivity {
     Boolean DoneAllQuestions() {
         Boolean statement = true;
         for (int i = 0; i < TypedAnswers.size(); i++)
-            if (TypedAnswers.get(i).equals("")) {
+            if (TypedAnswers.get(i).equals(" ")) {
                 statement = false;
                 break;
             }
@@ -164,8 +167,29 @@ public class Student_Lobby extends AppCompatActivity {
         LinearQR = (LinearLayout) findViewById(R.id.qr);
         LinearExam = (LinearLayout) findViewById(R.id.exam);
 
-        LinearExam.setVisibility(View.GONE);
-        LinearQR.setVisibility(View.VISIBLE);
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View qrDialogView = factory.inflate(R.layout.dialog_qr_lobby, null);
+        QrDialog = new AlertDialog.Builder(this).create();
+        QrDialog.setView(qrDialogView);
+        QrDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        QR = (ImageView) qrDialogView.findViewById(R.id.imageView2);
+        connStatus = (TextView) qrDialogView.findViewById(R.id.connectionStatus);
+        qrDialogView.findViewById(R.id.retry).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //your business logic
+                wm.setWifiEnabled(false);
+            }
+        });
+        QrDialog.setOnCancelListener(new DialogInterface.OnCancelListener()
+        {
+            @Override
+            public void onCancel(DialogInterface dialog)
+            {
+                Student_Lobby.this.finish();
+            }
+        });
+        QrDialog.show();
     }
 
     public static void InitQR(String name, String matricule, String MAC) {
@@ -182,9 +206,8 @@ public class Student_Lobby extends AppCompatActivity {
         if (!wm.isWifiEnabled())
             wm.setWifiEnabled(true);
 
-        QR = (ImageView) findViewById(R.id.imageView2);
 
-        connStatus = (TextView) findViewById(R.id.connectionStatus);
+
 
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         wp2pm = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
@@ -241,7 +264,7 @@ public class Student_Lobby extends AppCompatActivity {
             }
 
             public void onFinish() {
-                BtnFinishClicked(ptime.getRootView());
+                AnswerPoints();
             }
         }.start();
 
@@ -254,12 +277,11 @@ public class Student_Lobby extends AppCompatActivity {
         rv.setNestedScrollingEnabled(false);
         studentExamAdapter.notifyDataSetChanged();
         studentExamAdapter.notifyDataSetChanged();
+        TypedAnswers.clear();
         for (int i = 0; i < quest_list.size(); i++) {
-            TypedAnswers.add("");
+            TypedAnswers.add(" ");
         }
-
-        LinearExam.setVisibility(View.VISIBLE);
-        LinearQR.setVisibility(View.GONE);
+        QrDialog.dismiss();
     }
 
     public void sendAnswer(String Answer) {
@@ -339,6 +361,7 @@ public class Student_Lobby extends AppCompatActivity {
                         resultActivity.putExtra("id",id);
                         try {
                             sendRecieve.write(("FINISH").getBytes());
+                            FINISHED=true;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -391,8 +414,10 @@ public class Student_Lobby extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(sendRecieve==null)
+        if(sendRecieve==null){
             startActivity(new Intent(this,StudentActivity.class));
+            finish();
+        }
     }
     @Override
     public void onPause() {
@@ -400,6 +425,9 @@ public class Student_Lobby extends AppCompatActivity {
         if(sendRecieve!=null)
         try {
             sendRecieve.write("OUT_OF_APP".getBytes());
+            if(!FINISHED)
+            startService(new Intent(this, AntiCheatService.class));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

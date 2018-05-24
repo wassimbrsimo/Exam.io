@@ -41,7 +41,7 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             TFQuestAnswerHolder hold=(TFQuestAnswerHolder)holder;
             String rep="";
-            if(Answers.split(Student_Lobby.ANSWERS_SEPARATOR).length>=position)
+            if(Answers.split(Student_Lobby.ANSWERS_SEPARATOR).length>position)
             rep=Answers.split(Student_Lobby.ANSWERS_SEPARATOR)[position];
             hold.question.setText(mIt.getQuestion().get(0));
             hold.mIdView.setText(rep);

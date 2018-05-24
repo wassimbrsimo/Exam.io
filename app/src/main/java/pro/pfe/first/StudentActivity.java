@@ -49,7 +49,7 @@ public class StudentActivity extends FragmentActivity {
         }
         average/=Examlist.size();
         avg=findViewById(R.id.avg_note);
-        avg.setText("Moyenne : "+average+"%");
+        avg.setText(average+"%");
         name=findViewById(R.id.profil_name);
         name.setText(Etudiant.getName());
         RecyclerView rv = findViewById(R.id.rv_passed_exams);
@@ -82,9 +82,8 @@ public class StudentActivity extends FragmentActivity {
     }
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        super.onDestroy();
 
     }
 

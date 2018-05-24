@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Question {
     int type;
-    static final String Separator="010101";
+    static final String Separator="&&";
 
     public Question(ArrayList<String> quest,String answer,int  id,int e_id){
         this.question=quest;

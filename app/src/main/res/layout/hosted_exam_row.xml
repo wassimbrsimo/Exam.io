@@ -33,7 +33,6 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/acme"
                 android:text="EXAM FINAL 2"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
@@ -49,14 +48,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/acme"
                     android:text="NOTE :" />
 
                 <TextView
                     android:id="@+id/note_int"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/acme"
                     android:text="14/20" />
             </LinearLayout>
 
@@ -70,7 +67,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/acme"
                     android:text="Nom"
                     tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="263dp" />
@@ -79,7 +75,6 @@
                     android:id="@+id/rmatricule"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/acme"
                     android:text="03264941140"
                     android:textAlignment="viewStart" />
 

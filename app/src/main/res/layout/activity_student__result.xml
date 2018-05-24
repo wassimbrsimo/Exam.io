@@ -18,7 +18,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/blue_button_shape"
             android:elevation="5dp">
 
@@ -26,9 +27,9 @@
                 android:id="@+id/rtitre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/button4"
-                android:layout_alignBottom="@+id/button4"
-                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/rnote"
+                android:layout_alignLeft="@+id/rnote"
+                android:layout_alignStart="@+id/rnote"
                 android:text="Titre"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp" />
@@ -37,12 +38,9 @@
                 android:id="@+id/rmatricule"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/rnote"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="26dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_alignLeft="@+id/rname"
+                android:layout_alignStart="@+id/rname"
+                android:layout_below="@+id/rname"
                 android:text="matricule"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
@@ -51,9 +49,9 @@
                 android:id="@+id/rname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/rmatricule"
-                android:layout_alignLeft="@+id/rmatricule"
-                android:layout_alignStart="@+id/rmatricule"
+                android:layout_alignLeft="@+id/imageView4"
+                android:layout_alignStart="@+id/imageView4"
+                android:layout_below="@+id/imageView4"
                 android:text="NAME:"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
@@ -62,26 +60,49 @@
                 android:id="@+id/rnote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="31dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginRight="15dp"
-                android:text="NOTE :  20/20"
+                android:layout_below="@+id/rname"
+                android:layout_toEndOf="@+id/button4"
+                android:layout_toRightOf="@+id/button4"
+                android:text="60%"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/button4"
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="33dp"
+                android:background="@android:color/transparent"
+                android:elevation="5dp"
+                android:onClick="goBackPressed"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/back" />
+
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/rmatricule"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@+id/rmatricule"
-                android:layout_marginTop="34dp"
-                android:onClick="goBackPressed"
-                android:text="Accueil" />
+                android:layout_above="@+id/rmatricule"
+                android:layout_toLeftOf="@+id/rname"
+                android:layout_toStartOf="@+id/rname" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/button4"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="12dp"
+                app:srcCompat="@drawable/user" />
+
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView

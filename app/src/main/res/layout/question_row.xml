@@ -6,39 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
-    <ImageButton
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/cardView"
-        android:layout_alignRight="@+id/cardView"
-        android:layout_alignTop="@+id/cardView"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        android:layout_marginTop="78dp"
-        android:background="@drawable/blue_button_shape"
-        android:elevation="6dp"
-        android:onClick="DeleteQuestion"
-        android:padding="10dp"
-        android:src="@android:drawable/ic_menu_delete" />
-
-    <ImageButton
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/delete"
-        android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
-        android:layout_toLeftOf="@+id/delete"
-        android:layout_toStartOf="@+id/delete"
-        android:background="@drawable/blue_button_shape"
-        android:elevation="6dp"
-        android:enabled="false"
-        android:onClick="EditQuestion"
-        android:padding="10dp"
-        android:src="@android:drawable/ic_menu_edit" />
-
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -75,7 +42,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/acme"
                     android:text="test quest" />
 
                 <EditText
@@ -84,7 +50,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:fontFamily="@font/acme"
                     android:inputType="textPersonName"
                     android:visibility="gone" />
 
@@ -94,7 +59,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:fontFamily="@font/acme"
                     android:showText="true"
                     android:splitTrack="false"
                     android:switchMinWidth="100dp"
@@ -116,5 +80,38 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
+    <ImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/cardView"
+        android:layout_alignRight="@+id/cardView"
+        android:layout_alignTop="@+id/cardView"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="78dp"
+        android:background="@drawable/blue_button_shape"
+        android:elevation="6dp"
+        android:onClick="DeleteQuestion"
+        android:padding="10dp"
+        android:src="@android:drawable/ic_menu_delete" />
+
+    <ImageButton
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/delete"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_toLeftOf="@+id/delete"
+        android:layout_toStartOf="@+id/delete"
+        android:background="@drawable/blue_button_shape"
+        android:elevation="6dp"
+        android:enabled="false"
+        android:onClick="EditQuestion"
+        android:padding="10dp"
+        android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>

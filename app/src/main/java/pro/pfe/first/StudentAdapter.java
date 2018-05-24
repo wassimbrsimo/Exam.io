@@ -19,11 +19,10 @@ public class StudentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.examID=id;
     }
     public class NoteStudentViewHolder extends RecyclerView.ViewHolder{
-        TextView nom,note;
+        TextView nom;
         public NoteStudentViewHolder(View itemView) {
             super(itemView);
             nom=itemView.findViewById(R.id.nom);
-            note=itemView.findViewById(R.id.rnote);
         }
     }
     @Override
@@ -36,7 +35,6 @@ public class StudentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Student student = Student_List.get(position);
         NoteStudentViewHolder hold = (NoteStudentViewHolder) holder;
         hold.nom.setText(student.getName());
-        hold.note.setText(db.getStudentAnswer(student.getID(),examID));
     }
 
     @Override

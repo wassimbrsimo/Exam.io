@@ -26,20 +26,17 @@
                 android:id="@+id/conct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="20dp"
-                android:layout_marginEnd="18dp"
-                android:layout_marginRight="18dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:layout_marginRight="12dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/acme"
                 android:text="0"
                 android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/imageView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/conct"
@@ -53,10 +50,10 @@
                 android:id="@+id/readMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/imageView"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_weight="1"
-                android:fontFamily="@font/acme"
+                
                 android:text="Message"
                 android:textAlignment="center"
                 android:textSize="20sp"
@@ -66,12 +63,11 @@
                 android:id="@+id/connectionStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/conct"
-                android:layout_alignParentTop="true"
-                android:layout_alignRight="@+id/conct"
-                android:layout_marginTop="43dp"
+                android:layout_above="@+id/conct"
+                android:layout_alignLeft="@+id/sendButton"
+                android:layout_alignStart="@+id/sendButton"
+                android:layout_marginBottom="11dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/acme"
                 android:text="Connection Status"
                 android:textAlignment="center"
                 android:textColor="@android:color/holo_blue_dark"
@@ -82,24 +78,30 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/connectionStatus"
-                android:layout_toLeftOf="@+id/readMsg"
-                android:layout_toStartOf="@+id/readMsg"
                 android:text="EXAM final"
                 android:textColor="@color/colorAccent"
                 android:textSize="30sp" />
-        </RelativeLayout>
 
-        <ImageButton
-            android:id="@+id/sendButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="false"
-            android:layout_gravity="right"
-            android:background="@android:drawable/ic_menu_add"
-            android:fontFamily="@font/acme"
-            android:onClick="launchQRScanner"
-            android:textAlignment="center" />
+            <Button
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:background="@drawable/save_button_shape"
+                android:drawableRight="@android:drawable/ic_menu_add"
+                
+                android:onClick="launchQRScanner"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="Ajouter Eleve"
+                android:textAlignment="center" />
+        </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvstudents"
@@ -113,13 +115,13 @@
         </android.support.v7.widget.RecyclerView>
 
         <Button
-            android:id="@+id/sendButton0"
+            android:id="@+id/startButton"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:layout_alignEnd="@+id/discover2"
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/discover2"
-            android:fontFamily="@font/acme"
+            
             android:text="Commencer Exam" />
 
     </LinearLayout>

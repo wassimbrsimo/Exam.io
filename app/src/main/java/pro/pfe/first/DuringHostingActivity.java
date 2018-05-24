@@ -43,7 +43,7 @@ import static pro.pfe.first.Teacher.db;
 
 public class DuringHostingActivity extends AppCompatActivity  {
     RecyclerView recyclerView;
-    Button  addStudent;
+    Button  addStudent,startStudent;
 
     TextView readMsg,connStatus,conect;
     EditText writeMsg,ssid;
@@ -88,13 +88,27 @@ public class DuringHostingActivity extends AppCompatActivity  {
         addStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(CONNECTING==0)
               launchQRScanner(view);
+            }
+        });
+        startStudent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(CONNECTING==0)
+                    for(StudentSocket socket : Etudiants){
+                        try {
+                            socket.getSr().write("START_SIGNAL".getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
             }
         });
     }
     private void initWork() {
-        addStudent = (Button) findViewById(R.id.sendButton0);
+        addStudent = (Button) findViewById(R.id.sendButton);
+        startStudent = (Button) findViewById(R.id.startButton);
 
 
         recyclerView = (RecyclerView) findViewById(R.id.rvstudents);
@@ -243,7 +257,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
     }
 
     public void startTimedOutTimer(){
-        new CountDownTimer(1000, 1000) {
+        new CountDownTimer(500, 2) {
 
             public void onTick(long millisUntilFinished) {
                 Log.e("Timer "," millis remainins discovery : "+millisUntilFinished);
@@ -251,7 +265,6 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
             public void onFinish() {
 
-                    connStatus.setText("starting discovery again");
                     startDiscovery();
             }
         }.start();
@@ -269,7 +282,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
          AttenteMac.add(MAC);
          Log.e("ETUDIANT AJOUTER  ", "ETUDIENT ::: " + Etudiants.get(Etudiants.size() - 1).getName());
 
-         addStudent.setEnabled(false);
+         addStudent.setText("Attente connexion ..");
+         startStudent.setText("Attente connextion ..");
          startTimedOutTimer();
 
          //  addStudent.setEnabled(false);
@@ -295,6 +309,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
                         if (device.deviceAddress.equals(AttenteMac.get(0))) {
                             ConnectToMAC(AttenteMac.get(0), device);
                             CONNECTING=1;
+
                             Log.e("PEERS","Found "+AttenteMac.size());
 
                         }
@@ -365,6 +380,17 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
             if(tempMsg.equals("FINISH")){
                 Etudiants.get(msg.what).setState(6);
+                boolean finished=true;
+                for(StudentSocket s :Etudiants)
+                    if(s.getState()!=6)
+                        finished=false;
+                if(finished){
+                    Intent resultExam = new Intent(getApplicationContext(),Teacher_Done_Exam.class);
+                    resultExam.putExtra("id",examin.getId());
+                    startActivity(resultExam);
+                    wm.setWifiEnabled(false);
+                    finish();
+                }
                 adapter.notifyDataSetChanged();
             }
             else if (tempMsg.equals("OUT_OF_APP")) {
@@ -378,7 +404,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
             else if (tempMsg.split("]")[0].equals("0")) {
                 try {
                     stopDiscovery();
-                    addStudent.setEnabled(true);
+                    addStudent.setText("Ajouter Eleve");
+                    startStudent.setText("Commencer Examin");
                     CONNECTING=0;
                     Log.e("Host RECEPTION","msg : "+tempMsg );
                     int index =matchSrStudent(tempMsg.split("]")[1],msg.what);

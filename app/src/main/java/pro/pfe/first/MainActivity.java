@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
             else{  // student
                 side = new Intent(this,StudentActivity.class);
             }
+            side.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(side);
+            finish();
             startActivity(side);
         }
         super.onCreate(savedInstanceState);

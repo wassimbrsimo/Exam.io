@@ -7,6 +7,9 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class AntiCheatService extends Service {
     private WindowManager mWindowManager;
@@ -38,6 +41,18 @@ public class AntiCheatService extends Service {
         //Add the view to the window
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(overlayLayer, params);
+        final TextView back= overlayLayer.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent();
+                i.setClass(view.getContext(), Student_Lobby.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+                android.os.Process.killProcess(android.os.Process.myPid());
+
+            }
+        });
 
         //….
         //….

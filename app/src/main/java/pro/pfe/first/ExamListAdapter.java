@@ -177,7 +177,8 @@ return score;
                     }
 
                     DB db = new DB(historyholder.layout.getContext());
-                    historyholder.note.setText(CalculNote(source,db.getStudentAnswer(0,historyexam.getId()))+"%");
+                    String score = String.format("%.2f", CalculNote(source,db.getStudentAnswer(0,historyexam.getId())));
+                    historyholder.note.setText(score+"%");
                     historyholder.layout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

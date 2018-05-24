@@ -9,7 +9,6 @@
     >
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -18,10 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <RelativeLayout
-                android:id="@+id/expandedImage"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@drawable/gradient_shape"
@@ -36,7 +34,7 @@
                     android:layout_alignLeft="@+id/rtitre"
                     android:layout_alignStart="@+id/rtitre"
                     android:layout_below="@+id/rtitre"
-                    android:fontFamily="@font/acme"
+
                     android:text="TextView"
                     android:textColor="@color/colorAccent" />
 
@@ -49,7 +47,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="35dp"
                     android:layout_marginStart="35dp"
-                    android:fontFamily="@font/acme"
+
                     android:text="EXAM FINAL"
                     android:textColor="@color/colorAccent"
                     android:textSize="30sp" />
@@ -62,7 +60,7 @@
                     android:layout_toLeftOf="@+id/multi_btn"
                     android:layout_toStartOf="@+id/multi_btn"
                     android:background="@drawable/delete_button_shape"
-                    android:fontFamily="@font/acme"
+
                     android:text="vrai ou Fau" />
 
                 <Button
@@ -73,12 +71,11 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:background="@drawable/save_button_shape"
-                    android:fontFamily="@font/acme"
+
                     android:text="Choi multiple" />
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin">

@@ -9,19 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/card"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/card"
-            android:background="@drawable/delete_button_shape"
-            android:elevation="8dp"
-            app:srcCompat="@drawable/ic_clear_black_24dp"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="0dp" />
-
         <android.support.v7.widget.CardView
             android:id="@+id/card"
             android:layout_width="match_parent"
@@ -41,7 +28,6 @@
             tools:layout_editor_absoluteY="25dp">
 
             <LinearLayout
-                android:id="@+id/exam_container"
 
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -61,7 +47,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="casual"
+                        android:fontFamily="sans-serif-smallcaps"
                         android:text="Examin final QCM"
                         android:textAlignment="center"
                         android:textColor="@color/colorPrimary"
@@ -117,6 +103,20 @@
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
+
+        <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/card"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/card"
+            android:background="@drawable/delete_button_shape"
+            android:elevation="8dp"
+            app:srcCompat="@drawable/ic_clear_black_24dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

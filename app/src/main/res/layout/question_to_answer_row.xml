@@ -22,7 +22,6 @@
             tools:layout_editor_absoluteX="10dp">
 
             <LinearLayout
-                android:id="@+id/linear-layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -35,7 +34,6 @@
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/acme"
                     android:text="This is a question"
                     android:textAlignment="center" />
             </LinearLayout>

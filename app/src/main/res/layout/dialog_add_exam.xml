@@ -7,12 +7,11 @@
     android:background="@drawable/dialog_add_exam">
 
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:fontFamily="@font/acme"
+        
         android:text="Add Exam"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp" />
@@ -44,7 +43,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:fontFamily="@font/acme"
+                    
                     android:hint="Titre"
                     android:inputType="textPersonName" />
 
@@ -53,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:fontFamily="@font/acme"
+                    
                     android:hint="Description"
                     android:inputType="textPersonName" />
             </LinearLayout>
@@ -81,7 +80,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/blue_button_shape"
-                android:fontFamily="@font/acme"
+                
                 android:text="Ajouter"
                 android:textColor="@color/colorAccent" />
 
@@ -92,7 +91,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/blue_button_shape"
-                android:fontFamily="@font/acme"
+                
                 android:text="Annulé"
                 android:textColor="@color/colorAccent" />
         </LinearLayout>
