@@ -8,6 +8,24 @@ public class StudentSocket extends Student {
     DuringHostingActivity.SocketConnexion sr;
     String MAC;
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getN() {
+        return n;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    int score=0,n=0;
+
     public int getState() {
         return state;
     }

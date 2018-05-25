@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -23,10 +24,13 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class TFHolder extends RecyclerView.ViewHolder{
         TextView question;
         CardView question_row;
+        ImageView t,f;
         public TFHolder(View view) {
             super(view);
             this.question=view.findViewById(R.id.question_text);
             this.question_row= view.findViewById(R.id.question_row);
+            this.t=view.findViewById(R.id.vrai);
+            this.f=view.findViewById(R.id.faux);
 
         }
     }
@@ -71,11 +75,14 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         Question quest = liste_des_questions.get(position);
+
         if(holder.getItemViewType()==0) {
             TFHolder hold = (TFHolder) holder;
-            hold.question.setText(Question.toString(quest) + " / " + TypedAnswers.get(position));
+            hold.question.setText(Question.toString(quest));
             AnsweringManager(hold, position);
         }
+
+
         else {
             final MultiHolder hold=(MultiHolder) holder;
             hold.question.setText(quest.getQuestion().get(0));
@@ -86,6 +93,19 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
 
             for(int i =0;i<5;i++){
+                final int finalI = i;
+                hold.lays[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        hold.checks[finalI].setChecked(!hold.checks[finalI].isChecked());
+                        String temp="";
+                        for(int j=0;j<5;j++){
+                            temp+=hold.checks[j].isChecked()?"1":0;
+                        }
+                        TypedAnswers.remove(position);
+                        TypedAnswers.add(position,temp);
+                    }
+                });
                 hold.checks[i].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -98,6 +118,7 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 });
             }
+
             hold.card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -138,10 +159,16 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private void InitColors(final TFHolder hold, final Boolean answer, final Boolean isAnswerEmpty){
         if(isAnswerEmpty)
             hold.question_row.setCardBackgroundColor(Color.WHITE);
-        else if(answer)
-            hold.question_row.setCardBackgroundColor(Color.GREEN);
-        else
-            hold.question_row.setCardBackgroundColor(Color.RED);
+        else if(answer) {
+            hold.t.setVisibility(View.VISIBLE);
+            hold.f.setVisibility(View.GONE);
+            hold.question_row.setCardBackgroundColor(hold.question_row.getContext().getResources().getColor(R.color.colorAccent));
+        }
+        else{
+            hold.f.setVisibility(View.VISIBLE);
+            hold.t.setVisibility(View.GONE);
+            hold.question_row.setCardBackgroundColor(hold.question_row.getContext().getResources().getColor(R.color.colorNega));
+        }
     }
 
     private void ListenersManager(final TFHolder hold , final int position, final Boolean isAnswerEmpty, final Boolean Answer){

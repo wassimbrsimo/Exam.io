@@ -40,7 +40,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/rtitre"
@@ -54,32 +55,59 @@
                         android:textSize="30sp"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/duration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TextView" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            app:srcCompat="@drawable/chrono" />
+
+                        <TextView
+                            android:id="@+id/duration"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:text="30 mins"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorNega"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
                 <TextView
                     android:id="@+id/module"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="right"
                     android:layout_weight="1"
                     android:fontFamily="casual"
                     android:text="Crypto"
-                    android:textAlignment="center" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/nquest"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="right"
                     android:layout_weight="1"
                     android:gravity="end"
                     android:text="Questions : 5"
-                    android:textAlignment="textEnd" />
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -95,7 +123,7 @@
                         android:layout_weight="1"
                         android:background="@drawable/blue_button_shape"
                         android:elevation="0dp"
-                        android:text="HOST"
+                        android:text="PASSER LEXAMIN"
                         android:textColor="#fff" />
 
                 </LinearLayout>

@@ -25,8 +25,7 @@ import java.util.List;
 public class StudentActivity extends FragmentActivity {
     public static  DB db;
     public static Student Etudiant;
-    public static float NOTE=0;
-    TextView avg,name;
+    TextView avg,name,avg2;
     List<Exam> Examlist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +42,19 @@ public class StudentActivity extends FragmentActivity {
             Etudiant=db.getAllStudents().get(0);
 
         Examlist= db.getHostedExams();
+        int quesnum=0;
         float average=0;
         for(Exam e : Examlist){
-            average+=ExamListAdapter.CalculNote(e.getAnswers(),db.getStudentAnswer(0,e.getId()));
+            if(e!=null){
+                quesnum+=e.getQuestionsSize();
+                average+=Exam.CalculerNote(e,db.getStudentAnswer(0,e.getId()));
+            }
         }
-        average/=Examlist.size();
+
         avg=findViewById(R.id.avg_note);
-        avg.setText(average+"%");
+        avg2=findViewById(R.id.avg_note2);
+        avg.setText(String.valueOf((int)(average/quesnum*100)));
+        avg2.setText("("+(int)average+"/"+quesnum+")");
         name=findViewById(R.id.profil_name);
         name.setText(Etudiant.getName());
         RecyclerView rv = findViewById(R.id.rv_passed_exams);
@@ -77,6 +82,7 @@ public class StudentActivity extends FragmentActivity {
     }
     public void passExam(View view){
         Intent Lobby=new Intent(getApplicationContext(),Student_Lobby.class);
+        Lobby.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(Lobby);
         //todo: Animation ..
     }

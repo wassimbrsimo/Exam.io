@@ -44,24 +44,15 @@ public class Student_Result extends AppCompatActivity {
         rv.setNestedScrollingEnabled(false);
         eAdapter.notifyDataSetChanged();
 
-        String scoremsg="2]";
-        int score = 0;
-        String answers=db.getStudentAnswer(0,id);
-        String[] TypedAnswer = answers.split(Student_Lobby.ANSWERS_SEPARATOR);
-        String student_answer="";
-        for(int i =0;i<TypedAnswer.length;i++){
-            Log.e("CORECTION   ","         BONNE REPONSE : "+exam.getQuestions().get(i).getAnswer()+" TA REPONSE : "+TypedAnswer[i]);
-            student_answer+=TypedAnswer[i]+Student_Lobby.ANSWERS_SEPARATOR;
-            scoremsg+=exam.getQuestions().get(i).getAnswer()+Student_Lobby.ANSWERS_SEPARATOR;
-            if(TypedAnswer[i].equals(exam.getQuestions().get(i).getAnswer()))
-                score++;
 
-            note.setText(score+"/"+exam.getQuestions().size());
+        String answers=db.getStudentAnswer(0,id);
+            float bonneReponse=(int)Exam.CalculerNote(exam,answers);
+            int quesum=exam.getQuestionsSize();
+            note.setText((int)(bonneReponse/quesum*100)+"%  ("+(int)bonneReponse+"/"+quesum+")");
             nom.setText(Etudiant.getName());
             matricule.setText(Etudiant.getMatricule());
             titre.setText(exam.getTitre());
         }
-    }
 
     public void goBackPressed(View v){
         Intent home = new Intent(this,StudentActivity.class);

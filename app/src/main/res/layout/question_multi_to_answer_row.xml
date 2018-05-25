@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -15,9 +16,9 @@
             android:id="@+id/card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
-            app:cardCornerRadius="25dp"
+            app:cardCornerRadius="12dp"
             app:contentPadding="0dp">
 
             <TextView
@@ -27,7 +28,9 @@
                 android:layout_marginBottom="25dp"
                 android:layout_marginTop="25dp"
                 android:text="Le zync est une matiere qui :"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
         </android.support.v7.widget.CardView>
 
         <LinearLayout
@@ -40,6 +43,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/cl1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -47,11 +51,14 @@
                 android:visibility="gone">
 
                 <CheckBox
+                    android:id="@+id/ch1"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="5" />
+                    android:layout_weight="5"
+                    android:buttonTint="@color/common_google_signin_btn_text_dark_focused" />
 
                 <TextView
+                    android:id="@+id/c1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -60,19 +67,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cl2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
                 android:clickable="true"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
                 <CheckBox
+                    android:id="@+id/ch2"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="5" />
+                    android:layout_weight="5"
+                    android:buttonTint="@color/common_google_signin_btn_text_dark_focused" />
 
                 <TextView
+                    android:id="@+id/c2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -81,6 +91,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cl3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -88,11 +99,14 @@
                 android:visibility="gone">
 
                 <CheckBox
+                    android:id="@+id/ch3"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="5" />
+                    android:layout_weight="5"
+                    android:buttonTint="@color/common_google_signin_btn_text_dark_focused" />
 
                 <TextView
+                    android:id="@+id/c3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -101,6 +115,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cl4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -108,11 +123,14 @@
                 android:visibility="gone">
 
                 <CheckBox
+                    android:id="@+id/ch4"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="5" />
+                    android:layout_weight="5"
+                    android:buttonTint="@color/common_google_signin_btn_text_dark_focused" />
 
                 <TextView
+                    android:id="@+id/c4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -121,6 +139,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cl5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -128,11 +147,14 @@
                 android:visibility="gone">
 
                 <CheckBox
+                    android:id="@+id/ch5"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="5" />
+                    android:layout_weight="5"
+                    android:buttonTint="@color/common_google_signin_btn_text_dark_focused" />
 
                 <TextView
+                    android:id="@+id/c5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

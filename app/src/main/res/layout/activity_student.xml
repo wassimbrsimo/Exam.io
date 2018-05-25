@@ -31,63 +31,95 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:contentScrim="@color/colorPrimary"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                    app:layout_scrollFlags="exitUntilCollapsed|snap">
+
+                    <android.support.v7.widget.Toolbar
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignTop="@+id/usericon"
+                        android:fadeScrollbars="true"
+                        app:layout_collapseMode="parallax">
+
+                    </android.support.v7.widget.Toolbar>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="150dp"
                         android:background="@drawable/gradient_shape"
                         android:fitsSystemWindows="true"
                         app:layout_collapseMode="parallax"
                         app:layout_collapseParallaxMultiplier="0.7">
 
 
+                        <ImageView
+                            android:id="@+id/pourcent"
+                            android:layout_width="60dp"
+                            android:layout_height="53dp"
+                            android:layout_alignBottom="@+id/usericon"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="51dp"
+                            android:layout_marginRight="51dp"
+                            android:padding="2dp"
+                            android:src="@drawable/pourcent" />
+
                         <TextView
                             android:id="@+id/profil_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignLeft="@+id/imageView3"
+                            android:layout_alignLeft="@+id/usericon"
                             android:layout_alignParentBottom="true"
-                            android:layout_alignStart="@+id/imageView3"
-                            android:layout_marginBottom="30dp"
+                            android:layout_alignStart="@+id/usericon"
+                            android:layout_marginBottom="12dp"
                             android:text="Name :"
                             android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                            android:textSize="30sp" />
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/avg_note"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBaseline="@+id/profil_name"
-                            android:layout_alignBottom="@+id/profil_name"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginEnd="18dp"
-                            android:layout_marginRight="18dp"
-                            android:text="14%"
+                            android:layout_alignTop="@+id/pourcent"
+                            android:layout_toLeftOf="@+id/pourcent"
+                            android:layout_toStartOf="@+id/pourcent"
+                            android:text="14"
                             android:textColor="@color/colorAccent"
-                            android:textSize="30sp" />
+                            android:textSize="36sp" />
+
+                        <TextView
+                            android:id="@+id/avg_note2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/profil_name"
+                            android:layout_toEndOf="@+id/avg_note"
+                            android:layout_toRightOf="@+id/avg_note"
+                            android:text="14"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="24sp" />
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/usericon"
                             android:layout_width="75dp"
                             android:layout_height="75dp"
                             android:layout_above="@+id/profil_name"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:layout_marginBottom="13dp"
                             android:layout_marginLeft="29dp"
                             android:layout_marginStart="29dp"
                             android:src="@drawable/user" />
+
+                        <ImageView
+                            android:id="@+id/bar"
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:scaleType="matrix"
+                            android:src="@drawable/bar" />
                     </RelativeLayout>
-
-                    <android.support.v7.widget.Toolbar
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:fadeScrollbars="true"
-                        app:layout_collapseMode="pin">
-
-                    </android.support.v7.widget.Toolbar>
 
 
                 </android.support.design.widget.CollapsingToolbarLayout>
@@ -111,11 +143,11 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="51dp"
-            android:background="@drawable/blue_button_shape"
+            android:background="@drawable/save_button_shape"
             android:elevation="9dp"
             android:onClick="passExam"
             android:text="Passer un examin"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="512dp" />

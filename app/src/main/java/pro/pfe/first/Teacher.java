@@ -9,14 +9,14 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class Teacher extends AppCompatActivity implements Teacher_Tab1.OnFragmentInteractionListener,Teacher_Tab2.OnFragmentInteractionListener {
 
 
     public static DB db;
     public static Boolean VIEWHOSTEDEXAM=false;
-
-
+    public static ViewPager vp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +27,8 @@ public class Teacher extends AppCompatActivity implements Teacher_Tab1.OnFragmen
         tab.addTab(tab.newTab().setText(R.string.Exams_manager));
         tab.addTab(tab.newTab().setText(R.string.History));
         tab.setTabGravity(TabLayout.GRAVITY_FILL);
-        final ViewPager vp =(ViewPager) findViewById(R.id.pager);
-        pagesAdapter pAdapter = new pagesAdapter(getSupportFragmentManager(),tab.getTabCount());
+       vp =(ViewPager) findViewById(R.id.pager);
+        pagesAdapter pAdapter= new pagesAdapter(getSupportFragmentManager(),tab.getTabCount());
         vp.setAdapter(pAdapter);
         vp.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab));
         tab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

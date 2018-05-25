@@ -13,10 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +36,9 @@ import java.util.List;
 public class Teacher_Tab1 extends Fragment {
 
     View addPanel,addqPanel ;
-    ImageButton add,close,validate,delete;
-    RadioButton t,f;
+    ImageButton close,validate,delete;
+    Button add;
+    public static TextView number;
 
 
 
@@ -71,12 +75,17 @@ public class Teacher_Tab1 extends Fragment {
 
         addPanel=view.findViewById(R.id.add_epanel);
         close= (ImageButton) view.findViewById(R.id.add_qbtn);
-        add= (ImageButton) view.findViewById(R.id.create);
+        add=view.findViewById(R.id.create);
         validate= (ImageButton) view.findViewById(R.id.add_btn);
-
+        number= view.findViewById(R.id.module);
 
         Examlist= Teacher.db.getAllExams();
-        Log.e("EXAMILIST","DONE WE HAVE "+Examlist.size());
+        if(Examlist.size()==0)
+            number.setText("Il n ya pas d'examins");
+        else if(Examlist.size()==1)
+        number.setText("1 Examin");
+        else
+            number.setText(Examlist.size()+" Examins");
 
         rv = (RecyclerView) view.findViewById(R.id.recyclerview_Teacher);
         eAdapter=new ExamListAdapter(Examlist,0);
@@ -197,6 +206,7 @@ public class Teacher_Tab1 extends Fragment {
         long id=Teacher.db.create(e);
         e.setId((int)id);
         Examlist.add(e);
+        number.setText(Examlist.size()+" Examins");
         eAdapter.notifyItemInserted(Examlist.size());
         rv.scrollToPosition(0);
     }

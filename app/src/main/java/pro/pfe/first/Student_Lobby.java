@@ -44,6 +44,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pro.pfe.first.StudentActivity.Etudiant;
 import static pro.pfe.first.StudentActivity.db;
 
 public class Student_Lobby extends AppCompatActivity {
@@ -58,7 +59,7 @@ public class Student_Lobby extends AppCompatActivity {
 
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
-
+    public Intent intent=null;
 
     static final int MESSAGE_READ = 1;
     static String MAC_ADDRESS;
@@ -149,6 +150,7 @@ public class Student_Lobby extends AppCompatActivity {
         }
         try {
             sendRecieve.write(("2]" + answers).getBytes());
+            id =(int)db.create(actualExam);
             db.pushAnswer(answers, id, 0);
             txt.setText("Waiting for Answer ");
         } catch (IOException e) {
@@ -177,7 +179,6 @@ public class Student_Lobby extends AppCompatActivity {
         qrDialogView.findViewById(R.id.retry).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //your business logic
                 wm.setWifiEnabled(false);
             }
         });
@@ -205,6 +206,8 @@ public class Student_Lobby extends AppCompatActivity {
         wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if (!wm.isWifiEnabled())
             wm.setWifiEnabled(true);
+        else
+            wm.setWifiEnabled(false);
 
 
 
@@ -232,6 +235,10 @@ public class Student_Lobby extends AppCompatActivity {
             public void onSuccess() {
                 connStatus.setText("good , Discovery Started");
                // startTimedOutTimer();
+                WifiP2pDevice device = (WifiP2pDevice) intent
+                        .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+                if(!CONNECTED)
+                    InitQR(Etudiant.getName(),Etudiant.getMatricule(),device.deviceAddress);
             }
 
             @Override
@@ -317,7 +324,7 @@ public class Student_Lobby extends AppCompatActivity {
 
                     Log.e("CLIENT RECEPTION", "msg : " + tempMsg);
                                                                                                         // CODES DE RECEPTION ETUDIANT
-                    if (tempMsg.equals("MAC_REQUEST")) {                                    // CODE 0
+                    if (tempMsg.equals("MAC_REQUEST")) {
                         try {
                             sendRecieve.write(("0]" + MAC_ADDRESS).getBytes());
                             Log.e("MAC", "Sending mac adress to host");
@@ -341,7 +348,7 @@ public class Student_Lobby extends AppCompatActivity {
                         actualExam = Exam.toExam(tempMsg);
                         Log.e("EXAM ", " WE REVIECED EXAM WITH "+actualExam.getQuestions().size()+" QUESTIONS");
                         InitExam(actualExam);
-                        id =(int)db.create(actualExam);
+
 
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
@@ -352,7 +359,6 @@ public class Student_Lobby extends AppCompatActivity {
 
                         Log.e("CLIENT RECEPTION", "NOTE RECIEVED  ! : " + tempMsg
                                 + "\n" + " notemsg[]=" + notemsg.length + "  /  exam.questions = " + actualExam.getQuestions().size());
-
                         for (int i = 0; i < actualExam.getQuestions().size(); i++) {
                             db.create(new Question(actualExam.getQuestions().get(i).getQuestion(),notemsg[i],0,id));
                             Log.e("CREATEDD QUESTION DB "," ID QUESTION EXAM  id = "+id);
@@ -378,12 +384,11 @@ public class Student_Lobby extends AppCompatActivity {
             return true;
         }
     });
-
     WifiP2pManager.ConnectionInfoListener connectionInfoListener = new WifiP2pManager.ConnectionInfoListener() {
         @Override
         public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
-            final InetAddress groupOwnerAddress = wifiP2pInfo.groupOwnerAddress;
             Log.e("CONNECTION INFO done ","");
+            final InetAddress groupOwnerAddress = wifiP2pInfo.groupOwnerAddress;
             if (wifiP2pInfo.groupFormed) {
 
 
@@ -400,7 +405,7 @@ public class Student_Lobby extends AppCompatActivity {
     WifiP2pManager.GroupInfoListener groupeInfoListener = new WifiP2pManager.GroupInfoListener() {
         @Override
         public void onGroupInfoAvailable(WifiP2pGroup wifiP2pInfo) {
-
+            Log.e("CONNECTION INFO done ","");
             if (wifiP2pInfo.isGroupOwner()) {
                 connStatus.setText("Groupe Owner" + wifiP2pInfo.getClientList().size() + ")");
 
@@ -416,7 +421,6 @@ public class Student_Lobby extends AppCompatActivity {
     public void onBackPressed() {
         if(sendRecieve==null){
             startActivity(new Intent(this,StudentActivity.class));
-            finish();
         }
     }
     @Override

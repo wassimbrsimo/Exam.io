@@ -45,10 +45,10 @@ public class AntiCheatService extends Service {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent();
-                i.setClass(view.getContext(), Student_Lobby.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("pro.pfe.first");
+                if (launchIntent != null) {
+                    startActivity(launchIntent);//null pointer check in case package name was not found
+                }
                 android.os.Process.killProcess(android.os.Process.myPid());
 
             }

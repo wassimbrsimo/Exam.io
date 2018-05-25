@@ -3,7 +3,7 @@
 
     <gradient
         android:angle="90"
-        android:startColor="@color/viewfinder_laser"
+        android:startColor="@color/colorNega"
         android:endColor="#ff0e0e"
         android:type="linear" />
 

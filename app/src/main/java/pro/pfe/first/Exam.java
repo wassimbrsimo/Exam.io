@@ -60,7 +60,37 @@ public class Exam {
         return "1]" + e.getTitre() + "]" + e.getModule() + "]" + e.getId() + "]" + e.getDuration() + "]" + e.getQuestions().size() + Question.toStrings(e.getQuestions());
 
     }
+    public static float CalculerNote(Exam examin,String answers){
+        float score = 0;
+        String[] TypedAnswer = answers.split(Student_Lobby.ANSWERS_SEPARATOR);
+        String student_answer="";
+        for(int i =0;i<TypedAnswer.length;i++){
+            student_answer+=TypedAnswer[i]+Student_Lobby.ANSWERS_SEPARATOR;
 
+            if(examin.getQuestions().get(i).getType()==0 && TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer()))
+                score++;
+            else if(TypedAnswer.length>0)
+                for(int j=0;j<examin.getQuestions().get(i).getQuestion().size()-1 && j<TypedAnswer[i].length();j++){
+                    if(TypedAnswer[i].charAt(j)==examin.getQuestions().get(i).getAnswer().charAt(j))
+                    {
+                        score++;
+                    }
+                }
+            }
+        //todo: chrono design student and prof , late student timer ,buttons on/off design
+        return score;
+    }
+    public int getQuestionsSize(){
+        int size=0;
+        for(int i =0;i<getAnswers().split(Student_Lobby.ANSWERS_SEPARATOR).length;i++){
+
+            if(getQuestions().get(i).getType()==0)
+                size++;
+            else
+                size+=getQuestions().get(i).getQuestion().size()-1;
+        }
+        return  size;
+    }
     public static Exam toExam(String s) {
         String[] split = s.split("]");
         Exam e = new Exam(split[1], split[2], Integer.valueOf(split[3]), Integer.valueOf(split[4]));

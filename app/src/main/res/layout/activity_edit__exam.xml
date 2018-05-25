@@ -1,104 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<LinearLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="150dp"
+        android:layout_marginTop="-65dp"
+        android:background="@drawable/blue_button_shape"
+        android:elevation="5dp"
+        app:layout_collapseMode="pin">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            android:paddingTop="70dp">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/gradient_shape"
-                android:transitionName="hello"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/module"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/rtitre"
-                    android:layout_alignStart="@+id/rtitre"
-                    android:layout_below="@+id/rtitre"
-
-                    android:text="TextView"
-                    android:textColor="@color/colorAccent" />
-
-                <TextView
-                    android:id="@+id/rtitre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <ImageButton
+                    android:id="@+id/button5"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginStart="35dp"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:elevation="5dp"
+                    android:onClick="backPress"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/back" />
 
-                    android:text="EXAM FINAL"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="30sp" />
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/bool_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toLeftOf="@+id/multi_btn"
-                    android:layout_toStartOf="@+id/multi_btn"
-                    android:background="@drawable/delete_button_shape"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    android:text="vrai ou Fau" />
+                        <TextView
+                            android:id="@+id/rtitre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
 
-                <Button
-                    android:id="@+id/multi_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/save_button_shape"
+                            android:layout_weight="1"
+                            android:text="EXAM FINAL"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="18sp" />
 
-                    android:text="Choi multiple" />
-            </RelativeLayout>
+                        <TextView
+                            android:id="@+id/module"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/rtitre"
+                            android:layout_alignStart="@+id/rtitre"
+                            android:layout_below="@+id/rtitre"
 
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin">
+                            android:layout_weight="1"
+                            android:text="TextView"
+                            android:textColor="@color/colorAccent" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/multi_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="2"
+
+                        android:background="@drawable/save_button_shape"
+                        android:text="Choi multiple" />
+
+                    <Button
+                        android:id="@+id/bool_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_toLeftOf="@+id/multi_btn"
+                        android:layout_toStartOf="@+id/multi_btn"
+                        android:layout_weight="2"
+
+                        android:background="@drawable/delete_button_shape"
+                        android:text="vrai ou Fau" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
 
-            </android.support.v7.widget.Toolbar>
-
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/quest_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent" />
 
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/quest_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.v4.widget.NestedScrollView>
-
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

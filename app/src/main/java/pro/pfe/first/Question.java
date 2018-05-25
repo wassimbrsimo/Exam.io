@@ -73,7 +73,6 @@ public class Question {
         return questionString;
     }
     public static ArrayList<String> toQuestionArray(String questionString){
-        // todo : split question field
         ArrayList<String> temp=new ArrayList<String>();
         if(questionString.split(Separator).length>1){
             for(String s : questionString.split(Separator))

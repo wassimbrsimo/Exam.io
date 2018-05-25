@@ -64,7 +64,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
     public class HistoryExamView extends RecyclerView.ViewHolder {
-        public TextView Title,nom,matricule,note,desc;
+        public TextView Title,nom,matricule,note;
         View layout;
         RecyclerView rv;
 
@@ -73,9 +73,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(view);
             layout=view.findViewById(R.id.layout);
             Title =  view.findViewById(R.id.title);
-            desc=view.findViewById(R.id.desc);
             matricule = view.findViewById(R.id.rmatricule);
-            nom=view.findViewById(R.id.rname);
             note= view.findViewById(R.id.rnote);
             rv = view.findViewById(R.id.students_list);
 
@@ -93,17 +91,6 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
       return isHistory;
     }
 
-    public static float CalculNote(String source,String reponse){
-        String[] s=source.split(Student_Lobby.ANSWERS_SEPARATOR);
-        String[] r=reponse.split(Student_Lobby.ANSWERS_SEPARATOR);
-        float score=0;
-        for(int i=0;i<s.length;i++){
-            if(r.length>i && !r[i].equals("") && s[i].equals(r[i]))
-                score++;
-        }
-        score=score/(s.length)*100;
-return score;
-    }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView ;
@@ -167,18 +154,17 @@ return score;
                 final Exam historyexam = Examlist.get(position);
                     final HistoryExamView historyholder = (HistoryExamView) holder;
 
-                    historyholder.desc.setText(String.valueOf(historyexam.getQuestions().size()));
                     historyholder.Title.setText(historyexam.getTitre());
-                    historyholder.matricule.setText(historyexam.getModule() );
-                    historyholder.nom.setText(historyexam.getTitre());
+                    historyholder.matricule.setText(historyexam.getModule());
                     String source="";
                     for(Question q:historyexam.getQuestions()){
                         source+=q.getAnswer()+Student_Lobby.ANSWERS_SEPARATOR;
                     }
 
                     DB db = new DB(historyholder.layout.getContext());
-                    String score = String.format("%.2f", CalculNote(source,db.getStudentAnswer(0,historyexam.getId())));
-                    historyholder.note.setText(score+"%");
+                    int totalQuestions=historyexam.getQuestionsSize();
+                    float bonneReponses=Exam.CalculerNote(historyexam,db.getStudentAnswer(0,historyexam.getId()));
+                    historyholder.note.setText((int)(bonneReponses/totalQuestions*100)+"% ("+(int)bonneReponses+"/"+totalQuestions+")");
                     historyholder.layout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -191,19 +177,22 @@ return score;
                 break;
             case 2:
                 final Exam hostedexam = Examlist.get(position);
+
+                if(hostedexam!=null)
+                {
                     final HostedExamViewHolder hostedholder = (HostedExamViewHolder) holder;
                     hostedholder.Title.setText(hostedexam.getTitre());
                     hostedholder.matricule.setText(hostedexam.getModule());
                     hostedholder.nom.setText(hostedexam.getTitre());
-                    hostedholder.note.setText("Questions : "+hostedexam.getQuestions().size());
                     hostedholder.layout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent hostedActivity=new Intent(view.getContext(),Teacher_Done_Exam.class);
-                            hostedActivity.putExtra("id",hostedexam.getId());
+                            Intent hostedActivity = new Intent(view.getContext(), Teacher_Done_Exam.class);
+                            hostedActivity.putExtra("id", hostedexam.getId());
                             view.getContext().startActivity(hostedActivity);
                         }
-                    });
+
+                    });}
                 break;
         }
     }
@@ -213,6 +202,7 @@ return score;
         // launch the Hosting activity after passing data
         Intent HostingIntent=new Intent(v.getContext(),DuringHostingActivity.class);
         HostingIntent.putExtra("Exam",e.getId());
+        HostingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         v.getContext().startActivity(HostingIntent);
     }
 
@@ -228,10 +218,15 @@ return score;
         }
     }
     public void DeleteExam(int id){
-
         Teacher.db.DeleteExam(id);
         int index =getExamIndexByID(id);
         Examlist.remove(getExamIndexByID(id));
+        if(Examlist.size()==0)
+            Teacher_Tab1.number.setText("Il n ya pas d'examins");
+        else if(Examlist.size()==1)
+            Teacher_Tab1.number.setText("1 Examin");
+        else
+            Teacher_Tab1.number.setText(Examlist.size()+" Examins");
         notifyItemRemoved(index);
     }
     @Override

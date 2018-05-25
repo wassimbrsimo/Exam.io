@@ -16,9 +16,10 @@
             android:id="@+id/question_row"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            app:cardCornerRadius="25dp"
-            app:contentPadding="0dp"
+            android:layout_margin="5dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            app:contentPadding="15dp"
             tools:layout_editor_absoluteX="10dp">
 
             <LinearLayout
@@ -27,15 +28,32 @@
                 android:clickable="false"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/faux"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:visibility="gone"
+                    app:srcCompat="@android:drawable/ic_delete" />
+
+                <ImageView
+                    android:id="@+id/vrai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:visibility="gone"
+                    app:srcCompat="@android:drawable/checkbox_on_background" />
+
                 <TextView
                     android:id="@+id/question_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginTop="25dp"
                     android:layout_weight="1"
                     android:text="This is a question"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>

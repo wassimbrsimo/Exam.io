@@ -55,8 +55,8 @@ public class Edit_Exam extends AppCompatActivity {
         ArrayList<String> temp=new ArrayList<String>();
         temp.add("");
         if(type==1) {
-            temp.add("ce ci est n choi");
-            temp.add("la deuxieme choice");
+            temp.add("  ");
+            temp.add("");
         }      Question q= new Question(temp,"00000",-1,examin.getId());
         int identity=(int)db.create(q);
         q.setId(identity);
@@ -69,6 +69,9 @@ public class Edit_Exam extends AppCompatActivity {
         super.onBackPressed();
         Intent Teach=new Intent(this,Teacher.class);
         startActivity(Teach);
+    }
+    public void backPress(View v){
+        onBackPressed();
     }
 
 }

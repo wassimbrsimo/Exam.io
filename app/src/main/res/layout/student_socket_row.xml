@@ -39,6 +39,50 @@
                 android:layout_centerVertical="true"
                 android:text="status" />
 
+            <ImageView
+                android:id="@+id/simg1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/status"
+                android:layout_toStartOf="@+id/status"
+                app:srcCompat="@android:drawable/presence_away" />
+
+            <ImageView
+                android:id="@+id/simg2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/status"
+                android:layout_toStartOf="@+id/status"
+                app:srcCompat="@android:drawable/presence_online" />
+
+            <ImageView
+                android:id="@+id/simg3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/status"
+                android:layout_toStartOf="@+id/status"
+                app:srcCompat="@android:drawable/presence_busy" />
+
+            <ImageView
+                android:id="@+id/simg4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/status"
+                android:layout_toStartOf="@+id/status"
+                app:srcCompat="@android:drawable/presence_offline" />
+
             <Button
                 android:id="@+id/btn"
                 android:layout_width="wrap_content"

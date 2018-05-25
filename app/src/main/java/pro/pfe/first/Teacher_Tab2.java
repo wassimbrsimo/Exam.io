@@ -51,7 +51,7 @@ public class Teacher_Tab2 extends Fragment {
         rv.setAdapter(eAdapter);
         rv.setNestedScrollingEnabled(false);
         eAdapter.notifyDataSetChanged();
-        titre.setText("You Have "+Examlist.size()+" Hosted Exams");
+        titre.setText("Examin passé :"+Examlist.size());
     }
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -70,7 +70,9 @@ public class Teacher_Tab2 extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
+    public void onBack(View v){
+        Teacher.vp.setCurrentItem(1,true);
+    }
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
     }

@@ -114,7 +114,7 @@ public class DB extends SQLiteOpenHelper{
         ArrayList<Student> students=new ArrayList<>();
         if(c.moveToFirst())
             do {
-                students.add(getStudent(c.getInt(c.getColumnIndex(ID_ANSWER_STUDENT))));
+                students.add(0,getStudent(c.getInt(c.getColumnIndex(ID_ANSWER_STUDENT))));
             }while(c.moveToNext());
 
 
@@ -129,7 +129,7 @@ public class DB extends SQLiteOpenHelper{
 
         if(c.moveToFirst()){
             do {
-                exams.add(getExam(c.getInt(c.getColumnIndex(ID_ANSWER_EXAM))));
+                exams.add(0,getExam(c.getInt(c.getColumnIndex(ID_ANSWER_EXAM))));
             }
             while (c.moveToNext()) ;
         }

@@ -257,18 +257,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
     }
 
     public void startTimedOutTimer(){
-        new CountDownTimer(500, 2) {
 
-            public void onTick(long millisUntilFinished) {
-                Log.e("Timer "," millis remainins discovery : "+millisUntilFinished);
-            }
-
-            public void onFinish() {
-
-                    startDiscovery();
-            }
-        }.start();
-
+        startDiscovery();
     }
     public void onStudentIdentified(String result){
      if(!studentsexists(result.split("]")[2])) {
@@ -276,12 +266,10 @@ public class DuringHostingActivity extends AppCompatActivity  {
          // String[] data=result.split("/");
          String MAC = result.split("]")[2];
          conect.setText("going to connect to : " + result.split("]")[2]);
-         //todo : check if student already exists DB
          Log.e("QR", "Result : " + result);
          Etudiants.add(new StudentSocket(new Student(result.split("]")[0], result.split("]")[1], (int) db.insertStudent(result.split("]")[0], result.split("]")[1])), result.split("]")[2], null));
          AttenteMac.add(MAC);
          Log.e("ETUDIANT AJOUTER  ", "ETUDIENT ::: " + Etudiants.get(Etudiants.size() - 1).getName());
-
          addStudent.setText("Attente connexion ..");
          startStudent.setText("Attente connextion ..");
          startTimedOutTimer();
@@ -296,7 +284,6 @@ public class DuringHostingActivity extends AppCompatActivity  {
      }
      }
 
-    //TODO : -  A Z examination tests , security system ,history and marks for each student
     WifiP2pManager.PeerListListener peerListListener=new WifiP2pManager.PeerListListener() {
         @Override
         public void onPeersAvailable(WifiP2pDeviceList wifiP2pDeviceList) {
@@ -431,8 +418,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
             else if (tempMsg.split("]")[0].equals("2")) {
 
-                CalculateScore(tempMsg, Etudiants.get(msg.what));
-                Etudiants.get(msg.what).setState(3);
+                saveAnswers(tempMsg.split("]")[1], Etudiants.get(msg.what));
+
                 adapter.notifyDataSetChanged();
 
             }
@@ -442,24 +429,14 @@ public class DuringHostingActivity extends AppCompatActivity  {
             return true;
         }
     });
-    void CalculateScore(String recievedMsg,StudentSocket ss){
-        String scoremsg="2]";
-        int score = 0;
-        String answers=recievedMsg.split("]")[1];
-        String[] TypedAnswer = answers.split(Student_Lobby.ANSWERS_SEPARATOR);
-        Log.e("Recieved answer ","answer : "+answers);
-        String student_answer="";
-        for(int i =0;i<TypedAnswer.length;i++){
-            student_answer+=TypedAnswer[i]+Student_Lobby.ANSWERS_SEPARATOR;
-            scoremsg+=examin.getQuestions().get(i).getAnswer()+Student_Lobby.ANSWERS_SEPARATOR;
-            Log.e("Calculating ","answer : "+TypedAnswer[i]+" / realAnswer :"+examin.getQuestions().get(i).getAnswer());
-            if(TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer()))
-                score++;
-        }
+    void saveAnswers(String recievedMsg, StudentSocket ss){
+        ss.setState(7);
+        ss.setN(examin.getQuestionsSize());
+        ss.setScore((int)Exam.CalculerNote(examin,recievedMsg));
+
         try {
-            db.pushAnswer(answers,examin.getId(),ss.getID());
-            Log.e("Sending note  answer ","temMSg to send  : "+scoremsg+String.valueOf(score));
-            ss.getSr().write((scoremsg+String.valueOf(score)).getBytes());
+            db.pushAnswer(recievedMsg,examin.getId(),ss.getID());
+            ss.getSr().write(("2]"+examin.getAnswers()+String.valueOf(0)).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

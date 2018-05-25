@@ -1,12 +1,11 @@
 package pro.pfe.first;
 
-import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,12 +25,17 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
     public class StudentSocketHolder extends RecyclerView.ViewHolder {
         public TextView nom,status;
         public Button btn;
+        ImageView img1,img2,img3,img4;
 
         public StudentSocketHolder(View view) {
             super(view);
             nom = (TextView) view.findViewById(R.id.name);
             status= (TextView) view.findViewById(R.id.status);
             btn=view.findViewById(R.id.btn);
+            img1 =view.findViewById(R.id.simg1);
+            img2 =view.findViewById(R.id.simg2);
+            img3 =view.findViewById(R.id.simg3);
+            img4 =view.findViewById(R.id.simg4);
             }
     }
     @Override
@@ -72,11 +76,19 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             case 0:
                 hold.status.setText("connecting");
+                hold.img1.setVisibility(View.VISIBLE);
+                hold.img2.setVisibility(View.GONE);
+                hold.img3.setVisibility(View.GONE);
+                hold.img4.setVisibility(View.GONE);
                 break;
 
 
             case 1:
                 hold.status.setText("Connected !");
+                hold.img1.setVisibility(View.VISIBLE);
+                hold.img2.setVisibility(View.GONE);
+                hold.img3.setVisibility(View.GONE);
+                hold.img4.setVisibility(View.GONE);
                 break;
             case 2:
 
@@ -89,14 +101,32 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
             case 4:
 
                 hold.status.setText("Sorti de l'application !");
+
+                hold.img1.setVisibility(View.GONE);
+                hold.img2.setVisibility(View.GONE);
+                hold.img3.setVisibility(View.GONE);
+                hold.img4.setVisibility(View.VISIBLE);
                 break;
             case 5:
 
                 hold.status.setText("L'etudiant est revenu !");
+                hold.img1.setVisibility(View.VISIBLE);
+                hold.img2.setVisibility(View.GONE);
+                hold.img3.setVisibility(View.GONE);
+                hold.img4.setVisibility(View.GONE);
                 break;
             case 6:
 
                 hold.status.setText("Deconnecté");
+
+                hold.img1.setVisibility(View.GONE);
+                hold.img2.setVisibility(View.GONE);
+                hold.img3.setVisibility(View.VISIBLE);
+                hold.img4.setVisibility(View.GONE);
+                break;
+            case 7:
+
+                hold.status.setText("Note : "+student.getScore()+"/"+student.getN());
                 break;
         }
     }
