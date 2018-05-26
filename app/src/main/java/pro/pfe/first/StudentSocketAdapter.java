@@ -1,5 +1,6 @@
 package pro.pfe.first;
 
+import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import java.util.List;
 public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private List<StudentSocket> Studentlist;
     public DuringHostingActivity dha;
+    public static int TIMED_OUT_DELAY=25000;
     public StudentSocketAdapter(List<StudentSocket> studentlist,DuringHostingActivity dha) {
         Studentlist = studentlist;
         this.dha=dha;
@@ -59,7 +61,7 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                   dha.onRetryStudent(position);
 //            }
 //        }.start();
-
+        hold.btn.setVisibility(View.INVISIBLE);
         hold.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,13 +82,30 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
                 hold.img2.setVisibility(View.GONE);
                 hold.img3.setVisibility(View.GONE);
                 hold.img4.setVisibility(View.GONE);
+                new CountDownTimer(TIMED_OUT_DELAY, 1000) { // Temporary
+
+                    public void onTick(long millisUntilFinished) {
+
+                    }
+
+                    public void onFinish() {
+
+                        if(student.getState()==0){
+                            hold.status.setText("TIMED OUT , Reesayer");
+                            hold.btn.setVisibility(View.VISIBLE);
+                            dha.onPreRetry(position);
+                        }
+                    }
+                }.start();
                 break;
 
 
             case 1:
+
+                dha.notfyStudent(position);
                 hold.status.setText("Connected !");
-                hold.img1.setVisibility(View.VISIBLE);
-                hold.img2.setVisibility(View.GONE);
+                hold.img1.setVisibility(View.GONE);
+                hold.img2.setVisibility(View.VISIBLE);
                 hold.img3.setVisibility(View.GONE);
                 hold.img4.setVisibility(View.GONE);
                 break;
@@ -96,19 +115,20 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case 3:
 
-                hold.status.setText("exam terminé");
+                hold.status.setText("Commence l'examin");
+                //dha.notfyStudent(position);
                 break;
             case 4:
 
                 hold.status.setText("Sorti de l'application !");
-
+                dha.notfyStudent(position);
                 hold.img1.setVisibility(View.GONE);
                 hold.img2.setVisibility(View.GONE);
                 hold.img3.setVisibility(View.GONE);
                 hold.img4.setVisibility(View.VISIBLE);
                 break;
             case 5:
-
+                dha.notfyStudent(position);
                 hold.status.setText("L'etudiant est revenu !");
                 hold.img1.setVisibility(View.VISIBLE);
                 hold.img2.setVisibility(View.GONE);
@@ -116,9 +136,9 @@ public class StudentSocketAdapter extends RecyclerView.Adapter<RecyclerView.View
                 hold.img4.setVisibility(View.GONE);
                 break;
             case 6:
-
+                dha.notfyStudent(position);
                 hold.status.setText("Deconnecté");
-
+                student.setSr(null);
                 hold.img1.setVisibility(View.GONE);
                 hold.img2.setVisibility(View.GONE);
                 hold.img3.setVisibility(View.VISIBLE);

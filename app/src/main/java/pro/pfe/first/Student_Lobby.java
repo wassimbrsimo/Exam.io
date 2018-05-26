@@ -39,7 +39,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,6 @@ public class Student_Lobby extends AppCompatActivity {
 
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
-    public Intent intent=null;
 
     static final int MESSAGE_READ = 1;
     static String MAC_ADDRESS;
@@ -81,6 +79,7 @@ public class Student_Lobby extends AppCompatActivity {
     int id=0;
     public static final String ANSWERS_SEPARATOR = "-";
     public static List<String> TypedAnswers = new ArrayList<>();
+    Intent intent ;
 
 
     View LinearQR, LinearExam;
@@ -92,6 +91,7 @@ public class Student_Lobby extends AppCompatActivity {
         initNetWork();
         initExamView();
         TypedAnswers.clear();
+        intent =new Intent(this, AntiCheatService.class);
     }
 
     public void BtnFinishClicked(View view) {
@@ -187,7 +187,7 @@ public class Student_Lobby extends AppCompatActivity {
             @Override
             public void onCancel(DialogInterface dialog)
             {
-                Student_Lobby.this.finish();
+                finish();
             }
         });
         QrDialog.show();
@@ -262,12 +262,13 @@ public class Student_Lobby extends AppCompatActivity {
     }
 
     void InitExam(final Exam e) {
-        new CountDownTimer(e.getDuration() * 60 * 1000, 1000) { // Temporary
+        new CountDownTimer(e.getDuration() * 60000, 1000) { // Temporary
 
             public void onTick(long millisUntilFinished) {
                 ptime.setMax(e.getDuration() * 60);
                 time.setText(millisUntilFinished / 1000 / 60 + ":" + (millisUntilFinished / 1000 - (millisUntilFinished / 1000 / 60) * 60));
-                ptime.setProgress((int) (millisUntilFinished / 1000));
+                ptime.setProgress((int) (e.getDuration()*60-millisUntilFinished / 1000));
+                Log.e("progress ","prog : "+(int)(e.getDuration()*60-millisUntilFinished / 1000)+" total : "+e.getDuration()*60);
             }
 
             public void onFinish() {
@@ -347,11 +348,13 @@ public class Student_Lobby extends AppCompatActivity {
                         Log.e("CLIENT RECEPTION", "EXAM RECIEVED ! : " + tempMsg );
                         actualExam = Exam.toExam(tempMsg);
                         Log.e("EXAM ", " WE REVIECED EXAM WITH "+actualExam.getQuestions().size()+" QUESTIONS");
-                        InitExam(actualExam);
-
+                        connStatus.setText("Examin recu , Attente du signal du depart");
 
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
+                    }
+                    else if (tempMsg.equals("START_SIGNAL")) {                                  /// CODE 1
+                       InitExam(actualExam);
                     } else if (tempMsg.split("]")[0].equals("2")) {                                 // CODE 2
 
                         String answer = tempMsg.split("]")[1];
@@ -420,7 +423,7 @@ public class Student_Lobby extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(sendRecieve==null){
-            startActivity(new Intent(this,StudentActivity.class));
+            startActivity(intent);
         }
     }
     @Override
@@ -430,7 +433,7 @@ public class Student_Lobby extends AppCompatActivity {
         try {
             sendRecieve.write("OUT_OF_APP".getBytes());
             if(!FINISHED)
-            startService(new Intent(this, AntiCheatService.class));
+            startService(new Intent(getApplicationContext(), AntiCheatService.class));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -439,7 +442,7 @@ public class Student_Lobby extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        stopService(new Intent(getApplicationContext(), AntiCheatService.class));
         if(sendRecieve!=null)
         try {
             sendRecieve.write("BACK_TO_APP".getBytes());
@@ -449,11 +452,7 @@ public class Student_Lobby extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mReceiver);
-    }
+
 
     private class SendRecieve extends Thread{
         private Socket socket;

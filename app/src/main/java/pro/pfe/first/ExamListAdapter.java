@@ -2,13 +2,11 @@ package pro.pfe.first;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static pro.pfe.first.Student_Lobby.ANSWERS_SEPARATOR;
 import static pro.pfe.first.Teacher_Tab1.getExamIndexByID;
 
 
@@ -158,7 +157,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     historyholder.matricule.setText(historyexam.getModule());
                     String source="";
                     for(Question q:historyexam.getQuestions()){
-                        source+=q.getAnswer()+Student_Lobby.ANSWERS_SEPARATOR;
+                        source+=q.getAnswer()+ ANSWERS_SEPARATOR;
                     }
 
                     DB db = new DB(historyholder.layout.getContext());

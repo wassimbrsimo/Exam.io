@@ -14,6 +14,7 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +46,8 @@ import static pro.pfe.first.Teacher.db;
 public class DuringHostingActivity extends AppCompatActivity  {
     RecyclerView recyclerView;
     Button  addStudent,startStudent;
-
-    TextView readMsg,connStatus,conect;
+    ProgressBar ptime;
+    TextView conect,time;
     EditText writeMsg,ssid;
     int EXAM_ID;
     private ZXingScannerView zxing;
@@ -57,6 +59,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
     BroadcastReceiver mReceiver;
     IntentFilter mIntentFilter;
+    int DURATION_REMAINING=0;
 
     List<WifiP2pDevice> peers= new ArrayList<WifiP2pDevice>();
     Exam examin;
@@ -89,7 +92,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 if(CONNECTING==0)
-              launchQRScanner(view);
+                    launchQRScanner(view);
             }
         });
         startStudent.setOnClickListener(new View.OnClickListener() {
@@ -99,10 +102,27 @@ public class DuringHostingActivity extends AppCompatActivity  {
                     for(StudentSocket socket : Etudiants){
                         try {
                             socket.getSr().write("START_SIGNAL".getBytes());
+                            socket.setState(3);
+                            startStudent.setEnabled(false);
+                            adapter.notifyDataSetChanged();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
+                new CountDownTimer(examin.getDuration() * 60000, 1000) { // Temporary
+
+                    public void onTick(long millisUntilFinished) {
+                        DURATION_REMAINING=(int)millisUntilFinished/60000;
+                        if(DURATION_REMAINING<examin.getDuration()/4)
+                            addStudent.setEnabled(false);
+                        ptime.setMax(examin.getDuration() * 60);
+                        startStudent.setText(millisUntilFinished / 1000 / 60 + ":" + (millisUntilFinished / 1000 - (millisUntilFinished / 1000 / 60) * 60));
+                        ptime.setProgress((int) ((examin.getDuration()*60-millisUntilFinished / 1000)));
+                    }
+
+                    public void onFinish() {
+                    }
+                }.start();
             }
         });
     }
@@ -118,17 +138,19 @@ public class DuringHostingActivity extends AppCompatActivity  {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-
+        ptime = (ProgressBar) findViewById(R.id.ptime);
+        time=findViewById(R.id.time);
 
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        readMsg =(TextView) findViewById(R.id.readMsg);
-        connStatus = (TextView) findViewById(R.id.connectionStatus);
         conect = (TextView) findViewById(R.id.conct);
 
         EXAM_ID=getIntent().getIntExtra("Exam",0);
         examin= db.getExam(EXAM_ID);
+        DURATION_REMAINING=examin.getDuration();
+        time.setText(examin.getDuration()+":00");
+
 
         Toast.makeText(getApplicationContext(),Exam.toString(examin),Toast.LENGTH_LONG).show();
         wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -152,7 +174,6 @@ public class DuringHostingActivity extends AppCompatActivity  {
         wp2pm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                connStatus.setText("good , Discovery Started");
                 Log.e("DISCOVERY","ON");
             }
 
@@ -166,7 +187,6 @@ public class DuringHostingActivity extends AppCompatActivity  {
         wp2pm.stopPeerDiscovery(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                connStatus.setText("good , Discovery Started");
                 Log.e("DISCOVERY","OFF");
             }
 
@@ -177,25 +197,25 @@ public class DuringHostingActivity extends AppCompatActivity  {
         });
     }
 
-/*
-    @Override
-    protected void onResume() {
-        super.onResume();
+    /*
+        @Override
+        protected void onResume() {
+            super.onResume();
 
-        //  if (otherguysIp.equals(""))
-        //    {       serverClass = new ServerClass();
-        //      serverClass.start();
-        // }else if (!otherguysIp.equals("0")){
-        //     clientClass = new ClientClass(otherguysIp);
-        //     clientClass.start();
-        //  ://  }
+            //  if (otherguysIp.equals(""))
+            //    {       serverClass = new ServerClass();
+            //      serverClass.start();
+            // }else if (!otherguysIp.equals("0")){
+            //     clientClass = new ClientClass(otherguysIp);
+            //     clientClass.start();
+            //  ://  }
 
-    }
-*/    public void onDestroy() {
+        }
+    */    public void onDestroy() {
 
         unregisterReceiver(mReceiver);
-    wm.setWifiEnabled(false);
-    finish();
+        wm.setWifiEnabled(false);
+        finish();
         super.onDestroy();
 
     }
@@ -239,6 +259,50 @@ public class DuringHostingActivity extends AppCompatActivity  {
         }
         return  false;
     }
+    public void notfyStudent(int position){
+        if(position>10) {
+            Etudiants.add(0,Etudiants.get(position));
+            Etudiants.remove(position);
+            adapter.notifyDataSetChanged();
+        }
+    }
+    public void toggleButtons(boolean toggle){
+        if(toggle){
+        addStudent.setText("Ajouter Eleve");
+        startStudent.setText("Commencer Examin");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            addStudent.setBackground(getDrawable(R.drawable.save_button_shape));
+        }
+        else addStudent.setEnabled(true);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startStudent.setBackground(getDrawable(R.drawable.save_button_shape));
+        }
+        else startStudent.setEnabled(true);}
+        else {
+            addStudent.setText("Attente connexion ..");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                addStudent.setBackground(getDrawable(R.drawable.disabled_button_shape));
+            }
+            else addStudent.setEnabled(false);
+            startStudent.setText("Attente connextion ..");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                startStudent.setBackground(getDrawable(R.drawable.disabled_button_shape));
+            }
+            else startStudent.setEnabled(false);
+        }
+
+    }
+
+    public void onPreRetry(int position){
+        CONNECTING=0;
+        AttenteMac.clear();
+        Etudiants.get(position).setState(0);
+
+        toggleButtons(true);
+
+    }
     public void onRetryStudent(int position){
         stopDiscovery();
         for(int i=0;i<AttenteMac.size();i++)
@@ -254,6 +318,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
         adapter.notifyDataSetChanged();
         onStudentIdentified(name+"]"+mat+"]"+mac);
         CONNECTING=0;
+        toggleButtons(false);
     }
 
     public void startTimedOutTimer(){
@@ -261,28 +326,26 @@ public class DuringHostingActivity extends AppCompatActivity  {
         startDiscovery();
     }
     public void onStudentIdentified(String result){
-     if(!studentsexists(result.split("]")[2])) {
-         connStatus.setText("Connecting to " + result);
-         // String[] data=result.split("/");
-         String MAC = result.split("]")[2];
-         conect.setText("going to connect to : " + result.split("]")[2]);
-         Log.e("QR", "Result : " + result);
-         Etudiants.add(new StudentSocket(new Student(result.split("]")[0], result.split("]")[1], (int) db.insertStudent(result.split("]")[0], result.split("]")[1])), result.split("]")[2], null));
-         AttenteMac.add(MAC);
-         Log.e("ETUDIANT AJOUTER  ", "ETUDIENT ::: " + Etudiants.get(Etudiants.size() - 1).getName());
-         addStudent.setText("Attente connexion ..");
-         startStudent.setText("Attente connextion ..");
-         startTimedOutTimer();
+        if(!studentsexists(result.split("]")[2])) {
+            // String[] data=result.split("/");
+            String MAC = result.split("]")[2];
+            conect.setText("going to connect to : " + result.split("]")[2]);
+            Log.e("QR", "Result : " + result);
+            Etudiants.add(new StudentSocket(new Student(result.split("]")[0], result.split("]")[1], (int) db.insertStudent(result.split("]")[0], result.split("]")[1])), result.split("]")[2], null));
+            AttenteMac.add(MAC);
+            Log.e("ETUDIANT AJOUTER  ", "ETUDIENT ::: " + Etudiants.get(Etudiants.size() - 1).getName());
+            toggleButtons(false);
+            startTimedOutTimer();
 
-         //  addStudent.setEnabled(false);
+            //  addStudent.setEnabled(false);
 
 
 
 
-       //  startDiscovery();
-         adapter.notifyDataSetChanged();
-     }
-     }
+            //  startDiscovery();
+            adapter.notifyDataSetChanged();
+        }
+    }
 
     WifiP2pManager.PeerListListener peerListListener=new WifiP2pManager.PeerListListener() {
         @Override
@@ -293,15 +356,15 @@ public class DuringHostingActivity extends AppCompatActivity  {
                 Log.e("PEERS","faire entrer wahed "+AttenteMac.size());
                 for (final WifiP2pDevice device : wifiP2pDeviceList.getDeviceList()) {
 
-                        if (device.deviceAddress.equals(AttenteMac.get(0))) {
-                            ConnectToMAC(AttenteMac.get(0), device);
-                            CONNECTING=1;
+                    if (device.deviceAddress.equals(AttenteMac.get(0))) {
+                        ConnectToMAC(AttenteMac.get(0), device);
+                        CONNECTING=1;
 
-                            Log.e("PEERS","Found "+AttenteMac.size());
+                        Log.e("PEERS","Found "+AttenteMac.size());
 
-                        }
-                else
-                            Log.e("PEERS","not found "+AttenteMac.size());
+                    }
+                    else
+                        Log.e("PEERS","not found "+AttenteMac.size());
 
                 }}
         }
@@ -311,9 +374,9 @@ public class DuringHostingActivity extends AppCompatActivity  {
         @Override
         public void onConnectionInfoAvailable(WifiP2pInfo wifiP2pInfo) {
             if(wifiP2pInfo.groupFormed && wifiP2pInfo.isGroupOwner && CONNECTING==1){
-                connStatus.setText("Groupe Owner");
                 wp2pm.requestGroupInfo(mChannel,groupeInfoListener);
                 Log.e("SERVERCLASS","INITIATED");
+                socket_Connexion=null;
                 ServerClass serverClass=new ServerClass();
 
                 serverClass.start();
@@ -331,10 +394,9 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
             if(wifiP2pInfo!=null) {
 
-            if(wifiP2pInfo.isGroupOwner()){
-                connStatus.setText("Connected ("+wifiP2pInfo.getClientList().size()+")" );
-                conect.setText(" "+wifiP2pInfo.getClientList().size()+" ");
-            }
+                if(wifiP2pInfo.isGroupOwner()){
+                    conect.setText(" "+wifiP2pInfo.getClientList().size()+" ");
+                }
             }
         }
     };
@@ -361,8 +423,6 @@ public class DuringHostingActivity extends AppCompatActivity  {
 
             byte[] readBuff= (byte[]) msg.obj;
             String tempMsg = new String(readBuff,0,msg.arg1);
-            readMsg.setText(tempMsg);
-            conect.setText(conect.getText()+" O ");
             Log.e("eeeeeeeee","recieved : _______________________________________________"+tempMsg+" _______________________");
 
             if(tempMsg.equals("FINISH")){
@@ -391,8 +451,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
             else if (tempMsg.split("]")[0].equals("0")) {
                 try {
                     stopDiscovery();
-                    addStudent.setText("Ajouter Eleve");
-                    startStudent.setText("Commencer Examin");
+                    toggleButtons(true);
                     CONNECTING=0;
                     Log.e("Host RECEPTION","msg : "+tempMsg );
                     int index =matchSrStudent(tempMsg.split("]")[1],msg.what);

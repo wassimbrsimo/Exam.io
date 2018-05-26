@@ -4,13 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.Toast;
-
-import static pro.pfe.first.StudentActivity.Etudiant;
 
 public class StudentWifiReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;

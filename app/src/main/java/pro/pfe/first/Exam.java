@@ -1,8 +1,8 @@
 package pro.pfe.first;
 
-import android.util.Log;
-
 import java.util.ArrayList;
+
+import static pro.pfe.first.Student_Lobby.ANSWERS_SEPARATOR;
 
 public class Exam {
     public String getTitre() {
@@ -51,7 +51,7 @@ public class Exam {
     public String getAnswers(){
         String answers = "";
         for(Question q : getQuestions()) {
-            answers += q.getAnswer() + Student_Lobby.ANSWERS_SEPARATOR;
+            answers += q.getAnswer() + ANSWERS_SEPARATOR;
         }
         return answers;
     }
@@ -62,10 +62,10 @@ public class Exam {
     }
     public static float CalculerNote(Exam examin,String answers){
         float score = 0;
-        String[] TypedAnswer = answers.split(Student_Lobby.ANSWERS_SEPARATOR);
+        String[] TypedAnswer = answers.split(ANSWERS_SEPARATOR);
         String student_answer="";
         for(int i =0;i<TypedAnswer.length;i++){
-            student_answer+=TypedAnswer[i]+Student_Lobby.ANSWERS_SEPARATOR;
+            student_answer+=TypedAnswer[i]+ ANSWERS_SEPARATOR;
 
             if(examin.getQuestions().get(i).getType()==0 && TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer()))
                 score++;
@@ -82,7 +82,7 @@ public class Exam {
     }
     public int getQuestionsSize(){
         int size=0;
-        for(int i =0;i<getAnswers().split(Student_Lobby.ANSWERS_SEPARATOR).length;i++){
+        for(int i = 0; i<getAnswers().split(ANSWERS_SEPARATOR).length; i++){
 
             if(getQuestions().get(i).getType()==0)
                 size++;

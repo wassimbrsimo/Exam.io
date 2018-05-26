@@ -3,23 +3,15 @@ package pro.pfe.first;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.wifi.WifiManager;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import net.glxn.qrgen.android.QRCode;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class StudentActivity extends FragmentActivity {
@@ -84,6 +76,7 @@ public class StudentActivity extends FragmentActivity {
         Intent Lobby=new Intent(getApplicationContext(),Student_Lobby.class);
         Lobby.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(Lobby);
+
         //todo: Animation ..
     }
     @Override

@@ -42,7 +42,7 @@ public class Teacher_Done_Exam extends AppCompatActivity {
     }
 
     public void setupRv(ArrayList<Question> array,String answer,String name){
-        note.setText(Exam.CalculerNote(examin,answer)+"/"+examin.getQuestionsSize());
+        note.setText((int)Exam.CalculerNote(examin,answer)+"/"+examin.getQuestionsSize());
         nom.setText(name);
         qAdapter= new MyQuestionAnswerRecyclerViewAdapter(array,answer);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);

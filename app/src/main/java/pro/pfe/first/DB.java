@@ -135,6 +135,14 @@ public class DB extends SQLiteOpenHelper{
         }
         return exams;
     }
+    public ArrayList<Exam> getNonHostedExams(){
+        ArrayList<Exam> allExams = (ArrayList<Exam>) getAllExams();
+        ArrayList<Exam> nonHostedExams=new ArrayList<>();
+        for(Exam e : allExams)
+            if(!isExamHosted(e.getId()))
+                nonHostedExams.add(e);
+        return nonHostedExams;
+    }
 
     public Boolean isExamHosted(int ID){
 

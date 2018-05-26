@@ -1,7 +1,5 @@
 package pro.pfe.first;
 
-import android.graphics.Color;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import static pro.pfe.first.Student_Lobby.ANSWERS_SEPARATOR;
 
 public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -50,8 +50,8 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             TFQuestAnswerHolder hold=(TFQuestAnswerHolder)holder;
             String rep="";
-            if(Answers.split(Student_Lobby.ANSWERS_SEPARATOR).length>position)
-            rep=Answers.split(Student_Lobby.ANSWERS_SEPARATOR)[position];
+            if(Answers.split(ANSWERS_SEPARATOR).length>position)
+            rep=Answers.split(ANSWERS_SEPARATOR)[position];
             hold.question.setText(mIt.getQuestion().get(0));
             if(rep.equals("true"))
                 hold.t.setVisibility(View.VISIBLE);
@@ -68,8 +68,8 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         else if(holder.getItemViewType()==1){
             MultiQuestAnswerHolder hold=(MultiQuestAnswerHolder)holder;
             String rep="";
-            if(Answers.split(Student_Lobby.ANSWERS_SEPARATOR).length>position)
-            rep=Answers.split(Student_Lobby.ANSWERS_SEPARATOR)[position];
+            if(Answers.split(ANSWERS_SEPARATOR).length>position)
+            rep=Answers.split(ANSWERS_SEPARATOR)[position];
             hold.question.setText(mIt.getQuestion().get(0));
             for(int i=1;i<mIt.getQuestion().size();i++)
             {

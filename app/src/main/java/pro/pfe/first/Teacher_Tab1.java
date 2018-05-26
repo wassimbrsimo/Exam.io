@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -79,7 +80,7 @@ public class Teacher_Tab1 extends Fragment {
         validate= (ImageButton) view.findViewById(R.id.add_btn);
         number= view.findViewById(R.id.module);
 
-        Examlist= Teacher.db.getAllExams();
+        Examlist= Teacher.db.getNonHostedExams();
         if(Examlist.size()==0)
             number.setText("Il n ya pas d'examins");
         else if(Examlist.size()==1)
@@ -168,8 +169,14 @@ public class Teacher_Tab1 extends Fragment {
             @Override
             public void onClick(View v) {
                 //your business logic
+                Log.e("dialog","titre ("+titre.getText().toString()+")");
+                String temp=titre.getText().toString();
+                if(!temp.matches("")){
                 AddExam(np.getValue(),titre.getText().toString(),module.getText().toString());
                 deleteDialog.dismiss();
+                }
+                else
+                    Toast.makeText(getContext(),"Veuillez saisir un titre",Toast.LENGTH_SHORT).show();
             }
         });
         deleteDialogView.findViewById(R.id.add_qbtn).setOnClickListener(new View.OnClickListener() {
@@ -186,7 +193,7 @@ public class Teacher_Tab1 extends Fragment {
         int dur=0;
         switch (v){
             case 0:
-                dur=1;
+                dur=15;
                 break;
             case 1:
                 dur=30;
@@ -207,7 +214,7 @@ public class Teacher_Tab1 extends Fragment {
         e.setId((int)id);
         Examlist.add(e);
         number.setText(Examlist.size()+" Examins");
-        eAdapter.notifyItemInserted(Examlist.size());
+        eAdapter.notifyDataSetChanged();
         rv.scrollToPosition(0);
     }
 

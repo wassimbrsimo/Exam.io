@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.util.Log;
 import android.widget.Toast;
 
 public class TeacherWifiReceiver extends BroadcastReceiver {
@@ -27,7 +28,7 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
             int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE,-1);
             if(state==WifiP2pManager.WIFI_P2P_STATE_ENABLED){
                 Toast.makeText(context,"Wifi is On",Toast.LENGTH_SHORT).show();
-               // mActivity.startTimedOutTimer();
+              // mActivity.startDiscovery();
             }
             else {
                 Toast.makeText(context,"Wifi is OFF",Toast.LENGTH_SHORT).show();
@@ -35,8 +36,9 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
         }
         else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)){
 
-            mManager.requestPeers(mChannel,mActivity.peerListListener);
             if(mManager!=null){
+                Log.e("RECIEVER","PEERS REQUEST");
+                mManager.requestPeers(mChannel,mActivity.peerListListener);
             }
         }
         else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)){
@@ -48,7 +50,7 @@ public class TeacherWifiReceiver extends BroadcastReceiver {
 
                 mManager.requestConnectionInfo(mChannel,mActivity.connectionInfoListener);
             }else{
-                mActivity.connStatus.setText("device disconnected");
+                Log.e("","disconnected");
             }
             mManager.requestGroupInfo(mChannel, mActivity.groupeInfoListener);
 
