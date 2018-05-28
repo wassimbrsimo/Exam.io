@@ -49,6 +49,13 @@
                     android:layout_weight="1"
                     android:text="TextView" />
 
+                <TextView
+                    android:id="@+id/pts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:text="+00 pts" />
+
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

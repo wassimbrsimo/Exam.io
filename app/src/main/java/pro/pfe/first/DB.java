@@ -22,6 +22,7 @@ public class DB extends SQLiteOpenHelper{
             EXAM_DURATION="Duration",
             QUESTION_TYPE="Type",
             QUESTION_TEXT="Question",
+            QUESTION_NOTE="Note",
             QUESTION_REPONSE="Reponse",
             ID_ANSWER_EXAM="id_ae",
             ID_ANSWER_STUDENT="id_as",
@@ -59,6 +60,7 @@ public class DB extends SQLiteOpenHelper{
                                     +ID_QUESTION_EXAM+" INTEGER,"
                                     +QUESTION_TYPE+" INTEGER,"
                                     +QUESTION_TEXT+" TEXT,"
+                                    +QUESTION_NOTE+" FLOAT,"
                                     +QUESTION_REPONSE+" TEXT)"
            ;
 
@@ -186,7 +188,7 @@ public class DB extends SQLiteOpenHelper{
         if (q.moveToFirst()) {
             do {
 
-                Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
+                Question question = new Question(Question.toQuestion(q.getString(q.getColumnIndex(QUESTION_TEXT)),true).getQuestion(),  q.getString(q.getColumnIndex(QUESTION_REPONSE)),  q.getFloat(q.getColumnIndex(QUESTION_NOTE)),q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
                 questions.add(question);
 
             } while (q.moveToNext());
@@ -207,7 +209,7 @@ public class DB extends SQLiteOpenHelper{
                 ArrayList<Question> questions = new ArrayList<Question>();
                 if (q.moveToFirst()) {
                     do {
-                        Question question = new Question(Question.toQuestionArray(q.getString(q.getColumnIndex(QUESTION_TEXT))),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
+                        Question question = new Question(Question.toQuestion(q.getString(q.getColumnIndex(QUESTION_TEXT)),true).getQuestion(),  q.getString(q.getColumnIndex(QUESTION_REPONSE)), q.getFloat(q.getColumnIndex(QUESTION_NOTE)), q.getInt(q.getColumnIndex(ID_QUESTION)), q.getInt(q.getColumnIndex(ID_QUESTION_EXAM)));
                         questions.add(question);
 
                     } while (q.moveToNext());
@@ -238,8 +240,9 @@ public class DB extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(ID_QUESTION_EXAM,q.getE_id());
         values.put(QUESTION_TYPE,q.getType());
-        values.put(QUESTION_TEXT,Question.toString(q));
+        values.put(QUESTION_TEXT,Question.toString(q,true));
         values.put(QUESTION_REPONSE,q.getAnswer());
+        values.put(QUESTION_NOTE,q.getNote());
         return db.insert(TABLE_QUESTIONS,null,values);
     }
 
@@ -300,8 +303,8 @@ public class DB extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(QUESTION_REPONSE,q.getAnswer());
-        values.put(QUESTION_TEXT,Question.toString(q));
-
+        values.put(QUESTION_TEXT,Question.toString(q,true));
+        values.put(QUESTION_NOTE,q.getNote());
 
         return db.update(TABLE_QUESTIONS, values, ID_QUESTION_EXAM +"= ? AND "+ID_QUESTION+" = ?",
                 new String[] { String.valueOf(q.getE_id()),String.valueOf(q.getId()) });

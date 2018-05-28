@@ -57,7 +57,7 @@ public class Edit_Exam extends AppCompatActivity {
         if(type==1) {
             temp.add("  ");
             temp.add("");
-        }      Question q= new Question(temp,"00000",-1,examin.getId());
+        }      Question q= new Question(temp,"00000",0,-1,examin.getId());
         int identity=(int)db.create(q);
         q.setId(identity);
         examin.getQuestions().add(q);

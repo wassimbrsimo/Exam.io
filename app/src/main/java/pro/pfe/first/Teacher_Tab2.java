@@ -30,6 +30,7 @@ public class Teacher_Tab2 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(db!=null)
         Examlist = db.getHostedExams();
 
 

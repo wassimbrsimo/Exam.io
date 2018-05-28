@@ -28,10 +28,20 @@
 
                 <TextView
                     android:id="@+id/question_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="TextView"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ptstotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="+00 pts"
                     android:textAlignment="center"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold" />
@@ -42,8 +52,7 @@
                 android:id="@+id/choix1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -70,10 +79,17 @@
                             android:id="@+id/c1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pts1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="+00 pts" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -84,8 +100,7 @@
                 android:id="@+id/choix2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -112,10 +127,17 @@
                             android:id="@+id/c2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pts2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="+00 pts" />
 
                     </LinearLayout>
 
@@ -127,8 +149,7 @@
                 android:id="@+id/choix3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -155,10 +176,17 @@
                             android:id="@+id/c3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pts3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="+00 pts" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -170,8 +198,7 @@
                 android:id="@+id/choix4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -198,10 +225,17 @@
                             android:id="@+id/c4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pts4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="+00 pts" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -212,8 +246,7 @@
                 android:id="@+id/choix5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -240,10 +273,17 @@
                             android:id="@+id/c5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
+                            android:layout_weight="2"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pts5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="+00 pts" />
 
                     </LinearLayout>
 

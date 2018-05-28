@@ -60,8 +60,13 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             if(rep.equals(mIt.getAnswer())){
                 hold.mView.setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));
-            }else
+                hold.pts.setText("+"+mIt.getNote()+"pts");
+                hold.pts.setTextColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));
+            }else{
                 hold.mView.setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));
+                hold.pts.setText("0 /"+mIt.getNote()+"pts");
+                hold.pts.setTextColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));
+            }
         }
 
 
@@ -71,20 +76,28 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             if(Answers.split(ANSWERS_SEPARATOR).length>position)
             rep=Answers.split(ANSWERS_SEPARATOR)[position];
             hold.question.setText(mIt.getQuestion().get(0));
+            int  div = mIt.getAnswer().length() -mIt.getAnswer().replaceAll("1", "").length();
             for(int i=1;i<mIt.getQuestion().size();i++)
             {
                 hold.lays[i-1].setVisibility(View.VISIBLE);
                 hold.choices[i-1].setText(mIt.getQuestion().get(i));
-                    if(rep.length()>=i && rep.charAt(i-1)==mIt.getAnswer().charAt(i-1)){
-                        hold.checks[i-1].setChecked(true);
-                        Log.e("COLOR SETUP"," PUTING GREEN color "+mIt.getQuestion().size());
-                        hold.lays[i-1].setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));}
-                    else{
-                        hold.checks[i-1].setChecked(false);
-                        Log.e("COLOR SETUP"," PUTING RED color"+mIt.getQuestion().size());
-                        hold.lays[i-1].setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));}
-
+                if(rep.charAt(i-1)=='1' ||mIt.getAnswer().charAt(i-1)=='1') {
+                    if (rep.length() >= i && rep.charAt(i - 1) == mIt.getAnswer().charAt(i - 1)) {
+                        hold.checks[i - 1].setChecked(rep.charAt(i - 1) == '1');
+                        Log.e("COLOR SETUP", " PUTING GREEN color " + mIt.getQuestion().size());
+                        hold.lays[i - 1].setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));
+                        hold.ptsList[i-1].setText("+" + mIt.getNote()/div + "pts");
+                        hold.ptsList[i-1].setTextColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));
+                    } else {
+                        hold.checks[i - 1].setChecked(rep.charAt(i - 1) == '1');
+                        Log.e("COLOR SETUP", " PUTING RED color" + mIt.getQuestion().size());
+                        hold.lays[i - 1].setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));
+                        hold.ptsList[i-1].setText("-" + mIt.getNote()/div + "pts");
+                        hold.ptsList[i-1].setTextColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));
+                    }
+                }
             }
+            hold.pts.setText("total note ");
         }
     }
 
@@ -97,11 +110,12 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     public class TFQuestAnswerHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView question;
+        public final TextView question,pts;
         ImageView t,f;
 
         public TFQuestAnswerHolder(View view) {
             super(view);
+            pts=view.findViewById(R.id.pts);
             question=view.findViewById(R.id.question_text);
             mView = view.findViewById(R.id.card);
             t=view.findViewById(R.id.vrai);
@@ -110,23 +124,27 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
     public class MultiQuestAnswerHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        TextView question;
+        TextView question,pts;
         TextView[] choices=new TextView[5];
         CheckBox[] checks=new CheckBox[5];
         View[] lays=new View[5];
+        TextView[] ptsList=new TextView[5];
 
         public MultiQuestAnswerHolder(View view) {
             super(view);
             mView = view;
             question = (TextView) view.findViewById(R.id.question_text);
+            pts=view.findViewById(R.id.ptstotal);
             for(int i=1;i<6;i++){
                 int ID_text =itemView.getResources().getIdentifier("c"+i, "id",itemView.getContext().getPackageName());
                 int ID_check =itemView.getResources().getIdentifier("checkBox"+i, "id",itemView.getContext().getPackageName());
                 int ID_lay =itemView.getResources().getIdentifier("choix"+i, "id",itemView.getContext().getPackageName());
+                int ID_pts=itemView.getResources().getIdentifier("pts"+i,"id",itemView.getContext().getPackageName());
 
                 choices[i-1]=itemView.findViewById(ID_text);
                 checks[i-1]=itemView.findViewById(ID_check);
                 lays[i-1]=itemView.findViewById(ID_lay);
+                ptsList[i-1]=itemView.findViewById(ID_pts);
             }
 
         }

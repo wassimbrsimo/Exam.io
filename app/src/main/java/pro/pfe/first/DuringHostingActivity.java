@@ -68,6 +68,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
     public  StudentSocketAdapter adapter;
 
     public int CONNECTING=0;
+    boolean STARTED =false;
 
     public SocketConnexion socket_Connexion =null;
     public ArrayList<StudentSocket> Etudiants = new ArrayList<>();
@@ -98,7 +99,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
         startStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(CONNECTING==0)
+                STARTED=true;
                     for(StudentSocket socket : Etudiants){
                         try {
                             socket.getSr().write("START_SIGNAL".getBytes());
@@ -109,6 +110,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
                             e.printStackTrace();
                         }
                     }
+                    startStudent.setEnabled(false);
                 new CountDownTimer(examin.getDuration() * 60000, 1000) { // Temporary
 
                     public void onTick(long millisUntilFinished) {
@@ -116,6 +118,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
                         if(DURATION_REMAINING<examin.getDuration()/4)
                             addStudent.setEnabled(false);
                         ptime.setMax(examin.getDuration() * 60);
+                        time.setText(millisUntilFinished / 1000 / 60 + ":" + (millisUntilFinished / 1000 - (millisUntilFinished / 1000 / 60) * 60));
                         startStudent.setText(millisUntilFinished / 1000 / 60 + ":" + (millisUntilFinished / 1000 - (millisUntilFinished / 1000 / 60) * 60));
                         ptime.setProgress((int) ((examin.getDuration()*60-millisUntilFinished / 1000)));
                     }
@@ -438,7 +441,8 @@ public class DuringHostingActivity extends AppCompatActivity  {
                     wm.setWifiEnabled(false);
                     finish();
                 }
-                adapter.notifyDataSetChanged();
+                else
+                    adapter.notifyDataSetChanged();
             }
             else if (tempMsg.equals("OUT_OF_APP")) {
                 Etudiants.get(msg.what).setState(4);
@@ -466,6 +470,12 @@ public class DuringHostingActivity extends AppCompatActivity  {
                 Log.e("Host RECEPTION","Exam Request Recieved FROM :" + Etudiants.get(msg.what).getName());
                 try {
                     Etudiants.get(msg.what).setState(2);
+                    if(STARTED){
+                        examin.setDuration(DURATION_REMAINING);
+                        Etudiants.get(msg.what).getSr().write(Exam.toString(examin).getBytes());
+                        Etudiants.get(msg.what).getSr().write("START_SIGNAL".getBytes());
+                    }
+                    else
                     Etudiants.get(msg.what).getSr().write(Exam.toString(examin).getBytes());
                     adapter.notifyDataSetChanged();
                 } catch (IOException e) {
@@ -490,12 +500,12 @@ public class DuringHostingActivity extends AppCompatActivity  {
     });
     void saveAnswers(String recievedMsg, StudentSocket ss){
         ss.setState(7);
-        ss.setN(examin.getQuestionsSize());
+        ss.setN(examin.getNoteTotal());
         ss.setScore((int)Exam.CalculerNote(examin,recievedMsg));
 
         try {
             db.pushAnswer(recievedMsg,examin.getId(),ss.getID());
-            ss.getSr().write(("2]"+examin.getAnswers()+String.valueOf(0)).getBytes());
+            ss.getSr().write(("2]"+examin.getAnswers()).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

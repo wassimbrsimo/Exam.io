@@ -38,7 +38,7 @@ public class StudentActivity extends FragmentActivity {
         float average=0;
         for(Exam e : Examlist){
             if(e!=null){
-                quesnum+=e.getQuestionsSize();
+                quesnum+=e.getNoteTotal();
                 average+=Exam.CalculerNote(e,db.getStudentAnswer(0,e.getId()));
             }
         }

@@ -47,7 +47,7 @@ public class Student_Result extends AppCompatActivity {
 
         String answers=db.getStudentAnswer(0,id);
             float bonneReponse=(int)Exam.CalculerNote(exam,answers);
-            int quesum=exam.getQuestionsSize();
+            int quesum=exam.getNoteTotal();
             note.setText((int)(bonneReponse/quesum*100)+"%  ("+(int)bonneReponse+"/"+quesum+")");
             nom.setText(Etudiant.getName());
             matricule.setText(Etudiant.getMatricule());

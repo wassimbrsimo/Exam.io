@@ -161,7 +161,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
 
                     DB db = new DB(historyholder.layout.getContext());
-                    int totalQuestions=historyexam.getQuestionsSize();
+                    int totalQuestions=historyexam.getNoteTotal();
                     float bonneReponses=Exam.CalculerNote(historyexam,db.getStudentAnswer(0,historyexam.getId()));
                     historyholder.note.setText((int)(bonneReponses/totalQuestions*100)+"% ("+(int)bonneReponses+"/"+totalQuestions+")");
                     historyholder.layout.setOnClickListener(new View.OnClickListener() {

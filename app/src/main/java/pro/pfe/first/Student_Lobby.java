@@ -73,7 +73,7 @@ public class Student_Lobby extends AppCompatActivity {
     Button retry;
     StudentExamAdapter studentExamAdapter;
     ArrayList<Question> quest_list = new ArrayList<Question>();
-    TextView txt, time;
+    TextView  time;
     ProgressBar ptime;
     Exam actualExam = null;
     int id=0;
@@ -142,17 +142,16 @@ public class Student_Lobby extends AppCompatActivity {
 
     int AnswerPoints() {
         int score = 0;
-
+        FINISHED=true;
         String answers = "";
         for (int i = 0; i < TypedAnswers.size(); i++) {
-            answers += TypedAnswers.get(i) + ANSWERS_SEPARATOR;
+            answers += TypedAnswers.get(i) + (i<TypedAnswers.size()-1?ANSWERS_SEPARATOR:"");
 
         }
         try {
             sendRecieve.write(("2]" + answers).getBytes());
             id =(int)db.create(actualExam);
             db.pushAnswer(answers, id, 0);
-            txt.setText("Waiting for Answer ");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,7 +159,6 @@ public class Student_Lobby extends AppCompatActivity {
     }
 
     private void initExamView() {
-        txt = (TextView) findViewById(R.id.txt);
         time = (TextView) findViewById(R.id.time);
         ptime = (ProgressBar) findViewById(R.id.ptime);
         retry = findViewById(R.id.retry);
@@ -187,6 +185,7 @@ public class Student_Lobby extends AppCompatActivity {
             @Override
             public void onCancel(DialogInterface dialog)
             {
+                unregisterReceiver(mReceiver);
                 finish();
             }
         });
@@ -353,9 +352,9 @@ public class Student_Lobby extends AppCompatActivity {
                         /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
 
                     }
-                    else if (tempMsg.equals("START_SIGNAL")) {                                  /// CODE 1
+                    else if (tempMsg.equals("START_SIGNAL")) {
                        InitExam(actualExam);
-                    } else if (tempMsg.split("]")[0].equals("2")) {                                 // CODE 2
+                    } else if (tempMsg.split("]")[0].equals("2")) {
 
                         String answer = tempMsg.split("]")[1];
                         String[] notemsg = answer.split(ANSWERS_SEPARATOR);
@@ -363,22 +362,23 @@ public class Student_Lobby extends AppCompatActivity {
                         Log.e("CLIENT RECEPTION", "NOTE RECIEVED  ! : " + tempMsg
                                 + "\n" + " notemsg[]=" + notemsg.length + "  /  exam.questions = " + actualExam.getQuestions().size());
                         for (int i = 0; i < actualExam.getQuestions().size(); i++) {
-                            db.create(new Question(actualExam.getQuestions().get(i).getQuestion(),notemsg[i],0,id));
+                            db.create(new Question(actualExam.getQuestions().get(i).getQuestion(),notemsg[i],actualExam.getQuestions().get(i).getNote(),0,id));
                             Log.e("CREATEDD QUESTION DB "," ID QUESTION EXAM  id = "+id);
                         }
                         Intent resultActivity = new Intent(getApplicationContext(),Student_Result.class);
                         resultActivity.putExtra("id",id);
                         try {
                             sendRecieve.write(("FINISH").getBytes());
-                            FINISHED=true;
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         wm.setWifiEnabled(false);
                         startActivity(resultActivity);
+                        unregisterReceiver(mReceiver);
+
                         finish();
                     }
-                    /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]QUESTION 1]...2] 3 ..
+                    /////////////   FORMAT :  ONE]NAME]Module]ID]DURATION]NUMBERQUESTIONS]note&&QUESTION 1]note&&...2] 3 ..
 
 
                     break;
@@ -429,10 +429,10 @@ public class Student_Lobby extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        if(sendRecieve!=null)
+        if(sendRecieve!=null && !FINISHED)
         try {
             sendRecieve.write("OUT_OF_APP".getBytes());
-            if(!FINISHED)
+
             startService(new Intent(getApplicationContext(), AntiCheatService.class));
 
         } catch (IOException e) {
@@ -443,7 +443,7 @@ public class Student_Lobby extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         stopService(new Intent(getApplicationContext(), AntiCheatService.class));
-        if(sendRecieve!=null)
+        if(sendRecieve!=null && !FINISHED)
         try {
             sendRecieve.write("BACK_TO_APP".getBytes());
         } catch (IOException e) {

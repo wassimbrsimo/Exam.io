@@ -37,13 +37,6 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/question_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="test quest" />
-
                 <EditText
                     android:id="@+id/question_edit"
                     android:layout_width="match_parent"
@@ -53,6 +46,30 @@
                     android:inputType="textPersonName"
                     android:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/question_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="test quest" />
+
+                <TextView
+                    android:id="@+id/notetxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Note :"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark" />
+
+                <EditText
+                    android:id="@+id/notev"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="phone" />
+
                 <Switch
                     android:id="@+id/t"
                     android:layout_width="match_parent"
@@ -61,8 +78,10 @@
                     android:checked="true"
                     android:showText="true"
                     android:splitTrack="false"
-                    android:switchMinWidth="100dp"
-                    android:thumbTint="@color/colorPrimary"
+                    android:switchMinWidth="50dp"
+                    android:textOff="F"
+                    android:textOn="V"
+                    android:thumbTint="@color/colorAccent"
                     android:trackTint="@color/colorPrimary"
                     tools:checked="true" />
 

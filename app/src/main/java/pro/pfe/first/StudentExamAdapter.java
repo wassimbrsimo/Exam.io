@@ -78,7 +78,7 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         if(holder.getItemViewType()==0) {
             TFHolder hold = (TFHolder) holder;
-            hold.question.setText(Question.toString(quest));
+            hold.question.setText(quest.getQuestion().get(0));
             AnsweringManager(hold, position);
         }
 
@@ -86,8 +86,8 @@ public class StudentExamAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         else {
             final MultiHolder hold=(MultiHolder) holder;
             hold.question.setText(quest.getQuestion().get(0));
-            for(int i=0;i<quest.getQuestion().size()-1;i++){
-                hold.lays[i].setVisibility(View.VISIBLE);
+            for(int i=1;i<quest.getQuestion().size();i++){
+                hold.lays[i-1].setVisibility(View.VISIBLE);
                 if(i!=0)// skip the element 0 of ques
                 hold.choices[i-1].setText(quest.getQuestion().get(i));
             }

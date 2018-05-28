@@ -1,5 +1,7 @@
 package pro.pfe.first;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import static pro.pfe.first.Student_Lobby.ANSWERS_SEPARATOR;
@@ -29,6 +31,10 @@ public class Exam {
     private String Module;
     private int id;
 
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     public int getDuration() {
         return duration;
     }
@@ -50,8 +56,8 @@ public class Exam {
     }
     public String getAnswers(){
         String answers = "";
-        for(Question q : getQuestions()) {
-            answers += q.getAnswer() + ANSWERS_SEPARATOR;
+        for(int i=0;i<getQuestions().size();i++) {
+            answers += getQuestions().get(i).getAnswer() + (i<getQuestions().size()-1?ANSWERS_SEPARATOR:"");
         }
         return answers;
     }
@@ -64,30 +70,47 @@ public class Exam {
         float score = 0;
         String[] TypedAnswer = answers.split(ANSWERS_SEPARATOR);
         String student_answer="";
-        for(int i =0;i<TypedAnswer.length;i++){
-            student_answer+=TypedAnswer[i]+ ANSWERS_SEPARATOR;
+        int div=1;
+        for(int i =0;i<TypedAnswer.length && i<examin.getQuestions().size();i++) {
+            student_answer += TypedAnswer[i] + (i < TypedAnswer.length - 1 ? ANSWERS_SEPARATOR : "");
 
-            if(examin.getQuestions().get(i).getType()==0 && TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer()))
-                score++;
-            else if(TypedAnswer.length>0)
+            //combien de bons choix
+            Log.e("Log"," student answer="+student_answer+" exam questions "+examin.getQuestions().get(i).getAnswer());
+            if (examin.getQuestions().get(i).getType() == 0){
+
+                if (TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer())){Log.e("Log","score = "+score+" plus "+examin.getQuestions().get(i).getNote());
+                    score += examin.getQuestions().get(i).getNote();}
+        }
+
+
+            else {
+                div = examin.getQuestions().get(i).getAnswer().length() - examin.getQuestions().get(i).getAnswer().replaceAll("1", "").length();
                 for(int j=0;j<examin.getQuestions().get(i).getQuestion().size()-1 && j<TypedAnswer[i].length();j++){
-                    if(TypedAnswer[i].charAt(j)==examin.getQuestions().get(i).getAnswer().charAt(j))
+
+                    Log.e("Log","score = "+score+" plus "+examin.getQuestions().get(i).getNote());
+                    if(TypedAnswer[i].charAt(j)=='1' && examin.getQuestions().get(i).getAnswer().charAt(j)=='1')
                     {
-                        score++;
+                        Log.e("Log","score = "+score+" plus "+examin.getQuestions().get(i).getNote());
+                        score+=examin.getQuestions().get(i).getNote()/div;
+                    }
+                    else if(TypedAnswer[i].charAt(j)=='1'){
+                        Log.e("Log","score = "+score+" minus "+examin.getQuestions().get(i).getNote());
+                        score-=examin.getQuestions().get(i).getNote()/div;
                     }
                 }
             }
-        //todo: chrono design student and prof , late student timer ,buttons on/off design
+        }
+        // principe c retourné les lbonnes notes recu hnaya c a dir les bonne cochage valent chaqune un point en sorte k si toutes son coché elle feront getNote()
+        if(score<0)
+            score=0;
         return score;
     }
-    public int getQuestionsSize(){
-        int size=0;
-        for(int i = 0; i<getAnswers().split(ANSWERS_SEPARATOR).length; i++){
 
-            if(getQuestions().get(i).getType()==0)
-                size++;
-            else
-                size+=getQuestions().get(i).getQuestion().size()-1;
+
+    public int getNoteTotal(){
+        int size=0;
+        for(int i = 0; i<getQuestions().size(); i++){
+            size+=getQuestions().get(i).getNote();
         }
         return  size;
     }
