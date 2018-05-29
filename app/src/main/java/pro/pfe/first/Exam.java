@@ -75,7 +75,7 @@ public class Exam {
             student_answer += TypedAnswer[i] + (i < TypedAnswer.length - 1 ? ANSWERS_SEPARATOR : "");
 
             //combien de bons choix
-            Log.e("Log"," student answer="+student_answer+" exam questions "+examin.getQuestions().get(i).getAnswer());
+            Log.e("Log"," student answer="+student_answer+" exam questions "+examin.getAnswers());
             if (examin.getQuestions().get(i).getType() == 0){
 
                 if (TypedAnswer[i].equals(examin.getQuestions().get(i).getAnswer())){Log.e("Log","score = "+score+" plus "+examin.getQuestions().get(i).getNote());
@@ -85,16 +85,19 @@ public class Exam {
 
             else {
                 div = examin.getQuestions().get(i).getAnswer().length() - examin.getQuestions().get(i).getAnswer().replaceAll("1", "").length();
-                for(int j=0;j<examin.getQuestions().get(i).getQuestion().size()-1 && j<TypedAnswer[i].length();j++){
+                for(int j=0;j<examin.getQuestions().get(i).getQuestion().size() && j<TypedAnswer[i].length();j++){
 
-                    Log.e("Log","score = "+score+" plus "+examin.getQuestions().get(i).getNote());
                     if(TypedAnswer[i].charAt(j)=='1' && examin.getQuestions().get(i).getAnswer().charAt(j)=='1')
                     {
-                        Log.e("Log","score = "+score+" plus "+examin.getQuestions().get(i).getNote());
+                        Log.e("Log ","Typed :"+"score = "+score+" plus "+examin.getQuestions().get(i).getNote()/div);
                         score+=examin.getQuestions().get(i).getNote()/div;
                     }
-                    else if(TypedAnswer[i].charAt(j)=='1'){
-                        Log.e("Log","score = "+score+" minus "+examin.getQuestions().get(i).getNote());
+                    else if(examin.getQuestions().get(i).getAnswer().charAt(j)=='1' && TypedAnswer[i].charAt(j)=='0'){
+                        Log.e("Log","score = "+score+" minus "+examin.getQuestions().get(i).getNote()/div);
+                        score-=examin.getQuestions().get(i).getNote()/div;
+                    }
+                    else if(examin.getQuestions().get(i).getAnswer().charAt(j)=='0' && TypedAnswer[i].charAt(j)=='1' ){
+                        Log.e("Log","score = "+score+" minus "+examin.getQuestions().get(i).getNote()/div);
                         score-=examin.getQuestions().get(i).getNote()/div;
                     }
                 }

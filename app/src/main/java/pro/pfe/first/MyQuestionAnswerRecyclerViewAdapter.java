@@ -77,6 +77,7 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             rep=Answers.split(ANSWERS_SEPARATOR)[position];
             hold.question.setText(mIt.getQuestion().get(0));
             int  div = mIt.getAnswer().length() -mIt.getAnswer().replaceAll("1", "").length();
+            int scoretotal=0;
             for(int i=1;i<mIt.getQuestion().size();i++)
             {
                 hold.lays[i-1].setVisibility(View.VISIBLE);
@@ -86,18 +87,20 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         hold.checks[i - 1].setChecked(rep.charAt(i - 1) == '1');
                         Log.e("COLOR SETUP", " PUTING GREEN color " + mIt.getQuestion().size());
                         hold.lays[i - 1].setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));
-                        hold.ptsList[i-1].setText("+" + mIt.getNote()/div + "pts");
+                        hold.ptsList[i-1].setText("+" + mIt.getNote()/div + "pts");scoretotal+=mIt.getNote()/div;
                         hold.ptsList[i-1].setTextColor(hold.mView.getContext().getResources().getColor(R.color.colorAccent));
                     } else {
                         hold.checks[i - 1].setChecked(rep.charAt(i - 1) == '1');
                         Log.e("COLOR SETUP", " PUTING RED color" + mIt.getQuestion().size());
                         hold.lays[i - 1].setBackgroundColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));
-                        hold.ptsList[i-1].setText("-" + mIt.getNote()/div + "pts");
+                        hold.ptsList[i-1].setText("-" + mIt.getNote()/div + "pts");scoretotal-=mIt.getNote()/div;
                         hold.ptsList[i-1].setTextColor(hold.mView.getContext().getResources().getColor(R.color.colorNega));
                     }
                 }
             }
-            hold.pts.setText("total note ");
+            if(scoretotal<0)
+                scoretotal=0;
+            hold.pts.setText(scoretotal+"pts");
         }
     }
 
