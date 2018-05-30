@@ -6,91 +6,51 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:background="@drawable/blue_button_shape"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
-        android:transitionName="hello"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="6dp"
-        app:cardUseCompatPadding="true"
-        app:contentPadding="10dp"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="25dp">
+        android:elevation="6dp"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:text="EXAM FINAL 2"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="30sp" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="EXAM FINAL 2"
-                android:textAlignment="center"
-                android:textColor="@color/colorPrimary"
-                android:textSize="30sp" />
+        <TextView
+            android:id="@+id/rmatricule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="5"
+            android:textAlignment="center"
+            android:textColor="@color/cardview_light_background" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/std"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="eleves : 5"
+            android:textAlignment="center"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/rnote"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="NOTE :" />
-
-                <TextView
-                    android:id="@+id/note_int"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="14/20" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Nom"
-                    tools:layout_editor_absoluteX="0dp"
-                    tools:layout_editor_absoluteY="263dp" />
-
-                <TextView
-                    android:id="@+id/rmatricule"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="03264941140"
-                    android:textAlignment="viewStart" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/students_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_weight="1"
-        android:visibility="gone"
-        tools:layout_editor_absoluteY="502dp" />
+    </LinearLayout>
 
 </android.support.v7.widget.LinearLayoutCompat>

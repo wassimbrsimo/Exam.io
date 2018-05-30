@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:text="Vous n'avez pas repondu a toutes les questions"
             android:textAlignment="center"
+            android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -47,7 +48,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/blue_button_shape"
-                android:text="terminer comeme"
+                android:text="Terminer"
                 android:textColor="@color/colorAccent" />
 
             <Button
@@ -57,7 +58,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/blue_button_shape"
-                android:text="Annulé"
+                android:text="Annuler"
                 android:textColor="@color/colorAccent" />
         </LinearLayout>
     </LinearLayout>

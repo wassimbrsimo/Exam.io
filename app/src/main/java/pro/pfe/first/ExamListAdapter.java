@@ -45,19 +45,16 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public class HostedExamViewHolder extends RecyclerView.ViewHolder {
-        public TextView Title,nom,matricule,note;
+        public TextView Title, description,students;
         View layout;
-        RecyclerView rv;
 
 
         public HostedExamViewHolder(View view) {
             super(view);
             layout=view.findViewById(R.id.layout);
             Title =  view.findViewById(R.id.title);
-            matricule = view.findViewById(R.id.rmatricule);
-            nom=view.findViewById(R.id.name);
-            note= view.findViewById(R.id.note_int);
-            rv = view.findViewById(R.id.students_list);
+            description = view.findViewById(R.id.rmatricule);
+            students = view.findViewById(R.id.std);
 
 
         }
@@ -65,7 +62,6 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class HistoryExamView extends RecyclerView.ViewHolder {
         public TextView Title,nom,matricule,note;
         View layout;
-        RecyclerView rv;
 
 
         public HistoryExamView(View view) {
@@ -73,8 +69,7 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             layout=view.findViewById(R.id.layout);
             Title =  view.findViewById(R.id.title);
             matricule = view.findViewById(R.id.rmatricule);
-            note= view.findViewById(R.id.rnote);
-            rv = view.findViewById(R.id.students_list);
+            note=view.findViewById(R.id.rnote);
 
 
         }
@@ -161,9 +156,9 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
 
                     DB db = new DB(historyholder.layout.getContext());
-                    int totalQuestions=historyexam.getNoteTotal();
+                    float totalQuestions=historyexam.getNoteTotal();
                     float bonneReponses=Exam.CalculerNote(historyexam,db.getStudentAnswer(0,historyexam.getId()));
-                    historyholder.note.setText((int)(bonneReponses/totalQuestions*100)+"% ("+(int)bonneReponses+"/"+totalQuestions+")");
+                    historyholder.note.setText((int)(bonneReponses/totalQuestions*100)+"% ("+bonneReponses+"/"+totalQuestions+")");
                     historyholder.layout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -181,8 +176,9 @@ public class ExamListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 {
                     final HostedExamViewHolder hostedholder = (HostedExamViewHolder) holder;
                     hostedholder.Title.setText(hostedexam.getTitre());
-                    hostedholder.matricule.setText(hostedexam.getModule());
-                    hostedholder.nom.setText(hostedexam.getTitre());
+                    DB bdd=new DB(hostedholder.layout.getContext());
+                    hostedholder.description.setText(hostedexam.getModule());
+                    hostedholder.students.setText(bdd.getStudentWithExam(hostedexam.getId()).size()+" éleves");
                     hostedholder.layout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

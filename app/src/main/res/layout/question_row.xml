@@ -111,7 +111,7 @@
         android:layout_marginEnd="13dp"
         android:layout_marginRight="13dp"
         android:layout_marginTop="78dp"
-        android:background="@drawable/blue_button_shape"
+        android:background="@drawable/delete_button_shape"
         android:elevation="6dp"
         android:onClick="DeleteQuestion"
         android:padding="10dp"

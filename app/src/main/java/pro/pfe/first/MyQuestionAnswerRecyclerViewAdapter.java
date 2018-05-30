@@ -76,8 +76,8 @@ public class MyQuestionAnswerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             if(Answers.split(ANSWERS_SEPARATOR).length>position)
             rep=Answers.split(ANSWERS_SEPARATOR)[position];
             hold.question.setText(mIt.getQuestion().get(0));
-            int  div = mIt.getAnswer().length() -mIt.getAnswer().replaceAll("1", "").length();
-            int scoretotal=0;
+            float  div = mIt.getAnswer().length() -mIt.getAnswer().replaceAll("1", "").length();
+            float scoretotal=0;
             for(int i=1;i<mIt.getQuestion().size();i++)
             {
                 hold.lays[i-1].setVisibility(View.VISIBLE);

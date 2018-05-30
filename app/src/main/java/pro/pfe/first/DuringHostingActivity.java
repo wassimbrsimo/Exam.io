@@ -273,27 +273,13 @@ public class DuringHostingActivity extends AppCompatActivity  {
         if(toggle){
         addStudent.setText("Ajouter Eleve");
         startStudent.setText("Commencer Examin");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            addStudent.setBackground(getDrawable(R.drawable.save_button_shape));
-        }
-        else addStudent.setEnabled(true);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            startStudent.setBackground(getDrawable(R.drawable.save_button_shape));
-        }
-        else startStudent.setEnabled(true);}
+        addStudent.setEnabled(true);
+        startStudent.setEnabled(true);}
         else {
             addStudent.setText("Attente connexion ..");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                addStudent.setBackground(getDrawable(R.drawable.disabled_button_shape));
-            }
-            else addStudent.setEnabled(false);
+            addStudent.setEnabled(false);
             startStudent.setText("Attente connextion ..");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                startStudent.setBackground(getDrawable(R.drawable.disabled_button_shape));
-            }
-            else startStudent.setEnabled(false);
+           startStudent.setEnabled(false);
         }
 
     }
@@ -332,7 +318,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
         if(!studentsexists(result.split("]")[2])) {
             // String[] data=result.split("/");
             String MAC = result.split("]")[2];
-            conect.setText("going to connect to : " + result.split("]")[2]);
+            conect.setText("Connecting . . .");
             Log.e("QR", "Result : " + result);
             Etudiants.add(new StudentSocket(new Student(result.split("]")[0], result.split("]")[1], (int) db.insertStudent(result.split("]")[0], result.split("]")[1])), result.split("]")[2], null));
             AttenteMac.add(MAC);

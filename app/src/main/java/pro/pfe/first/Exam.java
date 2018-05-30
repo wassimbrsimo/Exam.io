@@ -101,11 +101,13 @@ public class Exam {
                         score-=examin.getQuestions().get(i).getNote()/div;
                     }
                 }
+
             }
+            if(score<0)
+                score=0;
         }
         // principe c retourné les lbonnes notes recu hnaya c a dir les bonne cochage valent chaqune un point en sorte k si toutes son coché elle feront getNote()
-        if(score<0)
-            score=0;
+
         return score;
     }
 

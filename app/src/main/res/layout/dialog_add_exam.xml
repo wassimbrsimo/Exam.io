@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:background="@drawable/dialog_add_exam">
 
     <TextView
@@ -11,9 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        
+
         android:text="Add Exam"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
         android:textSize="24sp" />
 
     <LinearLayout
@@ -29,7 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="top"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="50dp"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -42,8 +48,9 @@
                     android:id="@+id/add_titre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+
                     android:ems="10"
-                    
                     android:hint="Titre"
                     android:inputType="textPersonName" />
 
@@ -51,10 +58,12 @@
                     android:id="@+id/add_module"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+
                     android:ems="10"
-                    
                     android:hint="Description"
-                    android:inputType="textPersonName" />
+                    android:inputType="textPersonName"
+                    android:textColor="@color/colorAccent" />
             </LinearLayout>
 
             <NumberPicker
@@ -62,8 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="4"
-                android:backgroundTint="@color/colorAccent" />
+                android:layout_weight="4" />
 
         </LinearLayout>
 
@@ -80,7 +88,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/blue_button_shape"
-                
+
                 android:text="Ajouter"
                 android:textColor="@color/colorAccent" />
 
@@ -91,7 +99,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/blue_button_shape"
-                
+
                 android:text="Annulé"
                 android:textColor="@color/colorAccent" />
         </LinearLayout>
