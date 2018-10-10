@@ -91,7 +91,6 @@ public class Student_Lobby extends AppCompatActivity {
         initNetWork();
         initExamView();
         TypedAnswers.clear();
-        intent =new Intent(this, AntiCheatService.class);
     }
 
     public void BtnFinishClicked(View view) {
@@ -433,8 +432,6 @@ public class Student_Lobby extends AppCompatActivity {
         try {
             sendRecieve.write("OUT_OF_APP".getBytes());
 
-            startService(new Intent(getApplicationContext(), AntiCheatService.class));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -442,7 +439,6 @@ public class Student_Lobby extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        stopService(new Intent(getApplicationContext(), AntiCheatService.class));
         if(sendRecieve!=null && !FINISHED)
         try {
             sendRecieve.write("BACK_TO_APP".getBytes());

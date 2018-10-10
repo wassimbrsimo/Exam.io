@@ -418,7 +418,7 @@ public class DuringHostingActivity extends AppCompatActivity  {
                 Etudiants.get(msg.what).setState(6);
                 boolean finished=true;
                 for(StudentSocket s :Etudiants)
-                    if(s.getState()!=6)
+                    if(s.getState()!=6 && s.getState()!=7)
                         finished=false;
                 if(finished){
                     Intent resultExam = new Intent(getApplicationContext(),Teacher_Done_Exam.class);

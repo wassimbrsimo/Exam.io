@@ -49,11 +49,6 @@
         <activity android:name=".Student_Profile" />
         <activity android:name=".Student_Result" />
 
-        <service
-            android:name=".AntiCheatService"
-            android:enabled="true"
-            android:exported="false" />
-
 
     </application>
 
