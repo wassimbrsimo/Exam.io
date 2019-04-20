@@ -1,5 +1,5 @@
 # Exam.io
-Wireless Examination with Academic security level
+Wireless Examination with Academic features
 
 ## Screenshots
 <p float="left">
