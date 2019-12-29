@@ -1,5 +1,5 @@
 # Exam.io
-Wireless Examination with Academic features
+Android App featuring Wireless Exams with QR Authentication & Wifi Direct data transfer
 
 ## Screenshots
 <p float="left">
